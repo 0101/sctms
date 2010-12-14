@@ -1,0 +1,269 @@
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+header, section, article, nav, aside, footer, hgroup, figure, figcaption {
+	border: 0; margin: 0; padding: 0; vertical-align: baseline; font-weight: inherit;
+	font-style: inherit; font-size: 100%; font-family: inherit; cursor:default;}
+
+table {border-collapse: collapse; border-spacing: 0;}
+caption, th, td {text-align: left; font-weight: normal;}
+
+blockquote:before, blockquote:after,
+q:before, q:after {content: "";}
+blockquote, q {quotes: "" "";}
+
+li {list-style-type: none;}
+
+@font-face {
+    font-family: "Segoe UI";
+    src: url('../fonts/SEGOEUI.TTF');
+    src: local('Segoe UI'), url('../fonts/SEGOEUI.TTF') format("truetype");
+}
+@font-face {
+    font-family: "Segoe UI";
+	font-weight: bold;
+    src: url('../fonts/SEGOEUIB.TTF');
+    src: local('Segoe UI Bold'), url('../fonts/SEGOEUIB.TTF') format("truetype");
+}
+
+input, select {
+	margin: 0; font-family: "Segoe UI", "Lucida Grande", sans-serif;
+	font-size: 14px; color: #3f3f3f;}
+
+a {text-decoration: none; color: #7DBBF2; outline:none; cursor:pointer;}
+a * {cursor:pointer;}
+a:hover, a:active, a:focus {color: #FFD13A;}
+a.alt, .alt a {text-decoration: underline;}
+.alt a:hover, .alt a:active, .alt a:focus, a.alt:hover, a.alt:active, a.alt:focus {text-decoration: none;}
+a img {border: none;}
+
+.clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+
+strong, b {font-weight: bold;}
+em, i {font-style: italic;}
+
+h1, h2, h3, h4 {font-weight: normal;}
+
+header, section, article, nav, aside, footer, hgroup, figure, figcaption {display: block;}
+
+body {font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, sans-serif;
+	background:#0b0b0b url('../img/bg2.jpg') center -100px no-repeat; color:#aaa;
+	font-size:14px;}
+
+header.top {background:#040404 url('../img/top.jpg') center top no-repeat;text-align:center;}
+header.top.img2 {background-position:center -85px;}
+header.top.img3 {background-position:center -170px;}
+header.top.img4 {background-position:center -255px;}
+header.top.img5 {background-position:center -340px;}
+header.top.img6 {background-position:center -425px;}
+header.top .logo {
+	color:#000000;display:inline-block;font-size:48px;font-weight:bold;
+	padding:10px 20px;text-shadow:0 0 7px #5884AA, 1px 1px 2px #FFFFFF;height:65px;}
+header.top .logo:hover {text-shadow:0 0 7px #D69F20, 1px 1px 2px #F6FF4F;color:#1C1606;}
+header.top .mask {background: url('../img/top-mask.png') center no-repeat;}
+
+section.user {background:#000000;border-top:1px solid #333;border-bottom:1px solid #333;}
+section.user .info {display:inline-block;}
+section.user nav {display:inline;}
+section.user nav a {display:inline-block;padding:4px 7px;}
+section.user nav a:hover {background:#1C1606;}
+
+.content hgroup.h1 {text-align:center;font-size:24px;margin-top:30px;color:#D6D6D6;}
+.content hgroup.h1 * {display:inline;}
+.content hgroup .breadcrumbs {color: #555;font-size:17px;}
+.content hgroup .breadcrumbs a {color: #436482;}
+.content hgroup .breadcrumbs a:hover {color: #FFD13A;}
+
+.content .content-wrap {width:960px;margin:0 auto;}
+
+.content .index section {width:480px;float:left;}
+
+.content .box {
+	margin:20px;border:1px solid #434343;background:rgba(65, 65, 65, 0.5);
+	-moz-box-shadow:0 0 15px #3A5770;
+	-webkit-box-shadow:0 0 15px #3A5770;
+	box-shadow:0 0 15px #3A5770;}
+.content .index .box {width:440px;}
+
+.content .box .box-content {padding:25px;}
+
+.content .box hgroup {
+	background:#333;padding:7px 10px;font-size:17px;text-shadow:-1px -1px 0 #000;
+	border-bottom:1px solid #181818;border-left:8px solid #6d6d6d;}
+
+.box nav {display:block;background:#000000;border-bottom:1px solid #181818;}
+.box nav a {display:block;float:left;padding:7px 23px;font-size:17px;border-left:8px solid #253847;}
+.box nav a:hover {color: #FFD13A;background:#1C1606;border-color:#B29029;}
+.box nav a.selected {color: #aaa;background:#333;border-color:#6d6d6d;text-shadow:-1px -1px 0 #000;}
+.box nav a.loading {background:url('../img/loading_bar.gif') repeat-x; color:#FFD13A;border-color:#B29029;}
+
+.box.center-form {width: 400px;margin: 40px auto;}
+.login .box {margin-top:100px;width:600px;}
+.login .box .login-option {width:300px;float:left;}
+.login .box .form-field input {width:238px;}
+.login .box .password-login .box-content {border-right:1px solid #393939;}
+.login .box .nyx-login a {
+	display:block;background:url('../img/nyx.png') no-repeat center bottom;
+	height:222px;width:222px;text-align:center;margin-left:36px;}
+.login .box .nyx-login a:hover {background-position:center top;}
+.login .box .nyx-login a span {display:inline-block;margin-top:99px;text-align:center;font-size:17px;}
+
+form fieldset {margin:0 0 10px 0;}
+form .submit-row {/*background:#000;*/text-align:center;}
+form .submit-row input {
+	border:solid #253847;border-width:0 5px;background:#000;color:#7DBBF2;
+	outline:none;font-size:17px;font-weight:bold;padding:5px 10px;cursor:pointer;}
+form .submit-row input:hover,
+form .submit-row input:focus {color: #FFD13A;background:#1C1606;border-color:#B29029;}
+form .submit-row input.loading {color: #FFD13A;background:url('../img/loading_bar.gif') repeat-x;border-color:#B29029;}
+form .form-field label {display:block;float:left;margin:3px 0;font-weight:bold;}
+form .form-field {margin-bottom:10px;}
+form .form-field input,
+form .form-field textarea {
+	width:337px;border: 1px solid #666;background:#111111;color:#fff;
+	line-height:1.5;padding:5px;}
+form .form-field input:focus,
+form .form-field textarea:focus {border-color: #BF9A2B;background:#1C1606;color:#FFD13A;}
+form .form-field .optional {display:block;float:left;padding:5px;font-size:12px;}
+form .field-error input {border-color: #D30000;}
+form .errormsg {color: #D30000;display:block;clear:left;}
+
+.messages > li {
+	display:block;padding:10px 10px;margin: 5px;text-align:center;
+	font-size:17px;border: 1px solid #008000;background: #0C1B09;}
+.messages li.error {background:#541212;border:1px solid #D30000;}
+
+.index .tournaments .tournament {margin-bottom:10px;border-bottom:1px solid #383838;padding-bottom:5px;}
+.index .tournaments .tournament a {padding:5px;}
+.index .tournaments .tournament a.tournament-link {display:block;padding:5px;}
+.index .tournaments .tournament a.tournament-link:hover {background: #1C1606;}
+.index .tournaments .tournament h4 {font-weight:bold;}
+.index .tournaments .tournament div {color: #aaa;}
+.index .tournaments .tournament .current-info {}
+.index .tournaments .tournament .current-info .round {font-weight:bold;}
+.index .tournaments .tournament .joined {color:#16BF14;font-weight:bold;padding:5px;}
+.index .tournaments .create-tournament {font-weight:bold;padding:5px;display:inline-block;margin-bottom:10px;}
+.index .tournaments .ongoing-tournaments .icon {background-image: url('../img/icon-install.png');}
+.index .tournaments .future-tournaments .icon {background-image: url('../img/icon-scout.png');}
+.index .tournaments .past-tournaments .icon {background-image: url('../img/icon-army.png');}
+.index .past-tournaments .ranking a {padding:0;}
+.index .past-tournaments .ranking {background:#090909 no-repeat 293px -19px;border:1px solid #333333;padding:5px 10px;}
+.index .past-tournaments .ranking .place {font-weight:bold;}
+.index .past-tournaments .ranking .place1 .place {color:gold;text-shadow:0 0 2px gold;}
+.index .past-tournaments .ranking .place2 .place {color:#DDDDDD;text-shadow:0 0 2px #DDDDDD;}
+.index .past-tournaments .ranking .place3 .place {color:#CD7F32;text-shadow:0 0 2px #CD7F32;}
+
+.index .announcements {
+	background:rgba(255,202,58,0.1);
+	-moz-box-shadow:0 0 15px #6B5618;
+	-webkit-box-shadow:0 0 15px #6B5618;
+	box-shadow:0 0 15px #6B5618;}
+
+.tournament .rounds .round {display:block;}
+.tournament .rounds .round h4 a {display:block;padding:5px;font-size:14px;}
+.tournament .rounds .round h4 a:hover {background-color: #0C1B09;}
+.tournament .rounds .round.selected h4 a {font-size:20px;}
+.tournament .rounds .round h4 a .dates {color:#7A7A7A;margin-left:6px;}
+.tournament .rounds .round h4 a .timeinfo {color:#aaa;margin-left:6px;}
+.tournament .rounds .round.over h4 a .timeinfo {color:#7A7A7A;}
+.tournament .rounds .round.in_progress h4 a .timeinfo {color:#BFBF72;}
+.tournament .rounds .round-content {background:#1E1A1A;border-top:1px solid #000000;border-bottom:1px solid #444;padding:20px;}
+.tournament .rounds .round-content table {margin:0px auto;}
+.tournament .rounds .round-content table td {padding:3px 6px;border-bottom:1px solid #2D2D2D;}
+.tournament .rounds .round-content table .me td {background:#393939;color:#FFFFFF;}
+.tournament .rounds .round-content table .score {font-weight:bold;text-align:center;}
+.tournament .rounds .round-content table .finished .score {color:#ddd;}
+.tournament .rounds .round-content table .colon {padding:0;font-weight:bold;color:#666;text-align:center;}
+.tournament .rounds .round-content table .player1 {text-align:right;}
+.tournament .rounds .round-content table .winner {font-weight:bold;text-shadow:0 0 1px #898989;color:#ddd;}
+.tournament .rounds .round-content table .replays.empty {opacity:0.5;}
+.tournament .rounds .round-content table .me .replays {opacity:1; font-weight:bold;}
+
+.tournament .result_report h2 {font-size:20px; text-align: center; padding:10px;text-shadow:-1px -1px 0 #000000;}
+.tournament .result_report fieldset {
+	padding:30px 0;background:#1E1A1A;border-bottom:1px solid #444444;
+	border-top:1px solid #000000;margin:10px 0;}
+.tournament .result_report .player {width:48%; float:left; font-size:36px;}
+.tournament .result_report .colon {width:4%; float:left; text-align:center;font-size:36px;}
+.tournament .result_report .player1 {text-align:right;}
+.tournament .result_report form select {
+	font-size:36px;border: 1px solid #666;background:#111111;color:#fff;
+	line-height:1.5; text-align:center;}
+.tournament .result_report form select:focus {border-color: #BF9A2B;background:#1C1606;color:#FFD13A;}
+.tournament .join_tournament .box-content,
+.tournament .leave_tournament .box-content {padding:60px 20px;}
+.tournament .join_tournament form p,
+.tournament .leave_tournament form p {text-align:center; font-size:17px; padding:20px;}
+.tournament .message {font-size:17px; text-align:center; padding:10px; border:1px solid #333; background:#111;}
+
+.tournament .tournament_players table {width:100%;}
+.tournament .tournament_players table th {padding:3px; background:#333; font-weight:bold; text-shadow:-1px -1px 0 #000;}
+.tournament .tournament_players table td {padding:3px; border-bottom:1px solid #333; border-top:1px solid #000;}
+.tournament .tournament_players table .rank {text-align:center;font-weight:bold;}
+.tournament .tournament_players table .points,
+.tournament .tournament_players table .buchholz {text-align:center;}
+.tournament .tournament_players table tbody tr:hover td {color:#eee;}
+.tournament .tournament_players table .me td {background:#484848;color:#fff;}
+.tournament .tournament_players table .oponent-list {font-size:11px;}
+
+#fancybox-outer {
+	background:#111 !important;
+	-moz-box-shadow:0 0 15px #6BA1CE;
+	-webkit-box-shadow:0 0 15px #6BA1CE;
+	box-shadow:0 0 15px #6BA1CE;}
+.light-box .box {border:1px solid #434343;}
+.light-box .box-content {padding:25px;}
+
+.profile.content-wrap,
+.replays.content-wrap {width:642px;margin-top:100px;}
+
+.profile-content,
+.replays-content {width:600px;}
+.profile-content h1,
+.replays-content h1 {background:#000;font-size:17px;padding:5px 10px;color:#eee;border-bottom:1px solid #222222;}
+.profile-content h1.extra {background:#090909 url('../img/ranks.jpg') no-repeat; padding:15px 20px;}
+.profile-content h1.rank1 {background-position:100% -14px;}
+.profile-content h1.rank2 {background-position:100% -97px;}
+.profile-content h1.rank3 {background-position:100% -180px;}
+.profile-content h1.rank4 {background-position:100% -265px;}
+.profile-content h1.rank5 {background-position:100% -349px;}
+.profile-content h1.rank6 {background-position:100% -433px;}
+.profile-content table th,
+.profile-content table td {padding:7px;}
+.profile-content table.info .ch_name,
+.profile-content table.info .ch_code {font-size:17px;color:#eee;}
+.profile-content h2,
+.replays-content h2 {border-bottom:1px solid #333333;color:#636363;font-weight:bold;margin:0 7px;padding:35px 0 5px;}
+.profile-content table.tournaments .rank {color:#eee;}
+.profile-content table.tournaments .rank .placed1 {color:gold;text-shadow:0 0 2px gold;font-weight:bold;}
+.profile-content table.tournaments .rank .placed2 {color:#DDDDDD;text-shadow:0 0 2px #DDDDDD;font-weight:bold;}
+.profile-content table.tournaments .rank .placed3 {color:#CD7F32;text-shadow:0 0 2px #CD7F32;font-weight:bold;}
+
+.replays-content h1 .tournament {color:#999999;}
+.replays-content ul li.empty {color:#666666;font-size:17px;font-weight:bold;padding:40px;text-align:center;}
+.replays-content .replay a {display:inline-block;padding:5px 10px;}
+.replays-content .replay a:hover {background:#1C1606;}
+.replays-content .upload-wrap {padding:20px 0 0;text-align:center;}
+.replays-content .upload-wrap .upload-button-wrap {position:relative;height:40px;}
+.replays-content .upload-wrap .upload-button-wrap .centering-wrap {position:absolute;top:0;left:0;width:100%;height:30px;}
+.replays-content .upload-wrap .upload-button-display {
+	height:20px;margin:0 auto;border:solid #253847;border-width:0 5px;
+	background:#000;color:#7DBBF2;outline:none;font-size:17px;font-weight:bold;
+	padding:5px 10px 10px;display:inline-block;}
+.replays-content .upload-wrap .upload-button-display.loading {
+	color: #FFD13A;background:url('../img/loading_bar.gif') repeat-x;border-color:#B29029;}
+
+/* uploadify override */
+.replays-content .uploadifyQueueItem {
+	background-color:#000000;border:1px solid #333333;font-size:11px;
+	margin:5px auto;padding:10px;width:386px;}
+.replays-content .uploadifyProgress {background:#222;}
+.replays-content .uploadifyProgressBar {background: #FFD13A;}
+
+.replays-content .login-to-upload {background:#222222;font-size:17px;margin-top:20px;padding:10px;text-align:center;}

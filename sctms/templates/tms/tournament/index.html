@@ -1,0 +1,88 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ tournament.name }}{% endblock %}
+
+{% block content %}
+<hgroup class="h1">
+    <span class="breadcrumbs"><a href="/">{% trans "Home" %}</a> > </span><h1>{{ tournament.name }}</h1>
+</hgroup>
+
+<div class="content-wrap tournament">
+    <div class="box {{ current_view }}">
+        <nav class="clearfix">
+            <a {% if current_view == 'tournament' %}class="selected"{% endif %}
+               href="{{ tournament.get_absolute_url }}">{% trans "Info" %}</a>
+            <a {% if current_view == 'tournament_players' %}class="selected"{% endif %}
+               href="{% url tms:tournament_players slug=tournament.slug %}">{% trans "Players" %}</a>
+            <a {% if current_view == 'tournament_round' or current_view == 'tournament_rounds' %}class="selected"{% endif %}
+               href="{% url tms:tournament_rounds slug=tournament.slug %}">{% trans "Rounds" %}</a>
+            {% if tournament.current_round %}
+                <a {% if current_view == 'result_report' %}class="selected"{% endif %}
+                   href="{% url tms:result_report slug=tournament.slug %}">{% trans "Report match results" %}</a>
+            {% endif %}
+            {% with user.get_profile as player %}
+            {% if tournament.registration_open and not user.get_profile in tournament %}
+                <a {% if current_view == 'join_tournament' %}class="selected"{% endif %}
+                    href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a>
+            {% endif %}
+                {% if tournament.registration_open and user.get_profile in tournament %}
+                <a {% if current_view == 'leave_tournament' %}class="selected"{% endif %}
+                    href="{% url tms:leave_tournament slug=tournament.slug %}">{% trans "Leave tournament" %}</a>
+            {% endif %}
+            {% endwith %}
+        </nav>
+        <div class="box-content">
+            {% block box-content %}
+            <h3>Defaultní termíny a mapy pro jednotlivá kola</h3>
+                <ul>
+                    <li><b>Základní část</b>
+                    <ul>
+                        {% for round in tournament.rounds_swiss %}
+                            <li><strong>{{ round.description }}</strong> &gt;&gt; {{ round.start|date:"d. m." }} - {{ round.end|date:"d. m." }}, {{ round.first_map }}</li>
+                        {% endfor %}
+                    </ul></li>
+                    <li><br/></li>
+                    <li><b>Playoff</b>
+                    <ul>
+                        {% for round in tournament.rounds_playoff %}
+                            <li><strong>{{ round.description }}</strong> &gt;&gt; {{ round.start|date:"d. m." }} - {{ round.end|date:"d. m." }}, {{ round.first_map }}</li>
+                        {% endfor %}
+                    </ul></li>
+                </ul>
+                <br/>
+                <h3>Informace o lize, pravidla</h3>
+                <ul>
+                    <li><b>formát ligy:</b> 1v1</li>
+                    <li><b>registrace:</b> {{ tournament.registration_deadline }} CEST</li>
+                    <li><b>začátek:</b> {{ tournament.rounds.0.start|date:"d. m." }} 0:00 CEST </li>
+                    <li><b>počet účastníků:</b> {{ tournament.players.count }}</li>
+                    <li><b>formát ligy:</b> základní část BO3 švýcarským systémem <b>{{ tournament.rounds_swiss.count }} kol</b>, následovat bude BO5 (finále BO7) single elimination <b>playoff pro top 8</b> základní části</li>
+                    <li><b>časový průběh ligy:</b> 5 dní na kolo v základní části (vychází to na každé kolo alespoň jeden den sobota/neděle), playoff se odehraje formou týdenního nataženého turnaje/eventu coby vyvrcholení sezóny, finále se pak (snad) odehraje poslední den.</li>
+                    <li><b>ceny:</b> dobrý pocit a účast v hall of fame pro vítěze resp. top4, zahrání si pro každého a případné nasazení do budoucích turnajů</li>
+                    <li><b>PRAVIDLA</b>
+                        <ul>
+                            <li><b>mappack:</b> {{ tournament.map_pool.all|join:", " }}</li>
+
+                            <li><b>zápasy:</b> není možné odkládat v základní části (je to možné v play off pokud to fakt nejde jinak). Pokud se tak nestane a já nebudu mít žádné informace proč, počítá se zápas pro oba jako prohra. Pokud se na zápas vybodne jen jeden ze dvojice, druhý získává výhru. Snažte se vždy domluvit na odehrání mezi sebou, když to nepůjde, tak skrz mne. Snaha se domluvit se počítá</li>
+                            <li><b>formát her základní části:</b> Základní část se hraje systémem BO3, tedy na dvě vítězné hry. V případě remízy na některé z map (ani jeden hráč není schopen zničit toho druhého nebo se zničí ve stejný moment), může dojít k remíze (1-1-1), která je v základní části přípustná přípustná. Za vítězství jsou 3 body, za remízu 1 bod, za prohru 0. Pomocné hodnocení je 1. Buchholzův systém, 2. score a 3. vzájemný zápas. Top 8 hráčů základní části postoupí do Playoff.</li>
+                            <li><b>formát her playoff:</b> Single elimination pavouk (nasazení podle výsledků v základní části) se hraje systémem BO5 (tři vítězné hry) s výjimkou finále (BO7). Pokud by na jedné z map došlo k remíze (ani jeden hráč není schpen zničit toho druhého nebo se zničí ve stejný moment) a vedlo by to k celkové remíze v zápase, hráči musí odehrát rozhodující zápas na mapě, kterou vyberou buď jednomyslnou dohodou či systémem seškrtání map na jednu (počínaje hráčem s lepším nasazením v Playoff vždy vyškrtne každý hráč jednu mapu z map listu a nechá totéž udělat hráče druhého. Poslední nevyškrtnutá mapa je tou, na které se bude hrát.).</li>
+                            <li><b>výběr map:</b> pro každé kolo základní i single elimination bude vylosována první mapa, pak mapu volí vždy poražený (bez opakování)</li>
+                            <li><b>účastníci zápasu:</b> jsou jeho hráči, případně navíc organizátor a případní další observeři po domluvě hráčů</li>
+                            <li><b>využívání všech ingame mechanismů je povoleno</b></li></ul></li></ul>
+
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+// preload loading animation
+$('<img/>').attr('src', '{{ MEDIA_URL }}img/loading_bar.gif');
+$('.tournament .box nav a').click(function(){ $(this).addClass('loading'); });
+</script>
+{% endblock %}

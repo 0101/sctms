@@ -1,0 +1,59 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<hgroup class="h1">
+    <h1>{% trans "Welcome to StarCraft Tournament Management System" %}</h1>
+</hgroup>
+
+<div class="content-wrap index">
+    <section class="tournaments">
+
+        <div class="box ongoing-tournaments">
+            <hgroup><h3>{% trans "Ongoing tournaments" %}</h3></hgroup>
+            {% with tournaments.ongoing as tournaments %}
+                {% include 'tms/includes/tournaments_ongoing.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="box future-tournaments">
+            <hgroup><h3>{% trans "Future tournaments" %}</h3></hgroup>
+            {% with tournaments.future as tournaments %}
+                {% include 'tms/includes/tournaments_future.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="box past-tournaments">
+            <hgroup><h3>{% trans "Past tournaments" %}</h3></hgroup>
+            {% with tournaments_fast.past as tournaments %}
+                {% include 'tms/includes/tournaments_past.html' %}
+            {% endwith %}
+        </div>
+    </section>
+
+    <section class="news">
+        <div class="box announcements">
+            <hgroup><h3>{% trans "Announcements" %}</h3></hgroup>
+            <div class="box-content">
+                The system is in pre-alpha stage. Some things don't work yet and you may encounter some bugs.
+            </div>
+        </div>
+
+        <div class="box">
+            <hgroup><h3>{% trans "Latest events" %}</h3></hgroup>
+            <div class="box-content">
+                <ul>
+                    <li>TODO</li>
+                    <li>Some tournament started</li>
+                    <li>Match results: some guy 2 : 0 some other guy</li>
+                    <li>Someone uploaded new replay</li>
+                    <li>etc</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

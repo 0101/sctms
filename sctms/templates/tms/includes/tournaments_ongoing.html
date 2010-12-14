@@ -1,0 +1,48 @@
+{% load i18n %}
+<div class="box-content">
+    {% block before-list %}{% endblock %}
+    <ul>
+        {% for tournament in tournaments %}
+            <li class="tournament">
+                <a class="tournament-link" href="{{ tournament.get_absolute_url }}">
+                    <h4>{{ tournament }}</h4>
+                    {% block extra-info %}
+                        {% if tournament.current_round %}
+                        <div class="current-info">
+                            <strong>{{ tournament.current_round.description }}</strong> {{ tournament.current_round.time_info }}
+                        </div>
+                        {% endif %}
+                        {% comment %}
+                        {% if tournament.ranking_ready %}
+                        {% endcomment %}
+                        {% comment %}
+                        Don't want to slow down index page if ranking isn't calculated
+                        {% endcomment %}
+                        <div class="ranking">
+                            <strong>{% trans "Current ranking" %}:</strong>
+                            1. {{ tournament.ranking.0.player.user }}
+                            2. {{ tournament.ranking.1.player.user }}
+                            3. {{ tournament.ranking.2.player.user }}
+                        </div>
+                        {% comment %}
+                        {% endif %}
+                        {% endcomment %}
+                    {% endblock %}
+                </a>
+                {% block after-link %}
+                    {% if tournament.current_round and not user.is_authenticated or user.get_profile in tournament %}
+                    <a class="report-results" href="{% url tms:result_report slug=tournament.slug %}">{% trans "Report match results" %}</a>
+                    {% endif %}
+                {% endblock %}
+            </li>
+        {% empty %}
+            <li>
+                <span class="empty">
+                {% block empty %}
+                    {% trans "No ongoing tournaments..." %}
+                {% endblock %}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

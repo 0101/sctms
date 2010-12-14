@@ -1,0 +1,32 @@
+{% extends 'tms/tournament/index.html' %}
+
+{% load i18n form_tags %}
+
+{% block title %}{{ tournament.name }} > {% trans "Report match results" %} {% endblock %}
+
+{% block box-content %}
+
+<h2>{{ round.description }}</h2>
+
+{% if message %}
+<div class="message">{{ message }}</div>
+{% endif %}
+
+{% if not match.finished and form %}
+<form method="post" action="">
+    {% csrf_token %}
+    <fieldset>
+        <div class="player player1">
+            {{ form.player1_score.label_tag }} {{ form.player1_score }}
+        </div>
+        <div class="colon">:</div>
+        <div class="player player2">
+            {{ form.player2_score }} {{ form.player2_score.label_tag }}
+        </div>
+    </fieldset>
+    <div class="submit-row">
+        <input type="submit" value="{% trans 'Submit' %}" />
+    </div>
+</form>
+{% endif %}
+{% endblock %}

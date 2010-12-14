@@ -1,0 +1,10 @@
+{% spaceless %}{% load i18n %}
+
+<div class="form-field {{ field.name }} {{ extra_class }}{% if field.errors %} field-error{% endif %}">
+    {{ field.label_tag }}{% if not field.field.required %}<small class="optional">({% trans "optional" %})</small>{% endif %}
+	{% if field.errors %}<strong class="errormsg">{% for error in field.errors %}{{ error }}{% endfor %}</strong>{% endif %}
+    {{ field }}
+    {% if field.help_text %}<span class="help-text">{{ field.help_text }}</span>{% endif %}
+</div>
+
+{% endspaceless %}
