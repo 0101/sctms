@@ -246,7 +246,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     def current_round(self):
         try:
             now = datetime.now()
-            return self.round_set.filter(start__lte=now, end__gt=now)[0]
+            return self.rounds.filter(start__lte=now, end__gt=now)[0]
         except IndexError:
             return None
 
@@ -266,11 +266,6 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
             ranking = self._create_ranking()
             cache.set(key, ranking)
         return ranking
-
-    @property
-    def ranking_ready(self):
-        ranking = cache.get(self._get_ranking_cache_key())
-        return True if ranking else False
 
     @property
     def registration_open(self):
@@ -388,8 +383,6 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     first_map = models.ForeignKey(Map, null=True, blank=True)
     description = models.CharField(max_length=50, blank=True)
     type = models.SlugField(choices=TYPE_CHOICES)
-    #TODO: remove
-    is_playoff = models.BooleanField()
 
     class Meta:
         verbose_name = _(u'Round')
@@ -405,8 +398,12 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     @property
     @cached
     def index(self):
-        id_list = list(zip(*self.tournament.rounds.values_list('id'))[0])
-        return id_list.index(self.id) + 1
+        try:
+            id_list = list(zip(*self.tournament.rounds.values_list('id'))[0])
+            return id_list.index(self.id) + 1
+        except IndexError:
+            # must mean this is the first round just being created
+            return 1
 
     @property
     @cached
@@ -475,6 +472,7 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     @classmethod
     def clear_cache_round(cls, round, action):
         round.clear_template_cache()
+        invalidate_template_cache('rounds', round.tournament.id, None)
 
     @classmethod
     def clear_cache_match(cls, match, action):
@@ -498,9 +496,17 @@ class MatchMaker(object):
             return True
         return previous_round.end < datetime.now()
 
-    can_make_swiss = is_previous_round_over
-    can_make_single_elimination = is_previous_round_over
-    can_make_double_elimination = is_previous_round_over
+    def is_registration_closed(self, round):
+        return not round.tournament.registration_open
+
+    def reg_closed_and_previous_over(self, round):
+        return (self.is_registration_closed(round) and
+                self.is_previous_round_over(round))
+
+    can_make_random = is_registration_closed
+    can_make_swiss = reg_closed_and_previous_over
+    can_make_single_elimination = reg_closed_and_previous_over
+    can_make_double_elimination = reg_closed_and_previous_over
 
     def create_matches(self, round):
         # if there already are some matches, something's probably wrong

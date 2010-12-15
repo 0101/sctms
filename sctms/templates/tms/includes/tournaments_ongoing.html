@@ -12,21 +12,12 @@
                             <strong>{{ tournament.current_round.description }}</strong> {{ tournament.current_round.time_info }}
                         </div>
                         {% endif %}
-                        {% comment %}
-                        {% if tournament.ranking_ready %}
-                        {% endcomment %}
-                        {% comment %}
-                        Don't want to slow down index page if ranking isn't calculated
-                        {% endcomment %}
                         <div class="ranking">
                             <strong>{% trans "Current ranking" %}:</strong>
                             1. {{ tournament.ranking.0.player.user }}
                             2. {{ tournament.ranking.1.player.user }}
                             3. {{ tournament.ranking.2.player.user }}
                         </div>
-                        {% comment %}
-                        {% endif %}
-                        {% endcomment %}
                     {% endblock %}
                 </a>
                 {% block after-link %}

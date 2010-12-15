@@ -111,7 +111,7 @@ INSTALLED_APPS = [
     #'django.contrib.admindocs',
 
     # 3rd party apps
-    #'django_extensions',
+    'django_extensions',
 
     # project apps
     'tms',
