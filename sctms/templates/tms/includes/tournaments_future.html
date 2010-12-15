@@ -11,7 +11,8 @@
 {% block extra-info %}
     {% if tournament.registration_open %}
         <div class="current-info">
-            <span class="registration">{% trans "Registration ends in" %} {{ tournament.registration_deadline|timeuntil }}</span>
+            <p class="registration">{% trans "Registration ends in" %} {{ tournament.registration_deadline|timeuntil }}</p>
+            <p>{% trans "Players registered" %}: <strong>{{ tournament.players.count }}</strong></p>
         </div>
     {% endif %}
     {% with tournament.rounds.0 as first_round %}
