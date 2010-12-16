@@ -165,6 +165,9 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 	-webkit-box-shadow:0 0 15px #6B5618;
 	box-shadow:0 0 15px #6B5618;}
 
+.index .irc a,
+.index .irc span {display:inline-block;padding:2px;}
+
 .tournament .rounds .round {display:block;}
 .tournament .rounds .round h4 a {display:block;padding:5px;font-size:14px;}
 .tournament .rounds .round h4 a:hover {background-color: #0C1B09;}

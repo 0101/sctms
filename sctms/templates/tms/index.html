@@ -34,7 +34,7 @@
         </div>
     </section>
 
-    <section class="news">
+    <section>
         <div class="box announcements">
             <hgroup><h3>{% trans "Announcements" %}</h3></hgroup>
             <div class="box-content">
@@ -46,6 +46,16 @@
             <hgroup><h3>{% trans "Development" %}</h3></hgroup>
             <div class="box-content">
                 <p><strong><a href="https://github.com/0101/sctms">SCTMS on github</a></strong></p>
+            </div>
+        </div>
+
+        <div class="box irc">
+            <hgroup><h3>{% trans "IRC" %}</h3></hgroup>
+            <div class="box-content">
+                <span>{% trans "To join the chat" %}:</span><br/>
+                <a href="{% url tms:irc %}" target="_blank">{% trans "Use the <strong>web client</strong>" %}</a>
+                <span>{% trans "or" %}</span>
+                <a href="irc://irc.quakenet.org/nyxsc2league">{% trans "open this link with <strong>your IRC client</strong>" %}</a>
             </div>
         </div>
     </section>

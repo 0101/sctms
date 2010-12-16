@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.views.generic.simple import direct_to_template
 
 from tms.views import TmsNyxAuth
 
@@ -13,6 +14,7 @@ urlpatterns += patterns('tms.views',
     url(r'^reg/$', 'registration', name='registration'),
     url(r'^logout/$', 'logout', name='logout'),
     (r'^nyxauth/', include(TmsNyxAuth().urls(), namespace='nyxauth')),
+    url(r'^irc/$', direct_to_template, {'template': 'tms/irc.html'}, name='irc'),
     url(r'^(?P<slug>[\w_-]+)/$', 'tournament', name='tournament'),
     url(r'^(?P<slug>[\w_-]+)/players/$', 'tournament_players', name='tournament_players'),
     url(r'^(?P<slug>[\w_-]+)/rounds/$', 'tournament_rounds', name='tournament_rounds'),
