@@ -125,6 +125,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     players = models.ManyToManyField(Player, blank=True)
     map_pool = models.ManyToManyField(Map, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True)
+    format_class = models.CharField(_('Format'), max_length=50)
 
     objects = TournamentManager()
 
@@ -243,6 +244,11 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
 
     @property
     @cached
+    def format(self):
+        return tournament_formats.get(self.format_class)(self)
+
+    @property
+    @cached
     def current_round(self):
         try:
             now = datetime.now()
@@ -273,7 +279,12 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
 
     @property
     def rounds(self):
-        return self.round_set.order_by('start')
+        if self.round_set.count() == 0:
+            if not getattr(self, '_rounds_recursion_check', False):
+                self._rounds_recursion_check = True
+                self.format.create_rounds_if_possible()
+                self._rounds_recursion_check = False
+        return self.round_set.order_by('order')
 
     def clear_ranking_cache(self):
         cache.delete(self._get_ranking_cache_key())
@@ -377,12 +388,13 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     STATUS_IN_PROGRESS = 'in_progress'
     STATUS_OVER = 'over'
     tournament = models.ForeignKey(Tournament)
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField(null=True, blank=True)
     bo = models.PositiveSmallIntegerField(default=3)
     first_map = models.ForeignKey(Map, null=True, blank=True)
     description = models.CharField(max_length=50, blank=True)
     type = models.SlugField(choices=TYPE_CHOICES)
+    order = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name = _(u'Round')
@@ -398,12 +410,11 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     @property
     @cached
     def index(self):
-        try:
+        if self.id:
             id_list = list(zip(*self.tournament.rounds.values_list('id'))[0])
             return id_list.index(self.id) + 1
-        except IndexError:
-            # must mean this is the first round just being created
-            return 1
+        else:
+            return self.tournament.rounds.count() + 1
 
     @property
     @cached
@@ -420,11 +431,29 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     @property
     def status(self):
         now = datetime.now()
-        if self.start >= now:
+        if self.start >= now or not self.start:
             return Round.STATUS_NOT_STARTED
         if self.end < now:
             return Round.STATUS_OVER
         return Round.STATUS_IN_PROGRESS
+
+    @property
+    @cached
+    def previous_round(self):
+        try:
+            return (self.tournament.round_set.order_by('-order')
+                    .filter(order__lt=self.order)[0])
+        except IndexError:
+            return None
+
+    @property
+    @cached
+    def next_round(self):
+        try:
+            return (self.tournament.round_set.order_by('order')
+                    .filter(order__gt=self.order)[0])
+        except IndexError:
+            return None
 
     def clear_template_cache(self):
         invalidate_template_cache('rounds', self.tournament.id, self)
@@ -444,6 +473,7 @@ class Round(CacheNotifierModel, ClearCacheMixin):
 
     def save(self, *args, **kwargs):
         self.description = self.description or _('Round %s') % self.index
+        self.order = self.order or self.index
         super(Round, self).save(*args, **kwargs)
 
     def start_next_if_possible(self):
@@ -451,18 +481,16 @@ class Round(CacheNotifierModel, ClearCacheMixin):
         Checks if this round ended ahead of schedule and starts the next one
         if it is the case. Assuming this round is currently in progress.
         """
-        if not (self.is_in_progress() and self.all_finished):
-            return
-        try:
-            next = self.get_next_by_start()
-        except Round.DoesNotExist:
+        if not (self.is_in_progress() and self.all_finished and self.next_round):
             return
 
-        self.end = next.start = datetime.now()
+        self.end = self.next_round.start = datetime.now()
         self.save()
-        next.save()
+        self.next_round.save()
 
     def time_info(self):
+        if self.previous_round and not self.start:
+            return _('starts when %s is finished') % self.previous_round
         if self.is_not_yet_started():
             return _('starts in %s') % timeuntil(self.start)
         if self.is_in_progress():
@@ -490,11 +518,10 @@ class MatchMaker(object):
             self.create_matches(round)
 
     def is_previous_round_over(self, round):
-        try:
-            previous_round = round.get_previous_by_start()
-        except Round.DoesNotExist:
+        if round.previous_round:
+            return round.previous_round.end < datetime.now()
+        else:
             return True
-        return previous_round.end < datetime.now()
 
     def is_registration_closed(self, round):
         return not round.tournament.registration_open
@@ -555,9 +582,9 @@ class MatchMaker(object):
         return pairs
 
     def make_pairs_single_elimination(self, round, ranking):
-        previous_round = round.get_previous_by_start()
+        previous_round = round.previous_round
 
-        if previous_round.type == Round.TYPE_SINGLE_ELIM:
+        if previous_round and previous_round.type == Round.TYPE_SINGLE_ELIM:
             previous_winners = [m.winner for m in previous_round.matches]
             # this is expected to return items from ranking...
             players = [{'player': p} for p in previous_winners]
@@ -669,3 +696,6 @@ class Replay(CacheNotifierModel):
 
 bind_clear_cache(Round)
 bind_clear_cache(Tournament)
+
+
+from tms.tournaments import tournament_formats

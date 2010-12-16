@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-
+from tms.forms import TournamentForm
 from tms.models import Map, Match, Player, Replay, Round, Tournament
 
 
@@ -23,6 +23,7 @@ class TournamentAdmin(admin.ModelAdmin):
     filter_horizontal = 'players',
     list_display = 'name', 'slug',
     exclude = 'owner',
+    form = TournamentForm
 
 
 class RoundAdmin(admin.ModelAdmin):
@@ -30,7 +31,7 @@ class RoundAdmin(admin.ModelAdmin):
     list_display = 'description', 'tournament', 'start', 'end', 'type'
     list_filter = 'tournament',
     search_fields = 'tournament__name', 'description',
-    ordering = 'start',
+    ordering = 'order',
 
 
 class PlayerAdmin(admin.ModelAdmin):

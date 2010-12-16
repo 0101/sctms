@@ -1,5 +1,7 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
+from tms.tournaments import tournament_formats
 from tms.models import Player, Replay, Tournament
 
 
@@ -36,6 +38,11 @@ class ReplayForm(forms.ModelForm):
 
 
 class TournamentForm(forms.ModelForm):
+    format_class = forms.ChoiceField(label=_('Format'))
 
     class Meta:
         model = Tournament
+
+    def __init__(self, *args, **kwargs):
+        super(TournamentForm, self).__init__(*args, **kwargs)
+        self.fields['format_class'].choices = tournament_formats.get_choices()
