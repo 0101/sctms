@@ -135,7 +135,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .index .tournaments .tournament div {color: #aaa;}
 .index .tournaments .tournament .current-info {}
 .index .tournaments .tournament .current-info .round {font-weight:bold;}
-.index .tournaments .tournament .joined {color:#16BF14;font-weight:bold;padding:5px;}
+.index .tournaments .tournament .joined {color:#5DAA5D;font-weight:bold;padding:5px;}
 .index .tournaments .create-tournament {font-weight:bold;padding:5px;display:inline-block;margin-bottom:10px;}
 .index .tournaments .ongoing-tournaments .icon {background-image: url('../img/icon-install.png');}
 .index .tournaments .future-tournaments .icon {background-image: url('../img/icon-scout.png');}
