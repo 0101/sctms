@@ -18,4 +18,5 @@ class TournamentManager(models.Manager):
 
     def past(self):
         return (self.exclude_owned().exclude(round__end__gte=datetime.now())
-                                    .exclude(round=None))
+                                    .exclude(round=None)
+                                    .order_by('-registration_deadline'))
