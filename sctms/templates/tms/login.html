@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="login-option nyx-login">
-            <a href="{% url tms:nyxauth:dispatch %}">
+            <a href="{% url tms:nyxauth:dispatch %}?{{ request.GET.urlencode }}">
                 <span>Přihlásit se přes <strong>nyx</strong></span>
             </a>
         </div>
@@ -49,4 +49,3 @@
 $('#login-form input[type="text"]:first').focus();
 </script>
 {% endblock %}
-
