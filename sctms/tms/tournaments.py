@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta, time
 from math import log
 
+from django.core.exceptions import MultipleObjectsReturned
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
-from tms.models import Round
+from tms.models import Round, Match
 
 
 class __FormatLibrary(object):
@@ -96,5 +97,56 @@ class NyxLeague(BaseTournamentFormat):
                              _('Round of %s') % (2 ** (playoff_round_count - i))),
             )
 
+    def get_final_placing(self, limit=3):
+        ranking = self.tournament.ranking
+        ranking.sort_by('playoff_wins')
+
+        place = 1
+        wins = ranking[0]['playoff_wins']
+        group = [ranking[0]['player']]
+        for item in ranking[1:]:
+            if item['playoff_wins'] == wins:
+                group.append(item['player'])
+            else:
+                yield place, group
+                place += 1
+                if limit and place > limit:
+                    break
+                group = [item['player']]
+                wins = item['playoff_wins']
+
+
+class DoubleEliminationTournament(BaseTournamentFormat):
+    """
+    Double elimination tournament, winners bracket, losers bracket and all
+    that good jazz.
+    """
+
+    def get_final_placing(self, limit=4):
+        rounds = self.tournament.rounds
+        try:
+            final = Match.objects.get(round__in=rounds,
+                                      round__type=Round.TYPE_DOUBLE_ELIM_FIN)
+        except MultipleObjectsReturned:
+            # TODO: logging
+            print '%s has multiple Grand Final matches!' % self.tournament
+            return
+        except Match.DoesNotExist:
+            return
+
+        yield 1, [final.winner]
+        if limit == 1: return
+        yield 2, [final.loser]
+        if limit == 2: return
+
+        lb = rounds.filter(type=Round.TYPE_DOUBLE_ELIM_LB).order_by('-order')
+        try:
+            yield 3, [lb[0].match_set.all()[0].loser]
+            if limit == 3: return
+            yield 4, [lb[1].match_set.all()[0].loser]
+        except IndexError:
+            return
+
 
 tournament_formats.register(NyxLeague, 'Nyx League')
+tournament_formats.register(DoubleEliminationTournament, 'Double elimination tournament')

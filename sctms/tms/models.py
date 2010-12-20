@@ -108,7 +108,7 @@ class PlayerStats(object):
         # TODO: ugh...
         r = 0
         for tournament in self.player.tournament_set.all():
-            for place, players in tournament.get_playoff_placing(places=3):
+            for place, players in tournament.get_final_placing(limit=3):
                 if self.player in players:
                     if place == 1:
                         r = r + 1 if r >= 3 else 3
@@ -293,23 +293,8 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     def get_absolute_url(self):
         return reverse('tms:tournament', kwargs={'slug': self.slug})
 
-    def get_playoff_placing(self, places=3):
-        ranking = self.ranking
-        ranking.sort_by('playoff_wins')
-
-        place = 1
-        wins = ranking[0]['playoff_wins']
-        group = [ranking[0]['player']]
-        for item in ranking[1:]:
-            if item['playoff_wins'] == wins:
-                group.append(item['player'])
-            else:
-                yield place, group
-                place += 1
-                if place > places:
-                    break
-                group = [item['player']]
-                wins = item['playoff_wins']
+    def get_final_placing(self, *args, **kwargs):
+        return self.format.get_final_placing(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if not self.registration_deadline:
@@ -372,17 +357,21 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     TYPE_SWISS = 'swiss'
     TYPE_ROBIN = 'round_robin'
     TYPE_SINGLE_ELIM = 'single_elimination'
-    TYPE_DOUBLE_ELIM = 'double_elimination'
+    TYPE_DOUBLE_ELIM_WB = 'double_elimination_wb'
+    TYPE_DOUBLE_ELIM_LB = 'double_elimination_lb'
+    TYPE_DOUBLE_ELIM_FIN = 'double_elimination_fin'
+    # TODO: remove:
     TYPES_PLAYOFF = (
         TYPE_SINGLE_ELIM,
-        TYPE_DOUBLE_ELIM,
     )
     TYPE_CHOICES = (
         (TYPE_RANDOM, _('Random pairs')),
         (TYPE_SWISS, _('Swiss system')),
-        #TODO: (TYPE_ROBIN, _('Round-robin')),
-        (TYPE_SINGLE_ELIM, _('Single elimination playoff')),
-        #TODO: (TYPE_DOUBLE_ELIM, _('Double elimination playoff')),
+        (TYPE_ROBIN, _('Round-robin')),
+        (TYPE_SINGLE_ELIM, _('Single elimination')),
+        (TYPE_DOUBLE_ELIM_WB, _('Double elimination - Winners bracket')),
+        (TYPE_DOUBLE_ELIM_LB, _('Double elimination - Losers bracket')),
+        (TYPE_DOUBLE_ELIM_FIN, _('Double elimination - Final')),
     )
     STATUS_NOT_STARTED = 'not_yet_started'
     STATUS_IN_PROGRESS = 'in_progress'

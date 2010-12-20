@@ -11,7 +11,7 @@
 {% block after-link %}
 <div class="ranking">
     <ul>
-    {% for place, players in tournament.get_playoff_placing %}
+    {% for place, players in tournament.get_final_placing %}
         <li class="place{{ place }}"><span class="place">{{ place }}.</span>
             {% for player in players %}
                 <a class="lightbox" href="{{ player.get_absolute_url }}">{{ player.user }}</a>{% if not forloop.last %},{% endif %}
