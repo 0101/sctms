@@ -13,6 +13,7 @@ class RoundInline(admin.StackedInline):
 
 class MatchInline(admin.TabularInline):
     model = Match
+    raw_id_fields = 'player1', 'player2',
     extra = 0
 
 
@@ -36,6 +37,8 @@ class RoundAdmin(admin.ModelAdmin):
 
 class PlayerAdmin(admin.ModelAdmin):
     exclude = 'user',
+    list_display = 'user', 'character_name',
+    ordering = 'user',
 
     def queryset(self, request):
         qs = super(PlayerAdmin, self).queryset(request)
