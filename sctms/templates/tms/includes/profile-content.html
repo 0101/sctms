@@ -34,7 +34,7 @@
     <h2>{% trans "Played in" %}:</h2>
     <table class="tournaments past">
         {% for tournament, rank in tournaments.past %}
-        <tr><th><a href="{{ tournament.get_absolute_url }}">{{ tournament }}</a></th><td class="rank">Placed <span class="placed{{ rank }}">{{ rank }}.</span></td></tr>
+        <tr><th><a href="{{ tournament.get_absolute_url }}">{{ tournament }}</a></th>{% if rank %}<td class="rank">Placed <span class="placed{{ rank }}">{{ rank }}.</span></td>{% endif %}</tr>
         {% endfor %}
     </table>
     {% endif %}

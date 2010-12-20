@@ -246,13 +246,19 @@ def leave_tournament(request, tournament):
 def player_profile(request, username, template='tms/player_profile.html'):
     player = get_object_or_404(Player, user__username=username)
 
-    def tournament_info(tournament):
+    def ongoing_info(tournament):
         return tournament, tournament.ranking.get_for_player(player)['rank']
 
+    def past_info(tournament):
+        for place, players in tournament.get_final_placing(limit=None):
+            if player in players:
+                return tournament, place
+        return tournament, None
+
     tournaments = {
-        'ongoing': map(tournament_info, player.tournament_set.ongoing()),
+        'ongoing': map(ongoing_info, player.tournament_set.ongoing()),
         'future': player.tournament_set.future(),
-        'past': map(tournament_info, player.tournament_set.past()),
+        'past': map(past_info, player.tournament_set.past()),
     }
 
     context = {'player': player, 'tournaments': tournaments}
