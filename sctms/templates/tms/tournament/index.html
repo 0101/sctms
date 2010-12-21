@@ -9,6 +9,8 @@
     <span class="breadcrumbs"><a href="/">{% trans "Home" %}</a> > </span><h1>{{ tournament.name }}</h1>
 </hgroup>
 
+{% if tournament.slogan %}<div class="tournament-slogan">&ldquo;{{ tournament.slogan }}&rdquo;</div>{% endif %}
+
 <div class="content-wrap tournament">
     <div class="box {{ current_view }}">
         <nav class="clearfix">

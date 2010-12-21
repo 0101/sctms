@@ -119,6 +119,7 @@ class PlayerStats(object):
 
 class Tournament(CacheNotifierModel, ClearCacheMixin):
     name = models.CharField(max_length=50, unique=True)
+    slogan = models.CharField(max_length=200, blank=True)
     slug = AutoSlugField(populate_from='name')
     registration_deadline = models.DateTimeField(blank=True, help_text='Defaults to a week from today')
     additional_information = models.TextField(blank=True)

@@ -68,6 +68,8 @@ section.user nav a:hover {background:#1C1606;}
 .content hgroup .breadcrumbs a {color: #436482;}
 .content hgroup .breadcrumbs a:hover {color: #FFD13A;}
 
+.content .tournament-slogan {text-align:center;color:#666;font-family:"Trebuchet MS", "Segoe UI", "Lucida Grande";font-style:italic;margin-top:12px;}
+
 .content .content-wrap {width:960px;margin:0 auto;}
 
 .content .index section {width:480px;float:left;}
@@ -159,7 +161,6 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .tournament.box h2 {font-size:24px;border-bottom:3px solid #72A979;text-shadow:-1px -1px 0 #000;margin:30px 0 5px;color:#ddd}
 .tournament .tournament.box h3 {color:#72A979;font-size:17px;font-weight:bold;margin-top:20px;}
 .tournament .tournament.box strong {color:#ddd;}
-.tournament .tournament.box em {color:#72A979;font-style:normal;}
 .tournament .tournament.box p {margin-bottom:20px;}
 
 .tournament .rounds .round {display:block;}
