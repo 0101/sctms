@@ -5,7 +5,7 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.db import transaction
 from django.utils.translation import ugettext as _
 
-from tms.models import Round, Match
+from tms.models import Round, Match, Rules
 
 
 class __FormatLibrary(object):
@@ -39,6 +39,13 @@ class BaseTournamentFormat(object):
                 self._create_rounds()
             except AttributeError:
                 pass
+
+    @property
+    def rules(self):
+        try:
+            return Rules.objects.get(format_class=self.__class__.__name__).text
+        except Rules.DoesNotExist:
+            return ''
 
 
 class NyxLeague(BaseTournamentFormat):

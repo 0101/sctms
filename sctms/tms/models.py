@@ -139,6 +139,14 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     def __contains__(self, player):
         return self.players.filter(id=player.id).count() != 0
 
+    def __getattr__(self, attr):
+        """
+        tries to find missing atributes on the 'format' object
+        """
+        if attr.startswith('_'):
+            return super(Tournament, self).__getattr__(attr)
+        return getattr(self.format, attr)
+
     def _create_ranking(self):
         ranking = PlayerRanking(self)
 
@@ -293,9 +301,6 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     def get_absolute_url(self):
         return reverse('tms:tournament', kwargs={'slug': self.slug})
 
-    def get_final_placing(self, *args, **kwargs):
-        return self.format.get_final_placing(*args, **kwargs)
-
     def save(self, *args, **kwargs):
         if not self.registration_deadline:
             self.registration_deadline = date.today() + timedelta(7)
@@ -312,6 +317,14 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     @classmethod
     def clear_cache_match(cls, match, action):
         match.round.tournament.clear_ranking_cache()
+
+    @classmethod
+    def clear_cache_rules(cls, rules, action):
+        ids = (Tournament.objects.filter(format_class=rules.format_class)
+               .values_list('id'))
+        if ids:
+            for id in zip(*ids)[0]:
+                invalidate_template_cache('info', id)
 
 
 class FastTournament(Tournament):
@@ -681,6 +694,18 @@ class Replay(CacheNotifierModel):
     @property
     def tournament(self):
         return self.round.tournament
+
+
+class Rules(CacheNotifierModel):
+    format_class = models.CharField(max_length=50, unique=True)
+    text = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = _(u'Rules')
+        verbose_name_plural = _(u'Rules')
+
+    def __unicode__(self):
+        return self.format_class
 
 
 bind_clear_cache(Round)

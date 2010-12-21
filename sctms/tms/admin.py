@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-from tms.forms import TournamentForm
-from tms.models import Map, Match, Player, Replay, Round, Tournament
+from tms.forms import TournamentForm, RulesForm
+from tms.models import Map, Match, Player, Replay, Round, Tournament, Rules
 
 
 class RoundInline(admin.StackedInline):
@@ -21,7 +21,7 @@ class TournamentAdmin(admin.ModelAdmin):
     search_fields = 'name', 'slug',
     date_hierarchy = 'registration_deadline'
     inlines = RoundInline,
-    filter_horizontal = 'players',
+    filter_horizontal = 'players', 'map_pool',
     list_display = 'name', 'slug',
     exclude = 'owner',
     form = TournamentForm
@@ -62,8 +62,13 @@ class ReplayAdmin(admin.ModelAdmin):
     search_fields = 'file',
 
 
+class RulesAdmin(admin.ModelAdmin):
+    form = RulesForm
+
+
 admin.site.register(Map)
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(Replay, ReplayAdmin)
 admin.site.register(Round, RoundAdmin)
 admin.site.register(Tournament, TournamentAdmin)
+admin.site.register(Rules, RulesAdmin)

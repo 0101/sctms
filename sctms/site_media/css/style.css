@@ -156,6 +156,12 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .index .irc a,
 .index .irc span {display:inline-block;padding:2px;}
 
+.tournament .tournament.box h2 {font-size:24px;border-bottom:3px solid #72A979;text-shadow:-1px -1px 0 #000;margin:30px 0 5px;color:#ddd}
+.tournament .tournament.box h3 {color:#72A979;font-size:17px;font-weight:bold;margin-top:20px;}
+.tournament .tournament.box strong {color:#ddd;}
+.tournament .tournament.box em {color:#72A979;font-style:normal;}
+.tournament .tournament.box p {margin-bottom:20px;}
+
 .tournament .rounds .round {display:block;}
 .tournament .rounds .round h4 a {display:block;padding:5px;font-size:14px;}
 .tournament .rounds .round h4 a:hover {background-color: #0C1B09;}
