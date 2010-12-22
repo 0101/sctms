@@ -12,7 +12,8 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.simple import direct_to_template
@@ -139,33 +140,38 @@ class tournament_view(object):
                 'tournament': tournament,
                 'current_view': function.__name__,
             })
-            return direct_to_template(request, self.template, context)
+            templates = [
+                'tms/tournament/%s/%s' % (tournament.format_class, self.template),
+                'tms/tournament/%s' % self.template,
+            ]
+            return render_to_response(templates, context,
+                                      context_instance=RequestContext(request))
         return wrapped
 
 
-@tournament_view(template='tms/tournament/index.html')
+@tournament_view(template='index.html')
 def tournament(request, tournament): pass
 
 
-@tournament_view(template='tms/tournament/players.html')
+@tournament_view(template='players.html')
 def tournament_players(request, tournament): pass
 
 
-@tournament_view(template='tms/tournament/round.html')
+@tournament_view(template='round.html')
 def tournament_rounds(request, tournament):
     if tournament.current_round:
         return HttpResponseRedirect(tournament.current_round.get_absolute_url())
     return {'selected_round': None}
 
 
-@tournament_view(template='tms/tournament/round.html')
+@tournament_view(template='round.html')
 def tournament_round(request, tournament, id=None):
     round = get_object_or_404(Round, tournament=tournament, id=id)
     return {'selected_round': round}
 
 
 @login_required
-@tournament_view(template='tms/tournament/result_report.html')
+@tournament_view(template='result_report.html')
 def result_report(request, tournament):
     user = request.user
     player = user.get_profile()
@@ -207,7 +213,7 @@ def result_report(request, tournament):
 
 
 @login_required
-@tournament_view(template='tms/tournament/join.html')
+@tournament_view(template='join.html')
 def join_tournament(request, tournament):
     if not tournament.registration_open:
         return {'message': _('Registration closed.')}
@@ -225,7 +231,7 @@ def join_tournament(request, tournament):
 
 
 @login_required
-@tournament_view(template='tms/tournament/leave.html')
+@tournament_view(template='leave.html')
 def leave_tournament(request, tournament):
     if not tournament.registration_open:
         return {'message': _('You cannot leave a tournament '
