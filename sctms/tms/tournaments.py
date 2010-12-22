@@ -13,8 +13,8 @@ class __FormatLibrary(object):
     def __init__(self):
         self._registry = {}
 
-    def register(self, cls, name):
-        self._registry[cls.__name__] = {'class': cls, 'name': name}
+    def register(self, cls):
+        self._registry[cls.__name__] = {'class': cls, 'name': cls.name}
 
     def get(self, key):
         return self._registry[key]['class']
@@ -30,6 +30,17 @@ class BaseTournamentFormat(object):
     def __init__(self, tournament):
         self.tournament = tournament
 
+    @property
+    def description(self):
+        return self.__class__.__doc__
+
+    @property
+    def rules(self):
+        try:
+            return Rules.objects.get(format_class=self.__class__.__name__).text
+        except Rules.DoesNotExist:
+            return ''
+
     def create_rounds_if_possible(self):
         """
         Generates rounds for the tournament if registration is already closed.
@@ -40,19 +51,13 @@ class BaseTournamentFormat(object):
             except AttributeError:
                 pass
 
-    @property
-    def rules(self):
-        try:
-            return Rules.objects.get(format_class=self.__class__.__name__).text
-        except Rules.DoesNotExist:
-            return ''
-
 
 class NyxLeague(BaseTournamentFormat):
     """
     A two-stage tournament. 6 rounds of a swiss-system tournament, followed by
     a single-elimination playoff for top [2^(round(log2(registered players))) / 4] players.
     """
+    name = _('Nyx League')
 
     swiss_round_count = 6
     swiss_round_length = 5 # days
@@ -128,6 +133,7 @@ class DoubleEliminationTournament(BaseTournamentFormat):
     Double elimination tournament, winners bracket, losers bracket and all
     that good jazz.
     """
+    name = _('Double Elimination Tournament')
 
     def get_final_placing(self, limit=4):
         rounds = self.tournament.rounds
@@ -155,5 +161,5 @@ class DoubleEliminationTournament(BaseTournamentFormat):
             return
 
 
-tournament_formats.register(NyxLeague, 'Nyx League')
-tournament_formats.register(DoubleEliminationTournament, 'Double elimination tournament')
+tournament_formats.register(NyxLeague)
+tournament_formats.register(DoubleEliminationTournament)
