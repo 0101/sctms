@@ -38,7 +38,39 @@
         <div class="box-content">
             {% block box-content %}
             {% cache 90000000 info tournament.id %}
-            <h3>Defaultní termíny a mapy pro jednotlivá kola</h3>
+
+                <h2 id="info">{% trans "About" %}<span class="icon"></span></h2>
+                {% block about %}
+                    <ul>
+                        <li>{% trans "Event type" %}: <strong title="{{ tournament.description }}">{{ tournament.format.name }}</strong></li>
+                        <li>{% trans "Format" %}: <strong>1v1</strong></li>
+                    </ul>
+
+                    <h3>{% trans "Registration deadline" %}</h3>
+                    <ul>
+                    <li><strong>{{ tournament.registration_deadline|date:"d. m. Y G:i" }}</strong> CEST {% if tournament.registration_open %}
+                    &ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}</li>
+                    <li>Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
+                    <li>{% trans "Players registered" %}: <strong><a href="{% url tms:tournament_players slug=tournament.slug %}">{{ tournament.players.count }}</a></strong></li>
+                    </ul>
+
+                    <h3>{% trans "Start" %}</h3>
+                    <p>{% trans "The next day after registration deadline." %}
+
+                    <h3>{% trans "Map pack" %}</h3>
+                    <p>{{ tournament.map_pool.all|join:", " }}</p>
+
+                    <h3>{% trans "Round dates, maps and pairing" %}</h3>
+                    {% url tms:tournament_rounds slug=tournament.slug as rounds_url %}
+                    <p>{% blocktrans with rounds_url as url %}Will be published under <a href="{{ url }}">Rounds</a> after registration deadline.{% endblocktrans %}
+                {% endblock %}
+
+                {% if tournament.additional_information %}
+                    {{ tournament.additional_information|markdown }}
+                {% endif %}
+
+                {% comment %}
+                <h3>Defaultní termíny a mapy pro jednotlivá kola</h3>
                 <ul>
                     <li><b>Základní část</b>
                     <ul>
@@ -67,18 +99,15 @@
                     <li><b>ceny:</b> dobrý pocit a účast v hall of fame pro vítěze resp. top4, zahrání si pro každého a případné nasazení do budoucích turnajů</li>
                     <li><b>mappack:</b> {{ tournament.map_pool.all|join:", " }}</li>
                 </ul>
+                {% endcomment %}
 
-                <h2 id="rules">{% trans "Rules" %}</h2>
+                {% if tournament.prices %}
+                    <h2 id="prices">{% trans "Prices" %}<span class="icon"></span></h2>
+                    {{ tournament.prices|markdown }}
+                {% endif %}
+
+                <h2 id="rules">{% trans "Rules" %}<span class="icon"></span></h2>
                 {{ tournament.rules|markdown }}
-
-                    {% comment %}
-                        <li><b>zápasy:</b> není možné odkládat v základní části (je to možné v play off pokud to fakt nejde jinak). Pokud se tak nestane a já nebudu mít žádné informace proč, počítá se zápas pro oba jako prohra. Pokud se na zápas vybodne jen jeden ze dvojice, druhý získává výhru. Snažte se vždy domluvit na odehrání mezi sebou, když to nepůjde, tak skrz mne. Snaha se domluvit se počítá</li>
-                        <li><b>formát her základní části:</b> Základní část se hraje systémem BO3, tedy na dvě vítězné hry. V případě remízy na některé z map (ani jeden hráč není schopen zničit toho druhého nebo se zničí ve stejný moment), může dojít k remíze (1-1-1), která je v základní části přípustná přípustná. Za vítězství jsou 3 body, za remízu 1 bod, za prohru 0. Pomocné hodnocení je 1. Buchholzův systém, 2. score a 3. vzájemný zápas. Top 8 hráčů základní části postoupí do Playoff.</li>
-                        <li><b>formát her playoff:</b> Single elimination pavouk (nasazení podle výsledků v základní části) se hraje systémem BO5 (tři vítězné hry) s výjimkou finále (BO7). Pokud by na jedné z map došlo k remíze (ani jeden hráč není schpen zničit toho druhého nebo se zničí ve stejný moment) a vedlo by to k celkové remíze v zápase, hráči musí odehrát rozhodující zápas na mapě, kterou vyberou buď jednomyslnou dohodou či systémem seškrtání map na jednu (počínaje hráčem s lepším nasazením v Playoff vždy vyškrtne každý hráč jednu mapu z map listu a nechá totéž udělat hráče druhého. Poslední nevyškrtnutá mapa je tou, na které se bude hrát.).</li>
-                        <li><b>výběr map:</b> pro každé kolo základní i single elimination bude vylosována první mapa, pak mapu volí vždy poražený (bez opakování)</li>
-                        <li><b>účastníci zápasu:</b> jsou jeho hráči, případně navíc organizátor a případní další observeři po domluvě hráčů</li>
-                        <li><b>využívání všech ingame mechanismů je povoleno</b></li></ul>
-                    {% endcomment %}
 
             {% endcache %}
             {% endblock %}

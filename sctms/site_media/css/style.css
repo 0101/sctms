@@ -41,7 +41,7 @@ h1, h2, h3, h4 {font-weight: normal;}
 header, section, article, nav, aside, footer, hgroup, figure, figcaption {display: block;}
 
 body {font-family:"Segoe UI", "Lucida Grande", "Trebuchet MS", Helvetica, Arial, sans-serif;
-	background:#0b0b0b url('../img/bg2.jpg') center -100px no-repeat; color:#aaa;
+	background:#0b0b0b url('../img/bg2.jpg') center -100px repeat-y; color:#aaa;
 	font-size:14px;}
 
 header.top {background:#040404 url('../img/top.jpg') center top no-repeat;text-align:center;}
@@ -158,10 +158,18 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .index .irc a,
 .index .irc span {display:inline-block;padding:2px;}
 
-.tournament .tournament.box h2 {font-size:24px;border-bottom:3px solid #72A979;text-shadow:-1px -1px 0 #000;margin:30px 0 5px;color:#ddd}
+.tournament .tournament.box .box-content {padding:15px 70px;}
+.tournament .tournament.box h2 {font-size:24px;border-bottom:3px solid #527656;margin:30px 0 5px;color:#ddd;position:relative;}
+.tournament .tournament.box h2 .icon {
+	position:absolute;top:-6px;left:-59px;width:50px;height:50px;
+	background:url('../img/about-icons.png') no-repeat;opacity:0.85;}
+.tournament .tournament.box h2#rules .icon {background-position:center top;}
+.tournament .tournament.box h2#prices .icon {background-position:center -51px;}
+.tournament .tournament.box h2#info .icon {background-position:center -102px;}
 .tournament .tournament.box h3 {color:#72A979;font-size:17px;font-weight:bold;margin-top:20px;}
 .tournament .tournament.box strong {color:#ddd;}
 .tournament .tournament.box p {margin-bottom:20px;}
+.tournament .tournament.box li {margin:4px 0;}
 
 .tournament .rounds .round {display:block;}
 .tournament .rounds .round h4 a {display:block;padding:5px;font-size:14px;}
@@ -171,6 +179,8 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .rounds .round h4 a .timeinfo {color:#aaa;margin-left:6px;}
 .tournament .rounds .round.over h4 a .timeinfo {color:#7A7A7A;}
 .tournament .rounds .round.in_progress h4 a .timeinfo {color:#BFBF72;}
+.tournament .rounds .round h4 a .map {color:#ccc;}
+.tournament .rounds .round h4 a .map span {color:#7A7A7A;}
 .tournament .rounds .round-content {background:#1E1A1A;border-top:1px solid #000000;border-bottom:1px solid #444;padding:20px;}
 .tournament .rounds .round-content table {margin:0px auto;}
 .tournament .rounds .round-content table td {padding:3px 6px;border-bottom:1px solid #2D2D2D;}
