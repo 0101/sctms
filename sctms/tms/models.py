@@ -122,11 +122,12 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     slogan = models.CharField(max_length=200, blank=True)
     slug = AutoSlugField(populate_from='name')
     registration_deadline = models.DateTimeField(blank=True, help_text='Defaults to a week from today')
-    additional_information = models.TextField(blank=True)
+    additional_information = models.TextField(blank=True, help_text='You can use markdown formatting')
     players = models.ManyToManyField(Player, blank=True)
     map_pool = models.ManyToManyField(Map, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True)
     format_class = models.CharField(_('Format'), max_length=50)
+    prices = models.TextField(blank=True, help_text='You can use markdown formatting')
 
     objects = TournamentManager()
 
