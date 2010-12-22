@@ -12,7 +12,9 @@
         <h4><a href="{{ round.get_absolute_url }}">
             <span class="desc">{{ round.description }}</span>
             <span class="dates">{{ round.start|date:"d. m." }} &ndash; {{ round.end|date:"d. m." }}</span>
+            {% if round.first_map %}<span class="map"><span>@</span> {{ round.first_map }}{% endif %}
             <span class="timeinfo">{{ round.time_info }}</span>
+
         </a></h4>
         {% if round == selected_round %}
         <div class="round-content">
