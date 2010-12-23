@@ -6,6 +6,7 @@ from django.db import transaction
 from django.utils.translation import ugettext as _
 
 from tms.models import Round, Match, Rules
+from tms.utils import pop_random
 
 
 class __FormatLibrary(object):
@@ -51,6 +52,25 @@ class BaseTournamentFormat(object):
             except AttributeError:
                 pass
 
+    def get_random_map(self):
+        """
+        Returns random map from the map pool. Does not repeat a map until all
+        have already been returned.
+        """
+        if not hasattr(self, '_random_map_generator'):
+            all_maps = tuple(self.tournament.map_pool.all())
+            if not all_maps:
+                return None
+
+            def rmg():
+                while True:
+                    maps = list(all_maps)
+                    while len(maps) > 0:
+                        yield pop_random(maps)
+            self._random_map_generator = rmg()
+
+        return self._random_map_generator.next()
+
 
 class NyxLeague(BaseTournamentFormat):
     """
@@ -87,6 +107,7 @@ class NyxLeague(BaseTournamentFormat):
                 end=(end - timedelta(seconds=1)),
                 type=(Round.TYPE_RANDOM if i == 0 else Round.TYPE_SWISS),
                 bo=3,
+                first_map=self.get_random_map(),
             )
             start = end
 
@@ -107,6 +128,7 @@ class NyxLeague(BaseTournamentFormat):
                 bo=(7 if i == playoff_round_count - 1 else 5),
                 description=(_('Finals') if i == playoff_round_count - 1 else
                              _('Round of %s') % (2 ** (playoff_round_count - i))),
+                first_map=self.get_random_map(),
             )
 
     def get_final_placing(self, limit=3):
