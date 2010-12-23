@@ -311,6 +311,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     @classmethod
     def clear_cache_tournament(cls, tournament, action):
         tournament.clear_ranking_cache()
+        invalidate_template_cache('info', tournament.id)
 
     @classmethod
     def clear_cache_round(cls, round, action):
