@@ -1,5 +1,4 @@
 from datetime import date, datetime, timedelta
-from random import randint
 
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -14,7 +13,7 @@ from django_extensions.db.fields import AutoSlugField
 
 from tms.cachecontrol import CacheNotifierModel, bind_clear_cache, ClearCacheMixin, SAVE
 from tms.managers import TournamentManager
-from tms.utils import cached, invalidate_template_cache, odd, split, merge
+from tms.utils import cached, invalidate_template_cache, odd, split, merge, pop_random
 
 
 class Player(models.Model):
@@ -555,15 +554,14 @@ class MatchMaker(object):
             )
 
     def make_pairs_random(self, round, ranking):
-        pop_random = lambda x: x.pop(randint(0, len(x) - 1))
         while len(ranking) > 1:
             yield pop_random(ranking), pop_random(ranking)
 
 
     def make_pairs_swiss(self, round, ranking):
         if odd(ranking):
-            #TODO: ensure the same player doesn't get popped in multiple rounds
-            ranking.pop(randint(0, len(ranking) - 1))
+            #TODO: bye
+            pop_random(ranking)
 
         group = []
         pairs = []

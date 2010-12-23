@@ -1,3 +1,5 @@
+from random import randint
+
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.hashcompat import md5_constructor
@@ -53,6 +55,10 @@ def merge(x):
     return sum(x, [])
 
 
+def pop_random(x):
+    return x.pop(randint(0, len(x) - 1))
+
+
 def do_nothing(*args, **kwargs):
     pass
 
@@ -60,27 +66,30 @@ def do_nothing(*args, **kwargs):
 def import_players():
     from django.contrib.auth.models import User
     from tms.models import Player
+    from tms.views import _configure_user
 
-    data = """MARTYMARTY,http://eu.battle.net/sc2/en/profile/210242/1/marty/,marty,249
+    data="""MARTYMARTY,http://eu.battle.net/sc2/en/profile/210242/1/marty/,marty,249
+SAVANNAH,http://eu.battle.net/sc2/en/profile/202925/1/Savannah/,Savannah,765
 JANDOS,http://eu.battle.net/sc2/en/profile/204174/1/Jandos/,Jandos,213
-SUNBEAM,http://eu.battle.net/sc2/en/profile/575982/1/Sunbeam/,Sunbeam,126
+KULHY,http://eu.battle.net/sc2/en/profile/806297/1/StarCore/,StarCore,403
+MCKIDNEY,http://eu.battle.net/sc2/en/profile/212958/1/mcKidney/,mcKidney,154
 ARCHITECH,http://eu.battle.net/sc2/en/profile/983045/1/architech/,architech,365
 CUBIK07,http://eu.battle.net/sc2/en/profile/644462/1/ShutUpDonnie/,ShutUpDonnie,492
-SAVANNAH,http://eu.battle.net/sc2/en/profile/202925/1/Savannah/,Savannah,765
 TOMMY_ZLEE,http://eu.battle.net/sc2/en/profile/614918/1/Darkko/,Darkko,595
-SHARNY,http://eu.battle.net/sc2/en/profile/487923/1/Sharny/,Sharny,980
-PERRY,http://eu.battle.net/sc2/en/profile/904228/1/perryone/,perryone,722
-OGLOKOOG,http://eu.battle.net/sc2/en/profile/971744/1/Oglokoog/,Oglokoog,592
+SUNBEAM,http://eu.battle.net/sc2/en/profile/575982/1/Sunbeam/,Sunbeam,126
 ASS_KICKER,http://eu.battle.net/sc2/en/profile/676307/1/uzzi/,uzzi,944
-MCKIDNEY,http://eu.battle.net/sc2/en/profile/212958/1/mcKidney/,mcKidney,154
-LOBIN,http://eu.battle.net/sc2/en/profile/1073892/1/Lobin/,Lobin,989
-KULHY,http://eu.battle.net/sc2/en/profile/806297/1/StarCore/,StarCore,403
 EPICFAIL,http://eu.battle.net/sc2/en/profile/706958/1/OxFF/,OxFF,563
-BIOH,http://eu.battle.net/sc2/en/profile/300429/1/SPDB/,SPDB,854
-JUNGLER,http://eu.battle.net/sc2/en/profile/1067753/1/Jungler/,jungler,905
-REESHA,http://eu.battle.net/sc2/en/profile/1096458/1/Firael/,Firael,115
-XTREE,http://eu.battle.net/sc2/en/profile/693362/1/xTree/,xtree,387
-TEROX,http://eu.battle.net/sc2/en/profile/406042/1/terox/,terox,442"""
+WOODMAKER,http://eu.battle.net/sc2/en/profile/820215/1/woodmaker/,woodmaker,626
+STRANGERD,http://eu.battle.net/sc2/en/profile/1144885/1/StrangerD/,StrangerD,510
+DEFILER,http://eu.battle.net/sc2/en/profile/307907/1/defiler/,defiler,634
+GWINN,http://eu.battle.net/sc2/en/profile/1437124/1/Gwinn/,Gwinn,369
+PLECH,,Polymorph,719
+DESTROYER,http://eu.battle.net/sc2/en/profile/572398/1/DestroyER/,DestroyER,140
+PANVA,http://eu.battle.net/sc2/en/profile/483330/1/PanvA/,PanvA,757
+ATMKO,http://eu.battle.net/sc2/en/profile/744901/1/ATM/,ATM,991
+SKELLYUS,http://eu.battle.net/sc2/en/profile/355039/1/Matess/,Matess,714
+GAPPO,http://eu.battle.net/sc2/en/profile/436115/1/Gappo/,Gappo,967
+MONGHOL,http://eu.battle.net/sc2/en/profile/1348061/1/Monghol/,Monghol,204"""
 
     for d in data.split('\n'):
         username, bnet_url, name, code = d.split(',')
@@ -88,6 +97,9 @@ TEROX,http://eu.battle.net/sc2/en/profile/406042/1/terox/,terox,442"""
             print 'user %s already exists' % username
             continue
         user = User.objects.create_user(username, '', 'sc')
+        user = _configure_user(user)
+        user.set_unusable_password()
+        user.save()
         Player.objects.create(
             user=user,
             bnet_url=bnet_url,
