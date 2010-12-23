@@ -50,15 +50,25 @@
                     <ul>
                     <li><strong>{{ tournament.registration_deadline|date:"d. m. Y G:i" }}</strong> CEST {% if tournament.registration_open %}
                     &ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}</li>
-                    <li>Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
+                    <li id="click-to-join">Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
                     <li>{% trans "Players registered" %}: <strong><a href="{% url tms:tournament_players slug=tournament.slug %}">{{ tournament.players.count }}</a></strong></li>
                     </ul>
 
                     <h3>{% trans "Start" %}</h3>
-                    <p>{% trans "The next day after registration deadline." %}
+                    {% with tournament.rounds.0 as first_round %}
+                        {% if first_round %}
+                        <strong>{{ first_round.start|date:"d. m. Y G:i" }}</strong> CEST
+                        {% else %}
+                        <p>{% trans "The next day after registration deadline." %}
+                        {% endif %}
+                    {% endwith %}
 
-                    <h3>{% trans "Map pack" %}</h3>
-                    <p>{{ tournament.map_pool.all|join:", " }}</p>
+                    {% with tournament.map_pool.all as maps %}
+                        {% if maps %}
+                        <h3>{% trans "Map pack" %}</h3>
+                        <p>{{ tournament.map_pool.all|join:", " }}</p>
+                        {% endif %}
+                    {% endwith %}
 
                     <h3>{% trans "Round dates, maps and pairing" %}</h3>
                     {% url tms:tournament_rounds slug=tournament.slug as rounds_url %}
@@ -68,38 +78,6 @@
                 {% if tournament.additional_information %}
                     {{ tournament.additional_information|markdown }}
                 {% endif %}
-
-                {% comment %}
-                <h3>Defaultní termíny a mapy pro jednotlivá kola</h3>
-                <ul>
-                    <li><b>Základní část</b>
-                    <ul>
-                        {% for round in tournament.rounds_swiss %}
-                            <li><strong>{{ round.description }}</strong> &gt;&gt; {{ round.start|date:"d. m." }} - {{ round.end|date:"d. m." }}, {{ round.first_map }}</li>
-                        {% endfor %}
-                    </ul></li>
-                    <li><br/></li>
-                    <li><b>Playoff</b>
-                    <ul>
-                        {% for round in tournament.rounds_playoff %}
-                            <li><strong>{{ round.description }}</strong> &gt;&gt; {{ round.start|date:"d. m." }} - {{ round.end|date:"d. m." }}, {{ round.first_map }}</li>
-                        {% endfor %}
-                    </ul></li>
-                </ul>
-
-                <br/>
-                <h3>Informace o lize</h3>
-                <ul>
-                    <li><b>formát ligy:</b> 1v1</li>
-                    <li><b>registrace:</b> {{ tournament.registration_deadline }} CEST</li>
-                    <li><b>začátek:</b> {{ tournament.rounds.0.start|date:"d. m." }} 0:00 CEST </li>
-                    <li><b>počet účastníků:</b> {{ tournament.players.count }}</li>
-                    <li><b>formát ligy:</b> základní část BO3 švýcarským systémem <b>{{ tournament.rounds_swiss.count }} kol</b>, následovat bude BO5 (finále BO7) single elimination <b>playoff pro top 8</b> základní části</li>
-                    <li><b>časový průběh ligy:</b> 5 dní na kolo v základní části (vychází to na každé kolo alespoň jeden den sobota/neděle), playoff se odehraje formou týdenního nataženého turnaje/eventu coby vyvrcholení sezóny, finále se pak (snad) odehraje poslední den.</li>
-                    <li><b>ceny:</b> dobrý pocit a účast v hall of fame pro vítěze resp. top4, zahrání si pro každého a případné nasazení do budoucích turnajů</li>
-                    <li><b>mappack:</b> {{ tournament.map_pool.all|join:", " }}</li>
-                </ul>
-                {% endcomment %}
 
                 {% if tournament.prices %}
                     <h2 id="prices">{% trans "Prices" %}<span class="icon"></span></h2>
@@ -122,5 +100,9 @@
 // preload loading animation
 $('<img/>').attr('src', '{{ MEDIA_URL }}img/loading_bar.gif');
 $('.tournament .box nav a').click(function(){ $(this).addClass('loading'); });
+
+{% if user.get_profile in tournament %}
+$('#click-to-join').remove();
+{% endif %}
 </script>
 {% endblock %}
