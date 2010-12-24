@@ -11,7 +11,7 @@
 
 {% if tournament.slogan %}<div class="tournament-slogan">&ldquo;{{ tournament.slogan }}&rdquo;</div>{% endif %}
 
-<div class="content-wrap tournament">
+<div class="content-wrap tournament t-{{ current_view }}">
     <div class="box {{ current_view }}">
         <nav class="clearfix">
             <a {% if current_view == 'tournament' %}class="selected"{% endif %}
@@ -79,9 +79,9 @@
                     {{ tournament.additional_information|markdown }}
                 {% endif %}
 
-                {% if tournament.prices %}
-                    <h2 id="prices">{% trans "Prices" %}<span class="icon"></span></h2>
-                    {{ tournament.prices|markdown }}
+                {% if tournament.prizes %}
+                    <h2 id="prizes">{% trans "Prizes" %}<span class="icon"></span></h2>
+                    {{ tournament.prizes|markdown }}
                 {% endif %}
 
                 <h2 id="rules">{% trans "Rules" %}<span class="icon"></span></h2>

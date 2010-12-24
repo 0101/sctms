@@ -126,7 +126,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     map_pool = models.ManyToManyField(Map, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True)
     format_class = models.CharField(_('Format'), max_length=50)
-    prices = models.TextField(blank=True, help_text='You can use markdown formatting')
+    prizes = models.TextField(blank=True, help_text='You can use markdown formatting')
 
     objects = TournamentManager()
 
