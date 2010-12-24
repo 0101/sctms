@@ -104,6 +104,10 @@ section.user nav a:hover {background:#1C1606;}
 .login .box .nyx-login a:hover {background-position:center top;}
 .login .box .nyx-login a span {display:inline-block;margin-top:99px;text-align:center;font-size:17px;}
 
+.registration .nyx-sign-up {
+	background:url('../img/nyx.png') no-repeat -57px -274px rgba(0, 0, 0, 0.3);border-bottom: 1px solid #444444;font-size: 17px;
+	line-height: 2;text-align: center;}
+
 form fieldset {margin:0 0 10px 0;}
 form .submit-row {/*background:#000;*/text-align:center;}
 form .submit-row input {
@@ -210,6 +214,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .leave_tournament form p {text-align:center; font-size:17px; padding:20px;}
 .tournament .message {font-size:17px; text-align:center; padding:10px; border:1px solid #333; background:#111;}
 
+.content-wrap.t-tournament_players {width:auto;min-width:960px;max-width:1400px;}
 .tournament .tournament_players table {width:100%;}
 .tournament .tournament_players table th {padding:3px; background:#333; font-weight:bold; text-shadow:-1px -1px 0 #000;}
 .tournament .tournament_players table td {padding:3px; border-bottom:1px solid #333; border-top:1px solid #000;}
