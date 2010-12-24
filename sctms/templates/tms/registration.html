@@ -29,13 +29,14 @@
 <section class="registration">
     <hgroup class="h1"><h1>{% trans "Create new account" %}</h1></hgroup>
     <div class="box center-form">
-
-            <div class="nyx-sign-up">
-                <div class="box-content">
-                <p>Máte účet na <strong>NYX</strong>u?</p>
-                <p><strong><a href="{% url tms:nyxauth:dispatch %}">Přihlašte se přes NYX!</a></strong></p>
-                </div>
+        {% if user_form %}
+        <div class="nyx-sign-up">
+            <div class="box-content">
+            <p>Máte účet na <strong>NYX</strong>u?</p>
+            <p><strong><a href="{% url tms:nyxauth:dispatch %}">Přihlašte se přes NYX!</a></strong></p>
             </div>
+        </div>
+        {% endif %}
         <div class="box-content">
             <form method="post" action="">
                 {% csrf_token %}
@@ -66,11 +67,9 @@
 </section>
 {% endblock %}
 
-{% comment %}
 {% block js %}
 {{ block.super }}
 <script type="text/javascript">
 $('form input[type="text"]:first').focus();
 </script>
 {% endblock %}
-{% endcomment %}
