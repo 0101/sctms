@@ -21,9 +21,9 @@ class TournamentAdmin(admin.ModelAdmin):
     search_fields = 'name', 'slug',
     date_hierarchy = 'registration_deadline'
     inlines = RoundInline,
-    filter_horizontal = 'players', 'map_pool',
+    filter_horizontal = 'map_pool',
     list_display = 'name', 'slug',
-    exclude = 'owner',
+    exclude = 'owner', 'players',
     form = TournamentForm
 
 
