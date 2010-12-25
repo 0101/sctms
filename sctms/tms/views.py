@@ -256,7 +256,7 @@ def player_profile(request, username, template='tms/player_profile.html'):
         return tournament, tournament.ranking.get_for_player(player)['rank']
 
     def past_info(tournament):
-        for place, players in tournament.get_final_placing(limit=None):
+        for place, players in tournament.get_final_placing():
             if player in players:
                 return tournament, place
         return tournament, None
