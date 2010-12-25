@@ -63,6 +63,14 @@ def do_nothing(*args, **kwargs):
     pass
 
 
+def is_valid_pairing(pairing):
+    " returns if no pair played against each other before "
+    for p1, p2 in pairing:
+        if p2['player'] in p1['played_against']:
+            return False
+    return True
+
+
 def import_players():
     from django.contrib.auth.models import User
     from tms.models import Player

@@ -29,9 +29,9 @@
             <td class="points">{{ i.points }}</td>
             <td class="buchholz">{{ i.buchholz }}</td>
             <td>{{ i.wins }}&nbsp;({{ i.win_percent }}&nbsp;%)</td>
-            <td class="oponent-list">{% for x in i.won_against %}{{ x.player.user }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td class="oponent-list">{% for player in i.won_against %}{{ player.user }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
             <td>{{ i.losses }}&nbsp;({{ i.loss_percent }}&nbsp%)</td>
-            <td class="oponent-list">{% for x in i.lost_against %}{{ x.player.user }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td class="oponent-list">{% for player in i.lost_against %}{{ player.user }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
             <td>{{ i.games_won }}-{{ i.games_lost }}&nbsp;({% if i.games_won > i.games_lost %}+{% endif %}{{ i.score }})</td>
         </tr>
     {% endfor %}

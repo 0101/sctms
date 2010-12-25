@@ -13,7 +13,7 @@ from django_extensions.db.fields import AutoSlugField
 
 from tms.cachecontrol import CacheNotifierModel, bind_clear_cache, ClearCacheMixin, SAVE
 from tms.managers import TournamentManager
-from tms.utils import cached, invalidate_template_cache, odd, split, merge, pop_random
+from tms.utils import cached, invalidate_template_cache, odd, split, merge, pop_random, is_valid_pairing
 
 
 class Player(models.Model):
@@ -194,26 +194,26 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
             players = Player.objects.filter(id__in=(
                 player.matches_in(tournament).filter(winner=player).values('loser')
             ))
-            return [data[p] for p in players]
+            return list(players)
 
         @ranking.field
         def lost_against(player, tournament, data):
             players = Player.objects.filter(id__in=(
                 player.matches_in(tournament).filter(loser=player).values('winner')
             ))
-            return [data[p] for p in players]
+            return list(players)
 
         @ranking.field
         def played_against(player, tournament, data):
             p = data[player]
             players = set(
-                [pd['player'] for pd in p['won_against'] + p['lost_against']]
+                p['won_against'] + p['lost_against']
             )
-            return [data[p] for p in players]
+            return list(players)
 
         @ranking.field
         def buchholz(player, tournament, data):
-            return sum([pd['points'] for pd in data[player]['played_against']])
+            return sum([data[p]['points'] for p in data[player]['played_against']])
 
         @ranking.field
         def games_won(player, tournament, data):
@@ -570,7 +570,7 @@ class MatchMaker(object):
         def pair(group):
             assert not odd(group)
             half = len(group) / 2
-            return zip(group[:half], group[half:])
+            return [list(p) for p in zip(group[:half], group[half:])]
 
         for player in ranking:
             if player['points'] == points or odd(group):
@@ -581,7 +581,31 @@ class MatchMaker(object):
                 points = player['points']
         pairs += pair(group)
 
-        #TODO: check players don't get opponents they already played with
+        pairs = self._fix_rematches(pairs)
+
+        return pairs
+
+    def _fix_rematches(self, pairs):
+        " check players don't get opponents they already played with "
+        # FIXME: ghetto version for now...
+        for i in range(len(pairs)):
+            p1, p2 = pairs[i]
+            j = 1
+            if p2['player'] in p1['played_against']:
+                ok = False
+                while not ok:
+                    try:
+                        p3, p4 = pairs[i+j]
+                    except IndexError:
+                        # we're screwed now...
+                        return []
+                    for k, p in enumerate([p3, p4]):
+                        if p['player'] not in p1['played_against']:
+                            pairs[i][1] = p
+                            pairs[i+j][k] = p2
+                            ok = True
+                            break
+                    j += 1
         return pairs
 
     def make_pairs_single_elimination(self, round, ranking):
