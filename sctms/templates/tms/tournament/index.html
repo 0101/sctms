@@ -49,7 +49,7 @@
                     <h3>{% trans "Registration deadline" %}</h3>
                     <ul>
                     <li><strong>{{ tournament.registration_deadline|date:"d. m. Y G:i" }}</strong> CEST {% if tournament.registration_open %}
-                    &ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}</li>
+                    {% comment %}&ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}{% endcomment %}</li>
                     <li id="click-to-join">Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
                     <li>{% trans "Players registered" %}: <strong><a href="{% url tms:tournament_players slug=tournament.slug %}">{{ tournament.players.count }}</a></strong></li>
                     </ul>
