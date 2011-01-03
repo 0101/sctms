@@ -25,6 +25,10 @@
                     <a class="report-results" href="{% url tms:result_report slug=tournament.slug %}">{% trans "Report match results" %}</a>
                     {% endif %}
                 {% endblock %}
+                {% if user.is_manager or user.is_superuser %}
+                   
+                    <a href="{% url admin:tms_tournament_change tournament.id %}">Edit&nbsp;in&nbsp;admin</a>
+                {% endif %}
             </li>
         {% empty %}
             <li>
