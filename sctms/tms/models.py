@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import timeuntil, timesince, slugify
 
 from django_extensions.db.fields import AutoSlugField
+from jsonstore.models import JsonStore
 
 from tms.cachecontrol import CacheNotifierModel, bind_clear_cache, ClearCacheMixin, SAVE
 from tms.managers import TournamentManager
@@ -64,7 +65,11 @@ class PlayerRanking(object):
         self.tournament = tournament
         self.players = []
         self.player_dict = {}
-        for player in tournament.players.order_by('user__username'):
+        competitors = tournament.competitor_set.order_by('player__user__username')
+
+        for competitor in competitors:
+            player = competitor.player
+            player.competitor = competitor
             player_data = {'player': player}
             # get user from db, so that it gets cached
             player.user
@@ -87,7 +92,9 @@ class PlayerRanking(object):
         for row in self.players:
             field = function.__name__
             player = row['player']
-            row[field] = function(player, self.tournament, self.player_dict)
+            value = function(player, self.tournament, self.player_dict)
+            extra = player.competitor.get('extra_' + field)
+            row[field] = value + extra if extra else value
 
     def get_for_player(self, player):
         return self.player_dict[player]
@@ -122,7 +129,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     slug = AutoSlugField(populate_from='name')
     registration_deadline = models.DateTimeField(blank=True, help_text='Defaults to a week from today')
     additional_information = models.TextField(blank=True, help_text='You can use markdown formatting')
-    players = models.ManyToManyField(Player, blank=True)
+    players = models.ManyToManyField(Player, blank=True, through='Competitor')
     map_pool = models.ManyToManyField(Map, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True)
     format_class = models.CharField(_('Format'), max_length=50)
@@ -328,6 +335,11 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
             for id in zip(*ids)[0]:
                 invalidate_template_cache('info', id)
 
+    @classmethod
+    def clear_cache_competitor(cls, competitor, action):
+        competitor.tournament.clear_ranking_cache()
+
+
 
 class FastTournament(Tournament):
     """
@@ -365,6 +377,18 @@ class FastTournament(Tournament):
         full_ranking_key = Tournament._get_ranking_cache_key(self)
         full_ranking = cache.get(full_ranking_key)
         return full_ranking or super(FastTournament, self).ranking
+
+
+class Competitor(JsonStore, CacheNotifierModel):
+    player = models.ForeignKey(Player)
+    tournament = models.ForeignKey(Tournament)
+
+    class Meta:
+        verbose_name = _(u'Competitor')
+        verbose_name_plural = _(u'Competitors')
+
+    def __unicode__(self):
+        return '%s in %s' % (self.player.user.username, self.tournament.name)
 
 
 class Round(CacheNotifierModel, ClearCacheMixin):
@@ -414,6 +438,9 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     @property
     @cached
     def index(self):
+        """
+        Round index starting with 1.
+        """
         if self.id:
             id_list = list(zip(*self.tournament.rounds.values_list('id'))[0])
             return id_list.index(self.id) + 1
@@ -554,15 +581,37 @@ class MatchMaker(object):
             )
 
     def make_pairs_random(self, round, ranking):
+        ranking = self._random_bye_if_odd(round, ranking)
         while len(ranking) > 1:
             yield pop_random(ranking), pop_random(ranking)
 
+    def _random_bye_if_odd(self, round, ranking):
+        if odd(ranking):
+            # random player receives a "bye" (unless they already got it earlier)
+            bye_candidates = [x for x in ranking
+                              if not x['player'].competitor.received_bye]
+
+            for x in bye_candidates:
+                print x['player'].user.username
+
+            if not bye_candidates:
+                # everyone received a bye -- it's probably messed up
+                # TODO: logging
+                return []
+            bye_receiver = pop_random(bye_candidates)
+
+            print 'byed:', bye_receiver['player'].user.username
+
+            ranking.pop(ranking.index(bye_receiver))
+            competitor = bye_receiver['player'].competitor
+            competitor.received_bye = True
+            competitor.extra_points = 3
+            competitor.extra_buchholz = round.index * 3 + 1
+            competitor.save()
+        return ranking
 
     def make_pairs_swiss(self, round, ranking):
-        if odd(ranking):
-            #TODO: bye
-            pop_random(ranking)
-
+        ranking = self._random_bye_if_odd(round, ranking)
         group = []
         pairs = []
         points = ranking[0]['points']
