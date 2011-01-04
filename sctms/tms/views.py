@@ -20,9 +20,8 @@ from django.views.generic.simple import direct_to_template
 
 from nyxauth import NyxAuth
 
-from tms.cachecontrol import cache_control
 from tms.forms import PlayerForm, ResultForm, ReplayForm
-from tms.models import Tournament, Round, Match, PlayerRanking, Player, FastTournament
+from tms.models import Tournament, Round, Match, PlayerRanking, Player, FastTournament, Competitor
 
 
 def _configure_user(user):
@@ -224,8 +223,7 @@ def join_tournament(request, tournament):
         return {'message': _('You are already registered for this tournament.')}
 
     if request.method == 'POST':
-        tournament.players.add(player)
-        cache_control.trigger(tournament, 'player_add')
+        Competitor.objects.create(player=player, tournament=tournament)
         messages.success(request, _('You have joined %s!') % tournament.name)
         return HttpResponseRedirect(tournament.get_absolute_url())
 
@@ -243,8 +241,7 @@ def leave_tournament(request, tournament):
         return {'message': _('You are not registered for this tournament.')}
 
     if request.method == 'POST':
-        tournament.players.remove(player)
-        cache_control.trigger(tournament, 'player_remove')
+        Competitor.objects.get(player=player, tournament=tournament).delete()
         messages.success(request, _('You have left %s.') % tournament.name)
         return HttpResponseRedirect(reverse('tms:index'))
 
