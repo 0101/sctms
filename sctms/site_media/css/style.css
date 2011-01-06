@@ -238,9 +238,10 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 
 .profile-content,
 .replays-content {width:600px;}
-.profile-content h1,
-.replays-content h1 {background:#000;font-size:17px;padding:5px 10px;color:#eee;border-bottom:1px solid #222222;}
-.profile-content h1.extra {background:#090909 url('../img/ranks.jpg') no-repeat; padding:15px 20px;}
+.profile-content h1 {background:#000;border-bottom:1px solid #222222;}
+.profile-content .username{font-size:17px;color:#eee;padding:5px 10px;display:inline-block;}
+.profile-content h1.extra {background:#090909 url('../img/ranks.jpg') no-repeat;}
+.profile-content h1.extra .username {padding:15px 20px;}
 .profile-content h1.rank1 {background-position:100% -14px;}
 .profile-content h1.rank2 {background-position:100% -97px;}
 .profile-content h1.rank3 {background-position:100% -180px;}
@@ -257,7 +258,13 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .profile-content table.tournaments .rank .placed1 {color:gold;text-shadow:0 0 2px gold;font-weight:bold;}
 .profile-content table.tournaments .rank .placed2 {color:#DDDDDD;text-shadow:0 0 2px #DDDDDD;font-weight:bold;}
 .profile-content table.tournaments .rank .placed3 {color:#CD7F32;text-shadow:0 0 2px #CD7F32;font-weight:bold;}
+.profile-content .avatar {
+	float:right;border:1px solid #333;padding:3px;opacity:.8;background:#050505;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;}
 
+.replays-content h1 {background:#000;font-size:17px;padding:5px 10px;color:#eee;border-bottom:1px solid #222222;}
 .replays-content h1 .tournament {color:#999999;}
 .replays-content ul li.empty {color:#666666;font-size:17px;font-weight:bold;padding:40px;text-align:center;}
 .replays-content .replay a {display:inline-block;padding:5px 10px;}

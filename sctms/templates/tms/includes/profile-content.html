@@ -1,9 +1,12 @@
 {% load i18n %}
 <div class="box profile-content light-box">
     {% with player.get_stats.rank as rank %}
-    <h1 class="{% if rank %}extra rank{{ player.get_stats.rank }}{% endif %}" >{{ player.user }}</h1>
+    <h1 class="{% if rank %}extra rank{{ player.get_stats.rank }}{% endif %}" >
+        <span class="username">{{ player.user }}</span>
+    </h1>
     {% endwith %}
     <div class="box-content">
+        {% if player.avatar_url %}<img class="avatar" src="{{ player.avatar_url }}" alt=""/>{% endif %}
     <table class="info">
         <tr><th>Character name</th><td class="ch_name">{{ player.character_name }}</td></tr>
         <tr><th>Character code</th><td class="ch_code">{{ player.character_code }}</td></tr>

@@ -106,6 +106,7 @@ class TmsNyxAuth(NyxAuth):
 
                 player = player_form.save(commit=False)
                 player.user = user
+                player.from_nyx = True
                 player.save()
 
                 messages.success(request, _('Registration successfull.'))

@@ -23,6 +23,7 @@ class Player(models.Model):
     character_code = models.PositiveSmallIntegerField()
     bnet_url = models.URLField(null=True, blank=True)
     contact = models.CharField(max_length=100, blank=True)
+    from_nyx = models.BooleanField()
 
     class Meta:
         verbose_name = _('Player')
@@ -32,6 +33,12 @@ class Player(models.Model):
 
     def __unicode__(self):
         return self.character_name
+
+    @property
+    def avatar_url(self):
+        if self.from_nyx:
+            username = self.user.username
+            return 'http://i.nyx.cz/%s/%s.gif' % (username[:1], username)
 
     @property
     def matches(self):
