@@ -13,8 +13,17 @@
         {% if player.bnet_url %}
         <tr><th>BattleNet profile</th><td><a href="{{ player.bnet_url }}" target="_blank">{{ player.bnet_url }}</a></td></tr>
         {% endif %}
-        {% if player.contact %}
-        <tr><th>{% trans "Contact" %}</th><td>{{ player.contact|urlize }}</td></tr>
+        {% if player.from_nyx %}
+        <tr>
+            <th>{% trans "Contact" %}</th><td><a href="http://www.nyx.cz/index.php?l=mail;recipient={{ player.user.username }}" target="_blank">Poslat zprávu NYX poštou</a></td></tr>
+            {% if player.contact %}
+                <tr><th></th><td>{{ player.contact|urlize }}</td></tr>
+            {% endif %}
+        </tr>
+        {% else %}
+            {% if player.contact %}
+            <tr><th>{% trans "Contact" %}</th><td>{{ player.contact|urlize }}</td></tr>
+            {% endif %}
         {% endif %}
     </table>
     {% if tournaments.ongoing %}
