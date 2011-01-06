@@ -1,0 +1,14 @@
+{% for player in players %}
+    {% if player.avatar_url %}
+        <img
+             class="played-with avatar"
+             width="20"
+             height="25"
+             src="{{ player.avatar_url }}"
+             alt="{{ player.user }}"
+             title="{{ player.user }}"
+        />
+    {% else %}
+        {{ player.user }}
+    {% endif %}
+{% endfor %}
