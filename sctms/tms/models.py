@@ -582,26 +582,31 @@ class MatchMaker(object):
             )
 
     def make_pairs_random(self, round, ranking):
-        ranking = self._random_bye_if_odd(round, ranking)
+        ranking = self._bye_if_odd(round, ranking)
         while len(ranking) > 1:
             yield pop_random(ranking), pop_random(ranking)
 
-    def _random_bye_if_odd(self, round, ranking):
+    def _bye_if_odd(self, round, ranking):
+        """
+        If ranking player count is odd, pops a random player from a group of
+        players with the lowest score and who didn't receive a bye yet, and
+        gives them a bye. Returns odd-length ranking.
+        """
         if odd(ranking):
-            # random player receives a "bye" (unless they already got it earlier)
             bye_candidates = [x for x in ranking
                               if not x['player'].competitor.received_bye]
-
-            for x in bye_candidates:
-                print x['player'].user.username
 
             if not bye_candidates:
                 # everyone received a bye -- it's probably messed up
                 # TODO: logging
                 return []
-            bye_receiver = pop_random(bye_candidates)
 
-            print 'byed:', bye_receiver['player'].user.username
+            bye_candidates.sort(key=lambda x: x['points'])
+            lowest_points = bye_candidates[0]['points']
+
+            lp_group = [x for x in bye_candidates if x['points'] == lowest_points]
+
+            bye_receiver = pop_random(lp_group)
 
             ranking.pop(ranking.index(bye_receiver))
             competitor = bye_receiver['player'].competitor
@@ -612,7 +617,7 @@ class MatchMaker(object):
         return ranking
 
     def make_pairs_swiss(self, round, ranking):
-        ranking = self._random_bye_if_odd(round, ranking)
+        ranking = self._bye_if_odd(round, ranking)
         group = []
         pairs = []
         points = ranking[0]['points']
