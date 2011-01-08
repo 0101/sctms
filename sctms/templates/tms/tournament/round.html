@@ -5,7 +5,6 @@
 {% block title %}{{ tournament.name }} > {% trans "Rounds" %} > {{ selected_round.description }}{% endblock %}
 
 {% block box-content %}
-{% cache 90000000 rounds tournament.id selected_round %}
 <ul class="rounds">
     {% for round in tournament.rounds %}
     <li class="round {% if round == selected_round %}selected{% endif %} {{ round.status }}">
@@ -14,9 +13,9 @@
             <span class="dates">{{ round.start|date:"d. m." }} &ndash; {{ round.end|date:"d. m." }}</span>
             {% if round.first_map %}<span class="map"><span>@</span> {{ round.first_map }}{% endif %}
             <span class="timeinfo">{{ round.time_info }}</span>
-
         </a></h4>
         {% if round == selected_round %}
+        {% cache 90000000 rounds tournament.id selected_round %}
         <div class="round-content">
             {% if round.matches %}
             <table>
@@ -43,13 +42,13 @@
             <p class="empty">{% trans "To be announced" %}</p>
             {% endif %}
         </div>
+        {% endcache %}
         {% endif %}
     </li>
     {% empty %}
     <li class="empty">{% trans "To be announced" %}</li>
     {% endfor %}
 </ul>
-{% endcache %}
 {% endblock %}
 
 {% block js %}
