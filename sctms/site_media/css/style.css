@@ -187,15 +187,16 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .rounds .round h4 a .map span {color:#7A7A7A;}
 .tournament .rounds .round-content {background:#1E1A1A;border-top:1px solid #000000;border-bottom:1px solid #444;padding:20px;}
 .tournament .rounds .round-content table {margin:0px auto;}
-.tournament .rounds .round-content table td {padding:3px 6px;border-bottom:1px solid #2D2D2D;}
+.tournament .rounds .round-content table td {background:#111;padding:3px 6px;border-bottom:1px solid #2D2D2D;}
+.tournament .rounds .round-content table .finished td {background:transparent;}
 .tournament .rounds .round-content table .me td {background:#393939;color:#FFFFFF;}
 .tournament .rounds .round-content table .score {font-weight:bold;text-align:center;}
 .tournament .rounds .round-content table .finished .score {color:#ddd;}
 .tournament .rounds .round-content table .colon {padding:0;font-weight:bold;color:#666;text-align:center;}
 .tournament .rounds .round-content table .player1 {text-align:right;}
 .tournament .rounds .round-content table .winner {font-weight:bold;text-shadow:0 0 1px #898989;color:#ddd;}
-.tournament .rounds .round-content table .replays.empty {opacity:0.5;}
-.tournament .rounds .round-content table .me .replays {opacity:1; font-weight:bold;}
+.tournament .rounds .round-content table .replays.empty span {opacity:0.5;}
+.tournament .rounds .round-content table .me .replays span {opacity:1; font-weight:bold;}
 
 .tournament .result_report h2 {font-size:20px; text-align: center; padding:10px;text-shadow:-1px -1px 0 #000000;}
 .tournament .result_report fieldset {

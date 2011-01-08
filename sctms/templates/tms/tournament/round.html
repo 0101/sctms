@@ -32,7 +32,7 @@
                             <a class="lightbox" href="{{ match.player2.get_absolute_url }}">{{ match.player2.user }}</a>
                         </td>
                         <td class="replays {% if match.replays.count == 0 %}empty{% endif %}">
-                            <a class="lightbox" href="{% url tms:match_replays id=match.id %}">{% trans "Replays" %} ({{ match.replays.count }})</a>
+                            <span><a class="lightbox" href="{% url tms:match_replays id=match.id %}">{% trans "Replays" %} ({{ match.replays.count }})</a></span>
                         </td>
                     </tr>
                 {% endfor %}
