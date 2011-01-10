@@ -217,15 +217,16 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 
 .tournament .tournament_players table {width:100%;}
 .tournament .tournament_players table th {padding:3px; background:#333; font-weight:bold; text-shadow:-1px -1px 0 #000;}
-.tournament .tournament_players table td {padding:3px; border-bottom:1px solid #333; border-top:1px solid #333;}
+.tournament .tournament_players table td {padding:3px; border-bottom:1px solid #333; border-top:1px solid #333; vertical-align:middle;}
 .tournament .tournament_players table .rank {text-align:center;font-weight:bold;}
 .tournament .tournament_players table .points,
 .tournament .tournament_players table .buchholz {text-align:center;}
 .tournament .tournament_players table tbody tr:hover td {color:#eee;}
 .tournament .tournament_players table .me td {background:#484848;color:#fff;}
-.tournament .tournament_players table .opponent-list {font-size:11px;padding:0 3px 1px;}
-.tournament .tournament_players table .opponent-list .avatar {opacity:.65;position:relative;top:4px;margin-right:2px;}
+.tournament .tournament_players table .opponent-list {font-size:11px;padding:0px 2px;}
+.tournament .tournament_players table .opponent-list .avatar {opacity:.65;position:relative;top:1px;margin-right:1px;max-width:20px;overflow:hidden;display:inline-block;padding:1px;}
 .tournament .tournament_players table tbody tr:hover .opponent-list .avatar {opacity:1;}
+.tournament .tournament_players table .me .bye {color:#999;padding:3px 0;}
 .tournament .tournament_players table .bye {color:#666;padding:3px 0;}
 
 #fancybox-outer {
