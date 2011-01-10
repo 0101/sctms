@@ -280,6 +280,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 	padding:5px 10px 10px;display:inline-block;}
 .replays-content .upload-wrap .upload-button-display.loading {
 	color: #FFD13A;background:url('../img/loading_bar.gif') repeat-x;border-color:#B29029;}
+.replays-content .upload-wrap .hint {color:#777;font-size:11px;padding:5px;}
 
 /* uploadify override */
 .replays-content .uploadifyQueueItem {
