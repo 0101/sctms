@@ -226,6 +226,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .tournament_players table .opponent-list {font-size:11px;padding:0 3px 1px;}
 .tournament .tournament_players table .opponent-list .avatar {opacity:.65;position:relative;top:4px;margin-right:2px;}
 .tournament .tournament_players table tbody tr:hover .opponent-list .avatar {opacity:1;}
+.tournament .tournament_players table .bye {color:#666;padding:3px 0;}
 
 #fancybox-outer {
 	background:#111 !important;
