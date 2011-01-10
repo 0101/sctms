@@ -727,7 +727,7 @@ class Match(CacheNotifierModel):
     @property
     @cached
     def replays(self):
-        return self.replay_set.all()
+        return self.replay_set.order_by('file').all()
 
     def save(self, *args, **kwargs):
         if self.finished and self.player1_score != self.player2_score:
