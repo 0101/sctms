@@ -24,9 +24,10 @@ input, select {
 	margin: 0; font-family: "Segoe UI", "Lucida Grande", "Trebuchet MS", sans-serif;
 	font-size: 14px; color: #3f3f3f;}
 
-a {text-decoration: none; color: #7DBBF2; outline:none; cursor:pointer;}
+a, .fake-link {text-decoration: none; color: #7DBBF2; outline:none; cursor:pointer;}
 a * {cursor:pointer;}
-a:hover, a:active, a:focus {color: #FFD13A;}
+a:hover, a:active, a:focus,
+.fake-link:hover, .fake-link:active, .fake-link:focus {color: #FFD13A;}
 a.alt, .alt a {text-decoration: underline;}
 .alt a:hover, .alt a:active, .alt a:focus, a.alt:hover, a.alt:active, a.alt:focus {text-decoration: none;}
 a img {border: none;}
@@ -135,7 +136,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 
 .index .tournaments .tournament {margin-bottom:10px;border-bottom:1px solid #383838;padding-bottom:5px;}
 .index .tournaments .tournament a {padding:5px;}
-.index .tournaments .tournament a.tournament-link {display:block;padding:5px;}
+.index .tournaments .tournament a.tournament-link {display:block;padding:5px;line-height:1.5;}
 .index .tournaments .tournament a.tournament-link:hover {background: #1C1606;}
 .index .tournaments .tournament h4 {font-weight:bold;}
 .index .tournaments .tournament div {color: #aaa;}
@@ -143,9 +144,11 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .index .tournaments .tournament .current-info .round {font-weight:bold;}
 .index .tournaments .tournament .joined {color:#5DAA5D;font-weight:bold;padding:5px;}
 .index .tournaments .create-tournament {font-weight:bold;padding:5px;display:inline-block;margin-bottom:10px;}
-.index .tournaments .ongoing-tournaments .icon {background-image: url('../img/icon-install.png');}
-.index .tournaments .future-tournaments .icon {background-image: url('../img/icon-scout.png');}
-.index .tournaments .past-tournaments .icon {background-image: url('../img/icon-army.png');}
+.index .tournaments .ongoing-tournaments .map {color:#ddd;}
+.index .tournaments .ongoing-tournaments .player-match {padding:0 5px 5px;}
+.index .tournaments .ongoing-tournaments .player-match.finished {color:#666;}
+.index .tournaments .ongoing-tournaments .player-match a {padding:0;}
+
 .index .past-tournaments .ranking a {padding:0;}
 .index .past-tournaments .ranking {background:#090909 no-repeat 293px -19px;border:1px solid #333333;padding:5px 10px;}
 .index .past-tournaments .ranking .place {font-weight:bold;}
@@ -292,3 +295,13 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .replays-content .uploadifyProgressBar {background: #FFD13A;}
 
 .replays-content .login-to-upload {background:#222222;font-size:17px;margin-top:20px;padding:10px;text-align:center;}
+
+.replays-content .confirmed-post-wrap {display:inline-block;padding:5px;vertical-align:middle;position:relative;top:-1px;height:19px;}
+.replays-content .confirmed-post-wrap span {display:inline-block;padding:0px 5px;}
+.replays-content .delete-button {
+	background:url('../img/cross.png') no-repeat; width:16px; height:16px; position:absolute; left:7px; top:7px;
+	opacity: 0.5; cursor:pointer;}
+.replays-content .delete-button:hover {opacity:1;}
+.replays-content .confirmed-post-yes,
+.replays-content .confirmed-post-no {font-weight:bold;}
+.replays-content .replay a.loading {opacity: 0.5;}

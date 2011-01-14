@@ -757,6 +757,7 @@ class Replay(CacheNotifierModel):
     match = models.ForeignKey(Match)
     map = models.ForeignKey(Map, null=True, blank=True)
     description = models.TextField(blank=True)
+    uploaded_by = models.ForeignKey(User)
 
     class Meta:
         verbose_name = _(u'Replay')

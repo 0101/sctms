@@ -21,7 +21,7 @@ from django.views.generic.simple import direct_to_template
 from nyxauth import NyxAuth
 
 from tms.forms import PlayerForm, ResultForm, ReplayForm
-from tms.models import Tournament, Round, Match, PlayerRanking, Player, FastTournament, Competitor
+from tms.models import Tournament, Round, Match, PlayerRanking, Player, FastTournament, Competitor, Replay
 
 
 def _configure_user(user):
@@ -33,8 +33,27 @@ def _configure_user(user):
 
 
 def index(request, template='tms/index.html'):
-    context = {'tournaments': Tournament.objects,
-               'tournaments_fast': FastTournament.objects}
+
+    def player_info(t):
+        if request.user.is_authenticated():
+            player = request.user.get_profile()
+            try:
+                match = player.matches.filter(round=t.current_round)[0]
+            except IndexError:
+                pass
+            else:
+                match.opponent = (match.player1 if match.player2 == player
+                                  else match.player2)
+                t.player_match = match
+        return t
+
+    context = {
+        'tournaments': {
+            'ongoing': map(player_info, Tournament.objects.ongoing()),
+            'future': Tournament.objects.future(),
+            'past': FastTournament.objects.past()
+        }
+    }
     return direct_to_template(request, template, context)
 
 
@@ -301,7 +320,27 @@ def upload_replay(request, id):
         if form.is_valid():
             replay = form.save(commit=False)
             replay.match = match
+            replay.uploaded_by = user
             replay.save()
             return HttpResponse('ok')
 
     return HttpResponseForbidden()
+
+
+@login_required
+def delete_replay(request):
+    if request.method != 'POST':
+        return HttpResponseForbidden()
+
+    try:
+        id = int(request.POST.get('id') or '')
+    except ValueError:
+        return HttpResponseForbidden()
+
+    try:
+        replay = Replay.objects.get(id=id, uploaded_by=request.user)
+    except Replay.DoesNotExist:
+        return HttpResponseForbidden()
+
+    replay.delete()
+    return HttpResponse('ok')

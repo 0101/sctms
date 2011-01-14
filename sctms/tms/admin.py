@@ -17,6 +17,12 @@ class MatchInline(admin.TabularInline):
     extra = 0
 
 
+class MatchAdmin(admin.ModelAdmin):
+    list_display = '__unicode__', 'round',
+    list_filter = ('round',)
+    search_fields = ('round__tournament', 'round',)
+
+
 class TournamentAdmin(admin.ModelAdmin):
     search_fields = 'name', 'slug',
     date_hierarchy = 'registration_deadline'
@@ -60,6 +66,8 @@ class ReplayAdmin(admin.ModelAdmin):
     list_display = '__unicode__', 'player1', 'player2', 'tournament', 'round',
     list_filter = ()
     search_fields = 'file',
+    raw_id_fields = 'match',
+    readonly_fields = 'uploaded_by',
 
 
 class RulesAdmin(admin.ModelAdmin):
@@ -74,6 +82,7 @@ class CompetitorAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Map)
+admin.site.register(Match, MatchAdmin)
 admin.site.register(Player, PlayerAdmin)
 admin.site.register(Replay, ReplayAdmin)
 admin.site.register(Round, RoundAdmin)

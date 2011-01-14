@@ -28,7 +28,7 @@
 
         <div class="box past-tournaments">
             <hgroup><h3>{% trans "Past tournaments" %}</h3></hgroup>
-            {% with tournaments_fast.past as tournaments %}
+            {% with tournaments.past as tournaments %}
                 {% include 'tms/includes/tournaments_past.html' %}
             {% endwith %}
         </div>
