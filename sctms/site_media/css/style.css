@@ -26,8 +26,8 @@ input, select {
 
 a, .fake-link {text-decoration: none; color: #7DBBF2; outline:none; cursor:pointer;}
 a * {cursor:pointer;}
-a:hover, a:active, a:focus,
-.fake-link:hover, .fake-link:active, .fake-link:focus {color: #FFD13A;}
+a:hover, a:active, a:focus, a.hover,
+.fake-link:hover, .fake-link:active, .fake-link:focus, .fake-link.hover {color: #FFD13A;}
 a.alt, .alt a {text-decoration: underline;}
 .alt a:hover, .alt a:active, .alt a:focus, a.alt:hover, a.alt:active, a.alt:focus {text-decoration: none;}
 a img {border: none;}
@@ -224,13 +224,17 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .tournament_players table .rank {text-align:center;font-weight:bold;}
 .tournament .tournament_players table .points,
 .tournament .tournament_players table .buchholz {text-align:center;}
-.tournament .tournament_players table tbody tr:hover td {color:#eee;}
-.tournament .tournament_players table .me td {background:#484848;color:#fff;}
+.tournament .tournament_players table tbody tr:hover td {color:#eee; background:transparent;}
+            .tournament_players             tr.hover td {background:#342F21;}
+.tournament .tournament_players table tbody tr.me td {background:#484848;color:#fff;}
 .tournament .tournament_players table .opponent-list {font-size:11px;padding:0px 2px;}
-.tournament .tournament_players table .opponent-list .avatar {opacity:.65;position:relative;top:1px;margin-right:1px;max-width:20px;overflow:hidden;display:inline-block;padding:1px;}
-.tournament .tournament_players table tbody tr:hover .opponent-list .avatar {opacity:1;}
+.tournament .tournament_players table .opponent-list .avatar {
+	opacity:.65;position:relative;top:1px;margin-right:1px;max-width:20px;overflow:hidden;
+	display:inline-block;padding:1px;}
 .tournament .tournament_players table .me .bye {color:#999;padding:3px 0;}
 .tournament .tournament_players table .bye {color:#666;padding:3px 0;}
+
+.tournament .tournament_players table .opponent-list .avatar.hover {padding:0; border:1px solid #FFD13A; opacity:1; cursor:pointer;}
 
 #fancybox-outer {
 	background:#111 !important;

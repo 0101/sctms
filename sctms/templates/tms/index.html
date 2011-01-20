@@ -61,3 +61,10 @@
     </section>
 </div>
 {% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+$.multiHover.auto();
+</script>
+{% endblock %}

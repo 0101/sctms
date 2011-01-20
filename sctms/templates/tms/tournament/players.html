@@ -6,7 +6,7 @@
 
 {% block box-content %}
 {% cache 9000000 players tournament.id %}
-<table>
+<table class="ranking">
     <thead>
         <tr>
             <th>{% trans "Rank" %}</th>
@@ -24,9 +24,9 @@
 
     <tbody>
     {% for i in tournament.ranking %}
-        <tr class="user-{{ i.player.user.username }}">
+        <tr data-username="{{ i.player.user.username }}">
             <td class="rank">{{ i.rank }}</td>
-            <td><a class="lightbox" href="{% url tms:player_profile i.player.user.username %}">{{ i.player.user }}</a>&nbsp;({{ i.player }})</td>
+            <td><a class="lightbox player" href="{% url tms:player_profile i.player.user.username %}">{{ i.player.user }}</a>&nbsp;({{ i.player }})</td>
             <td class="bye">{% if i.player.competitor.received_bye %}<span class="bye" title="{% trans 'player received a bye' %}">(b)</span>{% endif %}</td>
             <td class="points">{{ i.points }} </td>
             <td class="buchholz">{{ i.buchholz }}</td>
@@ -45,9 +45,37 @@
 
 {% block js %}
 {{ block.super }}
+
 {% if user.is_authenticated %}
 <script type="text/javascript">
-$('table').find('tr.user-{{ user.username }}').addClass('me');
+$('table').find('tr[data-username="{{ user.username }}"]').addClass('me');
 </script>
 {% endif %}
+
+<script type="text/javascript">
+$('table.ranking tr .player').each(function() {
+    var player = $(this);
+    var row = player.closest('tr');
+    var username = row.attr('data-username');
+    var imgs = $('.opponent-list img[data-username="' + username + '"]');
+
+    player.multiHover({
+        onClick: function() {
+            if (this == player.get(0)) {
+                return true;
+            } else {
+                player.click();
+                return false;
+            }
+        },
+        onEnter: function(items) {
+            items.add(row).addClass('hover');
+        },
+        onLeave: function(items) {
+            items.add(row).removeClass('hover');
+        }
+    });
+    player.trigger('attach', [imgs]);
+});
+</script>
 {% endblock %}

@@ -51,7 +51,6 @@
 
         });
     }
-
     $.fn.confirmedPost.defaults = {
         url: '',
         getData: function() {},
@@ -78,6 +77,6 @@
         },
         wrapClass: '',
         buttonClass: '',
-        yesNoClass: '',
+        yesNoClass: ''
     }
 })(jQuery);
