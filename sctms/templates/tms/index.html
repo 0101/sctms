@@ -35,10 +35,20 @@
     </section>
 
     <section>
+        {% comment %}
         <div class="box announcements">
             <hgroup><h3>{% trans "Announcements" %}</h3></hgroup>
             <div class="box-content">
                 The system is in pre-alpha stage. Some things don't work yet and you may encounter some bugs.
+            </div>
+        </div>
+        {% endcomment %}
+        <div class="box">
+            <hgroup><h3>{% trans "FAQ" %}</h3></hgroup>
+            <div class="box-content">
+                <p>Feeling <strong>confused?</strong></p>
+                <br/>
+                <p>Check out <a href="{% url pages:page slug='faq' %}"><strong>Frequently&nbsp;Asked&nbsp;Questions</strong></a>!</p>
             </div>
         </div>
 

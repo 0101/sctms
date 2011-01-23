@@ -1,0 +1,19 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n markup %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<hgroup class="h1">
+    <span class="breadcrumbs"><a href="/">{% trans "Home" %}</a> > </span><h1>{{ page.title }}</h1>
+</hgroup>
+
+<div class="content-wrap editable-page">
+    <div class="box">
+        <div class="box-content">
+            {{ page.content|markdown }}
+        </div>
+    </div>
+</div>
+{% endblock %}

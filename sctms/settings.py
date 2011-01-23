@@ -117,6 +117,7 @@ INSTALLED_APPS = [
     # project apps
     'tms',
     'forms',
+    'pages',
 ]
 
 AUTH_PROFILE_MODULE = 'tms.Player'
