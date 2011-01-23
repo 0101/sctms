@@ -11,7 +11,7 @@
 
 {% if tournament.slogan %}<div class="tournament-slogan">&ldquo;{{ tournament.slogan }}&rdquo;</div>{% endif %}
 
-<div class="content-wrap tournament t-{{ current_view }} editable-page">
+<div class="content-wrap tournament t-{{ current_view }}">
     <div class="box {{ current_view }}">
         <nav class="clearfix">
             <a {% if current_view == 'tournament' %}class="selected"{% endif %}
