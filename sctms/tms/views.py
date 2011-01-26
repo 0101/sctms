@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import randint
 
 from django.conf.urls.defaults import patterns, url
@@ -344,3 +345,10 @@ def delete_replay(request):
 
     replay.delete()
     return HttpResponse('ok')
+
+
+def banner(request):
+    max = 9
+    url = '/site_media/img/banner/i%02d.jpg'
+    number = (datetime.now().hour - datetime.now().day) % max
+    return HttpResponseRedirect(url % number)
