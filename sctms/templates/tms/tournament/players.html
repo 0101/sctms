@@ -34,7 +34,7 @@
             <td class="opponent-list">{% with i.won_against as players %}{% include 'tms/includes/opponent-list.html' %}{% endwith %}</td>
             <td>{{ i.losses }}&nbsp;({{ i.loss_percent }}&nbsp%)</td>
             <td class="opponent-list">{% with i.lost_against as players %}{% include 'tms/includes/opponent-list.html' %}{% endwith %}</td>
-            <td>{{ i.games_won }}-{{ i.games_lost }}&nbsp;({% if i.games_won > i.games_lost %}+{% endif %}{{ i.score }})</td>
+            <td>{{ i.games_won }}-{{ i.games_lost }}&nbsp;({% if i.score > 0 %}+{% endif %}{{ i.score }})</td>
         </tr>
     {% endfor %}
     </tbody>

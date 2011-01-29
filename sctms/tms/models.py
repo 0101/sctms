@@ -106,8 +106,15 @@ class PlayerRanking(object):
     def get_for_player(self, player):
         return self.player_dict[player]
 
+    def sort(self, cmp):
+        self.players.sort(cmp=cmp)
+        self._add_rank()
+
     def sort_by(self, *fields):
         self.players.sort(key=lambda r: [r.get(f) for f in fields], reverse=True)
+        self._add_rank()
+
+    def _add_rank(self):
         for i in range(len(self.players)):
             self.players[i]['rank'] = i + 1
 
@@ -255,11 +262,22 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
                       'round__type__in': Round.TYPES_PLAYOFF}
             return player.won_matches.filter(**lookup).count()
 
-        ranking.sort_by('playoff_wins',
-                        'points',
-                        'buchholz',
-                        'score',
-                        'games_won')
+        def compare(x, y):
+            cmp = (
+                (y['playoff_wins'] - x['playoff_wins']) or
+                (y['points'] - x['points']) or
+                (y['buchholz'] - x['buchholz']) or
+                (y['score'] - x['score'])
+            )
+            if cmp == 0:
+                if x['player'] in y['won_against']:
+                    return 1
+                if y['player'] in x['won_against']:
+                    return -1
+            return cmp
+
+        ranking.sort(compare)
+
         return ranking
 
     def _get_ranking_cache_key(self):
