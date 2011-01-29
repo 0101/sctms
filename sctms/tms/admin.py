@@ -20,7 +20,7 @@ class MatchInline(admin.TabularInline):
 class MatchAdmin(admin.ModelAdmin):
     list_display = '__unicode__', 'round',
     list_filter = ('round',)
-    search_fields = ('round__tournament', 'round',)
+    search_fields = ('player1__user__username', 'player2__user__username',)
 
 
 class TournamentAdmin(admin.ModelAdmin):
