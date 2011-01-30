@@ -375,3 +375,11 @@ def banner(request):
     url = '/site_media/img/banner/i%02d.jpg'
     number = (datetime.now().hour + datetime.now().day) % max
     return HttpResponseRedirect(url % number)
+
+
+def status(request, template='tms/status.html'):
+    """
+    Simple status of ongoing tournaments.
+    """
+    context = {'ongoing_tournaments': Tournament.objects.ongoing()}
+    return direct_to_template(request, template, context)
