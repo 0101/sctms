@@ -2,7 +2,9 @@ from datetime import datetime, timedelta, time
 from math import log
 
 from django.core.exceptions import MultipleObjectsReturned
+from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.template.loader import select_template
 from django.utils.translation import ugettext as _
 
 from tms.models import Round, Match, Rules
@@ -32,6 +34,13 @@ class BaseTournamentFormat(object):
         self.tournament = tournament
 
     @property
+    def base_template(self):
+        return select_template((
+            'tms/tournament/%s/base.html' % self.tournament.format_class,
+            'tms/tournament/base.html',
+        ))
+
+    @property
     def description(self):
         return self.__class__.__doc__
 
@@ -51,6 +60,9 @@ class BaseTournamentFormat(object):
                 self._create_rounds()
             except AttributeError:
                 pass
+
+    def get_absolute_url(self):
+        return reverse('tms:tournament', kwargs={'slug': self.tournament.slug})
 
     def get_random_map(self):
         """
@@ -131,6 +143,16 @@ class NyxLeague(BaseTournamentFormat):
                 first_map=self.get_random_map(),
             )
 
+    def get_absolute_url(self):
+        if self.show_playoff():
+            return reverse('tms:tournament_playoff',
+                           kwargs={'slug': self.tournament.slug})
+        if self.tournament.current_round:
+            return reverse('tms:tournament_round',
+                           kwargs={'slug': self.tournament.slug,
+                                   'id': self.tournament.current_round.id})
+        return super(NyxLeague, self).get_absolute_url()
+
     def get_final_placing(self, limit=3):
         ranking = self.tournament.ranking
         ranking.sort_by('playoff_wins')
@@ -148,6 +170,19 @@ class NyxLeague(BaseTournamentFormat):
                     break
                 group = [item['player']]
                 wins = item['playoff_wins']
+
+    def show_playoff(self):
+        """
+        Returns whether to show the playoff tab in tournament navigation
+        """
+        try:
+            first_playoff_round = (self.tournament.rounds
+                                   .filter(type=Round.TYPE_SINGLE_ELIM)[0])
+        except IndexError:
+            return False
+        else:
+            return first_playoff_round.start < datetime.now()
+
 
 
 class DoubleEliminationTournament(BaseTournamentFormat):

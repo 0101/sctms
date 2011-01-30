@@ -1,106 +1,66 @@
-{% extends 'tms/base.html' %}
+{% extends tournament.base_template %}
 
 {% load i18n cache markup %}
 
 {% block title %}{{ tournament.name }}{% endblock %}
 
-{% block content %}
-<hgroup class="h1">
-    <span class="breadcrumbs"><a href="/">{% trans "Home" %}</a> > </span><h1>{{ tournament.name }}</h1>
-</hgroup>
+{% block box-content %}
+{% cache 90000000 info tournament.id %}
 
-{% if tournament.slogan %}<div class="tournament-slogan">&ldquo;{{ tournament.slogan }}&rdquo;</div>{% endif %}
+    <h2 id="info">{% trans "About" %}<span class="icon"></span></h2>
+    {% block about %}
+        <ul>
+            <li>{% trans "Event type" %}: <strong title="{{ tournament.description }}">{{ tournament.format.name }}</strong></li>
+            <li>{% trans "Format" %}: <strong>1v1</strong></li>
+        </ul>
 
-<div class="content-wrap tournament t-{{ current_view }}">
-    <div class="box {{ current_view }}">
-        <nav class="clearfix">
-            <a {% if current_view == 'tournament' %}class="selected"{% endif %}
-               href="{{ tournament.get_absolute_url }}">{% trans "Info" %}</a>
-            <a {% if current_view == 'tournament_players' %}class="selected"{% endif %}
-               href="{% url tms:tournament_players slug=tournament.slug %}">{% trans "Players" %}</a>
-            <a {% if current_view == 'tournament_round' or current_view == 'tournament_rounds' %}class="selected"{% endif %}
-               href="{% url tms:tournament_rounds slug=tournament.slug %}">{% trans "Rounds" %}</a>
-            {% if tournament.current_round %}
-                <a {% if current_view == 'result_report' %}class="selected"{% endif %}
-                   href="{% url tms:result_report slug=tournament.slug %}">{% trans "Report match results" %}</a>
+        <h3>{% trans "Registration deadline" %}</h3>
+        <ul>
+        <li><strong>{{ tournament.registration_deadline|date:"d. m. Y G:i" }}</strong> CEST {% if tournament.registration_open %}
+        {% comment %}&ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}{% endcomment %}</li>
+        <li id="click-to-join">Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
+        <li>{% trans "Players registered" %}: <strong><a href="{% url tms:tournament_players slug=tournament.slug %}">{{ tournament.players.count }}</a></strong></li>
+        </ul>
+
+        <h3>{% trans "Start" %}</h3>
+        {% with tournament.rounds.0 as first_round %}
+            {% if first_round %}
+            <strong>{{ first_round.start|date:"d. m. Y G:i" }}</strong> CEST
+            {% else %}
+            <p>{% trans "The next day after registration deadline." %}
             {% endif %}
-            {% with user.get_profile as player %}
-            {% if tournament.registration_open and not user.get_profile in tournament %}
-                <a {% if current_view == 'join_tournament' %}class="selected"{% endif %}
-                    href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a>
+        {% endwith %}
+
+        {% with tournament.map_pool.all as maps %}
+            {% if maps %}
+            <h3>{% trans "Map pack" %}</h3>
+            <p>{{ tournament.map_pool.all|join:", " }}</p>
             {% endif %}
-                {% if tournament.registration_open and user.get_profile in tournament %}
-                <a {% if current_view == 'leave_tournament' %}class="selected"{% endif %}
-                    href="{% url tms:leave_tournament slug=tournament.slug %}">{% trans "Leave tournament" %}</a>
-            {% endif %}
-            {% endwith %}
-        </nav>
-        <div class="box-content">
-            {% block box-content %}
-            {% cache 90000000 info tournament.id %}
+        {% endwith %}
 
-                <h2 id="info">{% trans "About" %}<span class="icon"></span></h2>
-                {% block about %}
-                    <ul>
-                        <li>{% trans "Event type" %}: <strong title="{{ tournament.description }}">{{ tournament.format.name }}</strong></li>
-                        <li>{% trans "Format" %}: <strong>1v1</strong></li>
-                    </ul>
+        <h3>{% trans "Round dates, maps and pairing" %}</h3>
+        {% url tms:tournament_rounds slug=tournament.slug as rounds_url %}
+        <p>{% blocktrans with rounds_url as url %}Will be published under <a href="{{ url }}">Rounds</a> after registration deadline.{% endblocktrans %}
+    {% endblock %}
 
-                    <h3>{% trans "Registration deadline" %}</h3>
-                    <ul>
-                    <li><strong>{{ tournament.registration_deadline|date:"d. m. Y G:i" }}</strong> CEST {% if tournament.registration_open %}
-                    {% comment %}&ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}{% endcomment %}</li>
-                    <li id="click-to-join">Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
-                    <li>{% trans "Players registered" %}: <strong><a href="{% url tms:tournament_players slug=tournament.slug %}">{{ tournament.players.count }}</a></strong></li>
-                    </ul>
+    {% if tournament.additional_information %}
+        {{ tournament.additional_information|markdown }}
+    {% endif %}
 
-                    <h3>{% trans "Start" %}</h3>
-                    {% with tournament.rounds.0 as first_round %}
-                        {% if first_round %}
-                        <strong>{{ first_round.start|date:"d. m. Y G:i" }}</strong> CEST
-                        {% else %}
-                        <p>{% trans "The next day after registration deadline." %}
-                        {% endif %}
-                    {% endwith %}
+    {% if tournament.prizes %}
+        <h2 id="prizes">{% trans "Prizes" %}<span class="icon"></span></h2>
+        {{ tournament.prizes|markdown }}
+    {% endif %}
 
-                    {% with tournament.map_pool.all as maps %}
-                        {% if maps %}
-                        <h3>{% trans "Map pack" %}</h3>
-                        <p>{{ tournament.map_pool.all|join:", " }}</p>
-                        {% endif %}
-                    {% endwith %}
+    <h2 id="rules">{% trans "Rules" %}<span class="icon"></span></h2>
+    {{ tournament.rules|markdown }}
 
-                    <h3>{% trans "Round dates, maps and pairing" %}</h3>
-                    {% url tms:tournament_rounds slug=tournament.slug as rounds_url %}
-                    <p>{% blocktrans with rounds_url as url %}Will be published under <a href="{{ url }}">Rounds</a> after registration deadline.{% endblocktrans %}
-                {% endblock %}
-
-                {% if tournament.additional_information %}
-                    {{ tournament.additional_information|markdown }}
-                {% endif %}
-
-                {% if tournament.prizes %}
-                    <h2 id="prizes">{% trans "Prizes" %}<span class="icon"></span></h2>
-                    {{ tournament.prizes|markdown }}
-                {% endif %}
-
-                <h2 id="rules">{% trans "Rules" %}<span class="icon"></span></h2>
-                {{ tournament.rules|markdown }}
-
-            {% endcache %}
-            {% endblock %}
-        </div>
-    </div>
-</div>
+{% endcache %}
 {% endblock %}
 
 {% block js %}
 {{ block.super }}
 <script type="text/javascript">
-// preload loading animation
-$('<img/>').attr('src', '{{ MEDIA_URL }}img/loading_bar.gif');
-$('.tournament .box nav a').click(function(){ $(this).addClass('loading'); });
-
 {% if user.get_profile in tournament %}
 $('#click-to-join').remove();
 {% endif %}

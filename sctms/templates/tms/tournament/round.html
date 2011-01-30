@@ -1,4 +1,4 @@
-{% extends 'tms/tournament/index.html' %}
+{% extends tournament.base_template %}
 
 {% load i18n cache %}
 
@@ -10,8 +10,8 @@
     <li class="round {% if round == selected_round %}selected{% endif %} {{ round.status }}">
         <h4><a href="{{ round.get_absolute_url }}">
             <span class="desc">{{ round.description }}</span>
-            <span class="dates">{{ round.start|date:"d. m." }} &ndash; {{ round.end|date:"d. m." }}</span>
-            {% if round.first_map %}<span class="map"><span>@</span> {{ round.first_map }}{% endif %}
+            <span class="dates">{{ round.start|date:"d. m."|default:"?" }} &ndash; {{ round.end|date:"d. m." }}</span>
+            {% if round.first_map %}<span class="map"><span>@</span> {{ round.first_map }}</span>{% endif %}
             <span class="timeinfo">{{ round.time_info }}</span>
         </a></h4>
         {% if round == selected_round %}
@@ -21,7 +21,7 @@
             <table>
                 <tbody>
                 {% for match in round.matches %}
-                    <tr class="user-{{ match.player1.user }} user-{{ match.player2.user }} {% if match.finished %}finished{% endif %}">
+                    <tr data-id="{{ match.id }}" class="match user-{{ match.player1.user }} user-{{ match.player2.user }} {% if match.finished %}finished{% endif %}">
                         <td class="player player1 {% if match.player1 == match.winner %}winner{% endif %}">
                             <a class="lightbox" href="{{ match.player1.get_absolute_url }}">{{ match.player1.user }}</a>
                         </td>

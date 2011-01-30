@@ -331,9 +331,6 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
         cache.delete(self._get_ranking_cache_key())
         invalidate_template_cache('players', self.id)
 
-    def get_absolute_url(self):
-        return reverse('tms:tournament', kwargs={'slug': self.slug})
-
     def save(self, *args, **kwargs):
         if not self.registration_deadline:
             self.registration_deadline = date.today() + timedelta(7)

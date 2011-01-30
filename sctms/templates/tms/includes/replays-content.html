@@ -37,9 +37,9 @@
         $(function(){
 
             function updateReplayCount() {
-                // update round-page if this is opened in lightbox
+                // update page if this is opened in lightbox
                 var count = $('.replay-list .replay').size();
-                $('.selected.round table .me .replays span a')
+                $('.match[data-id="{{ match.id }}"] .replays span a')
                     .text('{% trans "Replays" %} ('+ count +')');
             }
 

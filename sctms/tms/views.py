@@ -180,14 +180,37 @@ def tournament_players(request, tournament): pass
 @tournament_view(template='round.html')
 def tournament_rounds(request, tournament):
     if tournament.current_round:
-        return HttpResponseRedirect(tournament.current_round.get_absolute_url())
+
+        #FIXME: after views refactoring
+        if not (tournament.format_class == 'NyxLeague' and
+                tournament.show_playoff() and
+                tournament.current_round.type == Round.TYPE_SINGLE_ELIM):
+
+            return HttpResponseRedirect(tournament.current_round.get_absolute_url())
     return {'selected_round': None}
 
 
 @tournament_view(template='round.html')
 def tournament_round(request, tournament, id=None):
     round = get_object_or_404(Round, tournament=tournament, id=id)
+
+    #FIXME: after views refactoring
+    if (tournament.format_class == 'NyxLeague' and tournament.show_playoff() and
+        round.type == Round.TYPE_SINGLE_ELIM):
+        return HttpResponseRedirect(reverse('tms:tournament_playoff',
+                                            kwargs={'slug': tournament.slug}))
+
     return {'selected_round': round}
+
+
+@tournament_view(template='playoff.html')
+def tournament_playoff(request, tournament):
+    rounds = tournament.rounds.filter(type=Round.TYPE_SINGLE_ELIM)
+    if rounds:
+        #FIXME: don't have a top16 bracket display yet...
+        rounds = list(rounds)[-3:]
+        player_count = 2 ** len(rounds)
+        return {'rounds': rounds, 'player_count': player_count}
 
 
 @login_required

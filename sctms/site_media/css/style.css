@@ -208,8 +208,8 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .rounds .round-content table .colon {padding:0;font-weight:bold;color:#666;text-align:center;}
 .tournament .rounds .round-content table .player1 {text-align:right;}
 .tournament .rounds .round-content table .winner {font-weight:bold;text-shadow:0 0 1px #898989;color:#ddd;}
-.tournament .rounds .round-content table .replays.empty span {opacity:0.5;}
-.tournament .rounds .round-content table .me .replays span {opacity:1; font-weight:bold;}
+                                         .replays.empty span {opacity:0.5;}
+                                         .me.finished .replays.empty span {opacity:1; font-weight:bold;}
 
 .tournament .result_report h2 {font-size:20px; text-align: center; padding:10px;text-shadow:-1px -1px 0 #000000;}
 .tournament .result_report fieldset {
@@ -245,6 +245,40 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .tournament_players table .bye {color:#666;padding:3px 0;}
 
 .tournament .tournament_players table .opponent-list .avatar.hover {padding:0; border:1px solid #FFD13A; opacity:1; cursor:pointer;}
+
+.tournament .tournament_playoff .single-elim.top8 .bracket {
+	background:url('../img/se-playoff.png') no-repeat -6px 0; height:580px;
+	position:relative;margin-top:35px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round {position:absolute;width:178px;text-align:center;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round .description {
+	font-size:17px;font-weight:bold;color:#666;font-style:italic;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round .map {color:#ccc;padding:2px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round.round1 {left:15px;top:-25px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round.round2 {left:235px;top:45px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round.round3 {left:455px;top:185px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .round.champion-label {left:675px;top:226px;color:#eee;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match {position:absolute;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1 {left:15px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match1 {top:31px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match2 {top:171px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match3 {top:311px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match4 {top:451px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round2 {left:235px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round2.match1 {top:101px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round2.match2 {top:381px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round3.match1 {left:455px;top:241px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .match.round3.match1 {left:455px;top:241px;}
+
+.tournament .tournament_playoff .single-elim.top8 .bracket .player {width:178px;text-align:center;height:38px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .player.winner {
+	width:178px;text-align:center;height:38px;background:rgba(125,187,242,0.07);font-weight:bold;}
+	.tournament .tournament_playoff .single-elim.top8 .bracket .player.me {background:rgba(255,255,255,0.25);}
+.tournament .tournament_playoff .single-elim.top8 .bracket .player .user {padding:9px 0 9px 23px;display:inline-block;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .player .score {float:right;padding:9px 9px 0;font-weight:bold;color:#333;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .finished.match .player .score {color:#ccc;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .player.champion {position:absolute;left:675px;top:261px;height:58px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .player.champion .user {padding:16px 0;display:inline-block;font-size:17px;}
+.tournament .tournament_playoff .single-elim.top8 .bracket .replays {height:22px;text-align:center;}
 
 #fancybox-outer {
 	background:#111 !important;
