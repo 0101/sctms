@@ -53,10 +53,12 @@
 {% if user.is_authenticated %}
 <script type="text/javascript">
 var me = $('.bracket').find('.player.user-{{ user.username }}').addClass('me');
-var myMatch = me.closest('.match').addClass('me');
-if (myMatch.is('.finished')) {
-    myMatch.find('.empty.replays a').text('{% trans "Upload replays!" %}');
-}
+me.each(function() {
+    var myMatch = $(this).closest('.match').addClass('me');
+    if (myMatch.is('.finished')) {
+        myMatch.find('.empty.replays a').text('{% trans "Upload replays!" %}');
+    }
+});
 </script>
 {% endif %}
 {% endblock %}
