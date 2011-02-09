@@ -19,7 +19,7 @@
             <a href="{% url tms:login %}?next={{ request.path }}">{% trans "Log in" %}</a> {% trans "to upload replays." %}
         </div>
         {% endif %}
-        {% if user.get_profile in match %}
+        {% if user.get_profile in match or user.is_manager or user.is_superuser %}
         <div class="upload-wrap">
             <div class="upload-button-wrap">
                 <div class="centering-wrap">
