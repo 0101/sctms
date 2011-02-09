@@ -42,7 +42,7 @@ class RoundAdmin(admin.ModelAdmin):
 
 
 class PlayerAdmin(admin.ModelAdmin):
-    exclude = 'user',
+    exclude = 'user', 'from_nyx',
     list_display = 'user', 'character_name',
     ordering = 'user',
 

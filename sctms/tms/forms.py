@@ -9,7 +9,7 @@ class PlayerForm(forms.ModelForm):
 
     class Meta:
         model = Player
-        exclude = 'user',
+        exclude = 'user', 'from_nyx',
 
 
 class ResultForm(forms.Form):
@@ -55,5 +55,3 @@ class RulesForm(FormatClassChoiceForm):
 
     class Meta:
         model = Rules
-
-
