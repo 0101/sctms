@@ -10,13 +10,11 @@
 	</head>
 
 	<body>
-		<header class="top img6">
-			<div class="mask">
-				<a class="logo" href="/">SCTMS</a>
-				<section class="user">
-					{% block user-bar %}{% user_bar %}{% endblock %}
-				</section>
-			</div>
+		<header class="top">
+			<a class="logo" href="/">NSL</a>
+			<section class="user">
+				{% block user-bar %}{% user_bar %}{% endblock %}
+			</section>
 		</header>
 		{% block messages %}
 			{% if messages %}
@@ -29,7 +27,9 @@
 		{% endblock %}
 
 		<div class="content">
-		{% block content %}{% endblock %}
+			<div class="light">
+			{% block content %}{% endblock %}
+			</div>
 		</div>
 
 		{# fancybox #}

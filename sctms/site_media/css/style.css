@@ -45,15 +45,8 @@ body {font-family:"Segoe UI", "Lucida Grande", "Trebuchet MS", Helvetica, Arial,
 	background:#0b0b0b url('../img/bg2.jpg') center -100px repeat-y; color:#aaa;
 	font-size:14px;}
 
-header.top {background:#040404 url('../img/top.jpg') center top no-repeat;text-align:center;}
-header.top.img2 {background-position:center -85px;}
-header.top.img3 {background-position:center -170px;}
-header.top.img4 {background-position:center -255px;}
-header.top.img5 {background-position:center -340px;}
-header.top.img6 {background-position:center -425px;}
-header.top .logo {
-	color:#000000;display:inline-block;font-size:48px;font-weight:bold;
-	padding:10px 20px;text-shadow:0 0 7px #5884AA, 1px 1px 2px #FFFFFF;height:65px;}
+header.top {background:#111 url('../img/header.jpg') center top no-repeat;text-align:center;}
+header.top .logo {height:109px;text-indent:9000px;display:block;width:300px;overflow:hidden;margin:0 auto;}
 header.top .logo:hover {text-shadow:0 0 7px #D69F20, 1px 1px 2px #F6FF4F;color:#1C1606;}
 header.top .mask {background: url('../img/top-mask.png') center no-repeat;}
 
@@ -65,6 +58,9 @@ section.user nav a:hover {background:#1C1606;}
 
 .content hgroup.h1 {text-align:center;font-size:24px;margin-top:30px;color:#D6D6D6;}
 .content hgroup.h1 * {display:inline;}
+.content hgroup.h1 small {font-size:17px;color:#999;}
+.content hgroup.h1 strong {display:block;font-weight:normal;}
+.content hgroup.h1.index {margin:10px auto;}
 .content hgroup .breadcrumbs {color: #555;font-size:17px;}
 .content hgroup .breadcrumbs a {color: #436482;}
 .content hgroup .breadcrumbs a:hover {color: #FFD13A;}
@@ -72,6 +68,8 @@ section.user nav a:hover {background:#1C1606;}
 .content .tournament-slogan {text-align:center;color:#666;font-family:"Trebuchet MS", "Segoe UI", "Lucida Grande";font-style:italic;margin-top:12px;}
 
 .content .content-wrap {width:960px;margin:0 auto;}
+
+.content .light {background:url('../img/grey.png') no-repeat center top;padding-top:1px;min-height:600px;}
 
 .content .index section {width:480px;float:left;}
 
