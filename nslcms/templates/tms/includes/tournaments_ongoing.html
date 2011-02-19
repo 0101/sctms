@@ -1,0 +1,62 @@
+{% load i18n %}
+<div class="box-content">
+    {% block before-list %}{% endblock %}
+    <ul>
+        {% for tournament in tournaments %}
+            {% with tournament.player_match as match %}
+            <li class="tournament">
+                <a class="tournament-link" href="{{ tournament.get_absolute_url }}">
+                    <h4>{{ tournament }}</h4>
+                    {% block extra-info %}
+                        {% if tournament.current_round %}
+                        <div class="current-info">
+                            <strong>{{ tournament.current_round.description }}</strong> {% if tournament.current_round.first_map %}@ <strong class="map">{{ tournament.current_round.first_map }}</strong>{% endif %} {{ tournament.current_round.time_info }}
+                        </div>
+                        {% endif %}
+                        {% if not match %}
+                            <div class="ranking">
+                                <strong>{% trans "Current ranking" %}:</strong>
+                                1.&nbsp;{{ tournament.ranking.0.player.user }}
+                                2.&nbsp;{{ tournament.ranking.1.player.user }}
+                                3.&nbsp;{{ tournament.ranking.2.player.user }}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                </a>
+                {% block after-link %}
+                    {% if match %}
+                        {% if match.finished %}
+                            <div class="player-match finished">
+                                {{ match.player1.user }} {{ match.player1_score }}&nbsp;:&nbsp;{{ match.player2_score }} {{ match.player2.user }}
+                            </div>
+                        {% else %}
+                            <div class="player-match">
+                                {% trans "You are playing with" %}
+                                <a class="lightbox" href="{% url tms:player_profile match.opponent.user.username %}">{{ match.opponent.user.username }}</a>.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    {% if tournament.current_round and not user.is_authenticated or user.get_profile in tournament %}
+                        {% if match and not match.finished %}
+                            <a class="report-results" href="{% url tms:result_report slug=tournament.slug %}">{% trans "Report match results" %}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endblock %}
+                {% comment %}
+                {% if user.is_manager or user.is_superuser %}
+                    <a href="{% url admin:tms_tournament_change tournament.id %}">Edit&nbsp;in&nbsp;admin</a>
+                {% endif %}
+                {% endcomment %}
+            </li>
+            {% endwith %}
+        {% empty %}
+            <li>
+                <span class="empty">
+                {% block empty %}
+                    {% trans "No ongoing tournaments..." %}
+                {% endblock %}
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

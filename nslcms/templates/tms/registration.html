@@ -1,0 +1,75 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n form_tags %}
+
+{% block title %}{% trans "Registration" %}{% endblock %}
+
+{% block user-bar %}
+<nav>
+    {% trans "Already registered?" %}
+    <a href="{% url tms:login %}">{% trans "Log in" %}</a>
+</nav>
+{% endblock %}
+
+{% block messages %}
+    {{ block.super }}
+    {% if user_form.non_field_errors %}
+        <ul class="messages">
+            <li class="error">{{ user_form.non_field_errors }}</li>
+        </ul>
+    {% endif %}
+    {% if player_form.non_field_errors %}
+        <ul class="messages">
+            <li class="error">{{ player_form.non_field_errors }}</li>
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="registration">
+    <hgroup class="h1"><h1>{% trans "Create new account" %}</h1></hgroup>
+    <div class="box center-form">
+        {% if user_form %}
+        <div class="nyx-sign-up">
+            <div class="box-content">
+            <p>Máte účet na <strong>NYX</strong>u?</p>
+            <p><strong><a href="{% url tms:nyxauth:dispatch %}">Přihlašte se přes NYX!</a></strong></p>
+            </div>
+        </div>
+        {% endif %}
+        <div class="box-content">
+            <form method="post" action="">
+                {% csrf_token %}
+                {% if user_form %}
+                <fieldset>
+                    {% with user_form.username as field %}
+                    <div class="form-field {{ field.name }} {% if field.errors %} field-error{% endif %}">
+                        {{ field.label_tag }}
+                        {% if field.errors %}<strong class="errormsg">{% for error in field.errors %}{{ error }}{% endfor %}</strong>{% endif %}
+                        {{ field }}
+                    </div>
+                    {% endwith %}
+                    {% field user_form.password1 %}
+                    {% field user_form.password2 %}
+                </fieldset>
+                {% endif %}
+                <fieldset>
+                    {% for field in player_form %}
+                        {% field field %}
+                    {% endfor %}
+                </fieldset>
+                <div class="submit-row">
+                    <input class="button" type="submit" value="{% trans 'Create account' %}" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+$('form input[type="text"]:first').focus();
+</script>
+{% endblock %}

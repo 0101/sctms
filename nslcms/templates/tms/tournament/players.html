@@ -1,0 +1,81 @@
+{% extends tournament.base_template %}
+
+{% load i18n cache %}
+
+{% block title %}{{ tournament.name }} > {% trans "Players" %} {% endblock %}
+
+{% block box-content %}
+{% cache 9000000 players tournament.id %}
+<table class="ranking">
+    <thead>
+        <tr>
+            <th>{% trans "Rank" %}</th>
+            <th>{% trans "Player" %}</th>
+            <th class="bye"></th>
+            <th>{% trans "Points" %}</th>
+            <th>{% trans "Buch." %}</th>
+            <th>{% trans "Wins" %}</th>
+            <th>{% trans "Won against" %}</th>
+            <th>{% trans "Losses" %}</th>
+            <th>{% trans "Lost against" %}</th>
+            <th>{% trans "Score" %}</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for i in tournament.ranking %}
+        <tr data-username="{{ i.player.user.username }}">
+            <td class="rank">{{ i.rank }}</td>
+            <td><a class="lightbox player" href="{% url tms:player_profile i.player.user.username %}">{{ i.player.user }}</a>&nbsp;({{ i.player }})</td>
+            <td class="bye">{% if i.player.competitor.received_bye %}<span class="bye" title="{% trans 'player received a bye' %}">(b)</span>{% endif %}</td>
+            <td class="points">{{ i.points }} </td>
+            <td class="buchholz">{{ i.buchholz }}</td>
+            <td>{{ i.wins }}&nbsp;({{ i.win_percent }}&nbsp;%)</td>
+            <td class="opponent-list">{% with i.won_against as players %}{% include 'tms/includes/opponent-list.html' %}{% endwith %}</td>
+            <td>{{ i.losses }}&nbsp;({{ i.loss_percent }}&nbsp%)</td>
+            <td class="opponent-list">{% with i.lost_against as players %}{% include 'tms/includes/opponent-list.html' %}{% endwith %}</td>
+            <td>{{ i.games_won }}-{{ i.games_lost }}&nbsp;({% if i.score > 0 %}+{% endif %}{{ i.score }})</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+{% endcache %}
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+
+{% if user.is_authenticated %}
+<script type="text/javascript">
+$('table').find('tr[data-username="{{ user.username }}"]').addClass('me');
+</script>
+{% endif %}
+
+<script type="text/javascript">
+$('table.ranking tr .player').each(function() {
+    var player = $(this);
+    var row = player.closest('tr');
+    var username = row.attr('data-username');
+    var imgs = $('.opponent-list img[data-username="' + username + '"]');
+
+    player.multiHover({
+        onClick: function() {
+            if (this == player.get(0)) {
+                return true;
+            } else {
+                player.click();
+                return false;
+            }
+        },
+        onEnter: function(items) {
+            items.add(row).addClass('hover');
+        },
+        onLeave: function(items) {
+            items.add(row).removeClass('hover');
+        }
+    });
+    player.trigger('attach', [imgs]);
+});
+</script>
+{% endblock %}

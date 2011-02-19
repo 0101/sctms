@@ -1,0 +1,22 @@
+{% extends 'admin/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ title }} | SCTMS{% endblock %}
+
+{% block extrastyle %}
+<style>
+#header {background:url('{{ MEDIA_URL }}img/bn-bg.jpg') center 33%;border-bottom:2px solid #8C8C8C;}
+#header h1 {margin:-1px 0;padding:0 15px;}
+#header #site-name a {font-size:32px;color:#000000;display:inline-block;font-weight:bold;text-shadow:0 0 5px #5884AA, 1px 1px 1px #FFFFFF;}
+#header #site-name a:hover {text-shadow:0 0 5px #D69F20, 1px 1px 1px #F6FF4F;text-decoration:none;}
+#header #site-name a span {font-size:17px; font-weight:normal; color:#7DBBF2; text-shadow:none;}
+#header #site-name a:hover span {color:#FFD13A;}
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="/">SCTMS <span>< {% trans "Back to site" %}</span></a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

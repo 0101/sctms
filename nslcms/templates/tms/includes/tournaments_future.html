@@ -1,0 +1,38 @@
+{% extends 'tms/includes/tournaments_ongoing.html' %}
+
+{% load i18n %}
+
+{% block before-list %}
+    {% if user.is_manager or user.is_superuser %}
+    <a class="create-tournament" href="{% url admin:tms_tournament_add %}">{% trans "Create new tournament" %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block extra-info %}
+    {% if tournament.registration_open %}
+        <div class="current-info">
+            <p class="registration">{% trans "Registration ends in" %} {{ tournament.registration_deadline|timeuntil }}</p>
+            <p>{% trans "Players registered" %}: <strong>{{ tournament.players.count }}</strong></p>
+        </div>
+    {% endif %}
+    {% with tournament.rounds.0 as first_round %}
+        {% if first_round %}
+        <div class="current-info">
+            <strong>{{ first_round.description }}</strong> {{ first_round.time_info }}
+        </div>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block after-link %}
+    {% if user.is_authenticated and user.get_profile in tournament %}
+        <span class="joined">{% trans "You are registered for this tournament" %}</span>
+        <a href="{% url tms:leave_tournament slug=tournament.slug %}">{% trans "Leave" %}</a>
+    {% else %}
+        <a class="join" href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join this tournament" %}</a>
+    {% endif %}
+{% endblock %}
+
+{% block empty %}
+    {% trans "No future tournaments..." %}
+{% endblock %}

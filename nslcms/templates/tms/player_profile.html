@@ -1,0 +1,11 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Profile" %}: {{ player.user }}{% endblock %}
+
+{% block content %}
+<div class="content-wrap profile">
+    {% include 'tms/includes/profile-content.html' %}
+</div>
+{% endblock %}

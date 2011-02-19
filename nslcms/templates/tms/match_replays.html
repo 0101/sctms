@@ -1,0 +1,11 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Match" %}: {{ match.player1 }} vs {{ match.player2 }}{% endblock %}
+
+{% block content %}
+<div class="content-wrap replays">
+    {% include 'tms/includes/replays-content.html' %}
+</div>
+{% endblock %}

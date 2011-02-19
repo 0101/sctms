@@ -1,0 +1,68 @@
+{% extends tournament.base_template %}
+
+{% load i18n cache markup %}
+
+{% block title %}{{ tournament.name }}{% endblock %}
+
+{% block box-content %}
+{% cache 90000000 info tournament.id %}
+
+    <h2 id="info">{% trans "About" %}<span class="icon"></span></h2>
+    {% block about %}
+        <ul>
+            <li>{% trans "Event type" %}: <strong title="{{ tournament.description }}">{{ tournament.format.name }}</strong></li>
+            <li>{% trans "Format" %}: <strong>1v1</strong></li>
+        </ul>
+
+        <h3>{% trans "Registration deadline" %}</h3>
+        <ul>
+        <li><strong>{{ tournament.registration_deadline|date:"d. m. Y G:i" }}</strong> CEST {% if tournament.registration_open %}
+        {% comment %}&ndash; {% trans "in" %} {{ tournament.registration_deadline|timeuntil }}{% endcomment %}</li>
+        <li id="click-to-join">Click <strong><a href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a></strong> to register{% endif %}</li>
+        <li>{% trans "Players registered" %}: <strong><a href="{% url tms:tournament_players slug=tournament.slug %}">{{ tournament.players.count }}</a></strong></li>
+        </ul>
+
+        <h3>{% trans "Start" %}</h3>
+        {% with tournament.rounds.0 as first_round %}
+            {% if first_round %}
+            <strong>{{ first_round.start|date:"d. m. Y G:i" }}</strong> CEST
+            {% else %}
+            <p>{% trans "The next day after registration deadline." %}
+            {% endif %}
+        {% endwith %}
+
+        {% with tournament.map_pool.all as maps %}
+            {% if maps %}
+            <h3>{% trans "Map pack" %}</h3>
+            <p>{{ tournament.map_pool.all|join:", " }}</p>
+            {% endif %}
+        {% endwith %}
+
+        <h3>{% trans "Round dates, maps and pairing" %}</h3>
+        {% url tms:tournament_rounds slug=tournament.slug as rounds_url %}
+        <p>{% blocktrans with rounds_url as url %}Will be published under <a href="{{ url }}">Rounds</a> after registration deadline.{% endblocktrans %}
+    {% endblock %}
+
+    {% if tournament.additional_information %}
+        {{ tournament.additional_information|markdown }}
+    {% endif %}
+
+    {% if tournament.prizes %}
+        <h2 id="prizes">{% trans "Prizes" %}<span class="icon"></span></h2>
+        {{ tournament.prizes|markdown }}
+    {% endif %}
+
+    <h2 id="rules">{% trans "Rules" %}<span class="icon"></span></h2>
+    {{ tournament.rules|markdown }}
+
+{% endcache %}
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+{% if user.get_profile in tournament %}
+$('#click-to-join').remove();
+{% endif %}
+</script>
+{% endblock %}
