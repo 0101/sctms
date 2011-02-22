@@ -371,7 +371,7 @@ def delete_replay(request):
 
 
 def banner(request):
-    max = 25
+    max = 26
     url = '/site_media/img/banner/i%02d.jpg'
     number = (datetime.now().hour + datetime.now().day) % max
     return HttpResponseRedirect(url % number)
