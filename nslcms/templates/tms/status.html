@@ -1,9 +1,0 @@
-<center>
-{% for tournament in ongoing_tournaments %}
-<strong>{{ tournament }}</strong><br/>
-{% if tournament.current_round %}
-<strong>{{ tournament.current_round.description }}</strong>
-{% if tournament.current_round.first_map %}@ <strong>{{ tournament.current_round.first_map }}</strong>{% endif %} {{ tournament.current_round.time_info }}
-{% endif %}
-{% endfor %}
-</center>
