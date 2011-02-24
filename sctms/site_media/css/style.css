@@ -45,16 +45,49 @@ body {font-family:"Segoe UI", "Lucida Grande", "Trebuchet MS", Helvetica, Arial,
 	background:#0b0b0b url('../img/bg2.jpg') center -100px repeat-y; color:#aaa;
 	font-size:14px;}
 
-header.top {background:#111 url('../img/header.jpg') center top no-repeat;text-align:center;}
-header.top .logo {height:109px;text-indent:9000px;display:block;width:300px;overflow:hidden;margin:0 auto;}
+header.top {background:#000 url('../img/header.jpg') center top no-repeat;}
+header.top .logo {height:114px;text-indent:9000px;display:block;width:300px;overflow:hidden;margin:0 auto;}
 header.top .logo:hover {text-shadow:0 0 7px #D69F20, 1px 1px 2px #F6FF4F;color:#1C1606;}
-header.top .mask {background: url('../img/top-mask.png') center no-repeat;}
+header.top .content {width:920px;margin:0 auto;position:relative;}
 
-section.user {background:#000000;border-top:1px solid #333;border-bottom:1px solid #333;}
-section.user .info {display:inline-block;}
+header.top .main_menu {border-bottom:1px solid #333;}
+header.top .main_menu nav {width:920px;margin:0 auto;text-align:center;}
+header.top .main_menu nav a {
+    padding:6px 10px;display:inline-block;font-size:17px;font-weight:bold;
+	width:7em;text-align:center;margin:0 3px;border-bottom:5px solid #333;}
+header.top .main_menu nav a span {color:#fff; opacity:.35;}
+
+header.top .main_menu nav a.selected {background:rgba(255, 255, 255, .08);border-bottom-color:#999;}
+header.top .main_menu nav a.selected span {color:#d6d6d6;opacity:1;}
+
+header.top .main_menu nav a:hover,
+header.top .main_menu nav a:active,
+header.top .main_menu nav a:focus,
+header.top .main_menu nav a.loading {border-bottom-color:#B29029;background:rgba(255, 209, 58, .08);}
+header.top .main_menu nav a:hover span,
+header.top .main_menu nav a:active span,
+header.top .main_menu nav a:focus span,
+header.top .main_menu nav a.loading span {opacity:1;color:#FFD13A;}
+
+header.top .main_menu nav a.loading {background:url('../img/static.gif');}
+header.top .main_menu nav a.loading span {opacity:.5;}
+
+section.user {
+    position:absolute;right:0;top:0px;background:rgba(65, 65, 65, 0.5);padding:3px;border:1px solid #434343;
+    border-bottom-width:5px;
+	-moz-box-shadow:0 0 15px #3A5770;
+	-webkit-box-shadow:0 0 15px #3A5770;
+	box-shadow:0 0 15px #3A5770;}
+section.user .avatar {float:left;}
+section.user .avatar .img {width:40px; height:50px;border:2px solid #000;opacity:.8;}
+section.user .controls {float:left;}
+section.user .info {padding:4px 0;margin:0 7px;}
 section.user nav {display:inline;}
+section.user nav.not_logged_in {display:inline;padding:0 5px;}
 section.user nav a {display:inline-block;padding:4px 7px;}
-section.user nav a:hover {background:#1C1606;}
+section.user .logged_in nav a {background:#000;}
+section.user .logged_in nav a:hover {background:#1C1606;}
+section.user nav a:hover {}
 
 .content hgroup.h1 {text-align:center;font-size:24px;margin-top:30px;color:#D6D6D6;}
 .content hgroup.h1 * {display:inline;}
@@ -65,7 +98,9 @@ section.user nav a:hover {background:#1C1606;}
 .content hgroup .breadcrumbs a {color: #436482;}
 .content hgroup .breadcrumbs a:hover {color: #FFD13A;}
 
-.content .tournament-slogan {text-align:center;color:#666;font-family:"Trebuchet MS", "Segoe UI", "Lucida Grande";font-style:italic;margin-top:12px;}
+.content .tournament-slogan {
+	text-align:center;color:#666;font-family:"Trebuchet MS", "Segoe UI", "Lucida Grande";
+	font-style:italic;margin-top:12px;}
 
 .content .content-wrap {width:960px;margin:0 auto;}
 
@@ -104,8 +139,8 @@ section.user nav a:hover {background:#1C1606;}
 .login .box .nyx-login a span {display:inline-block;margin-top:99px;text-align:center;font-size:17px;}
 
 .registration .nyx-sign-up {
-	background:url('../img/nyx.png') no-repeat -57px -274px rgba(0, 0, 0, 0.3);border-bottom: 1px solid #444444;font-size: 17px;
-	line-height: 2;text-align: center;}
+	background:url('../img/nyx.png') no-repeat -57px -274px rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid #444444;font-size: 17px;line-height: 2;text-align: center;}
 
 form fieldset {margin:0 0 10px 0;}
 form .submit-row {/*background:#000;*/text-align:center;}

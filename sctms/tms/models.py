@@ -363,7 +363,6 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
         invalidate_template_cache('info', competitor.tournament.id)
 
 
-
 class FastTournament(Tournament):
     """
     Tournament model proxy which only creates limited version of ranking.
