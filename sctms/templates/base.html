@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+{% load i18n nsl_tags %}
+	<head>
+		<meta charset="utf-8" />
+		<title>{% block title %}{% endblock %} | SCTMS</title>
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css?19" type="text/css" media="screen,projection" />
+
+		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+		{# jQuery #}
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.3.min.js"></script>
+	</head>
+
+	<body>
+		<header class="top">
+            <div class="content">
+                <a class="logo" href="/">NSL</a>
+                <section class="user">
+                    {% block user-bar %}{% user_bar %}{% endblock %}
+                </section>
+            </div>
+            <section class="main_menu">
+				{% block main_menu %}
+                    {% include 'includes/main_menu.html' %}
+				{% endblock %}
+            </section>
+		</header>
+		{% block messages %}
+			{% if messages %}
+			<ul class="messages">
+				{% for message in messages %}
+				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		{% endblock %}
+
+		<div class="content">
+			{% block content %}{% endblock %}
+		</div>
+
+		{# fancybox #}
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/fancybox/jquery.easing-1.3.pack.js"></script>
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/fancybox/jquery.fancybox-1.3.2.js"></script>
+		<link rel="stylesheet" href="{{ MEDIA_URL }}js/fancybox/jquery.fancybox-1.3.2.css" type="text/css" media="screen,projection" />
+
+		{# uploadify #}
+		<link rel="stylesheet" href="{{ MEDIA_URL }}js/uploadify/uploadify.css" type="text/css" media="screen,projection" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/uploadify/swfobject.js"></script>
+
+		{# global variables #}
+		<script type="text/javascript">
+		var MEDIA_URL = '{{ MEDIA_URL }}';
+		</script>
+
+		{% block js %}
+		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.multihover.js"></script>
+		<script type="text/javascript">
+		$('form .submit-row input').click(function(){
+			$(this).addClass('loading');
+		});
+		$('a.lightbox').fancybox({
+			overlayShow:false,
+			padding:0,
+		});
+		$('header.top .main_menu nav a').click(function() {$(this).addClass('loading')});
+		</script>
+		{% endblock %}
+	</body>
+</html>

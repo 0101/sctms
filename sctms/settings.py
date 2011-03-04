@@ -115,6 +115,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     # project apps
+    'nsl',
     'tms',
     'forms',
     'pages',

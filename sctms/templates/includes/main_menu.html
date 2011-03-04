@@ -1,0 +1,8 @@
+{% spaceless %}
+<nav>
+    <a {% if main_menu_selected == 'home' %}class="selected"{% endif %} href="/"><span>Home</span></a>
+    <a {% if main_menu_selected == 'tour' %}class="selected"{% endif %} href="{% url tms:index %}"><span>Tournaments</span></a>
+    <a {% if main_menu_selected == 'irc' %}class="selected"{% endif %} href="{% url irc %}"><span>Chat</span></a>
+    <a {% if main_menu_selected == 'pages_faq' %}class="selected"{% endif %} href="{% url pages:page slug='faq' %}"><span>FAQ</span></a>
+</nav>
+{% endspaceless %}

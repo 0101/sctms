@@ -4,13 +4,6 @@
 
 {% block title %}{% trans "Registration" %}{% endblock %}
 
-{% block user-bar %}
-<nav>
-    {% trans "Already registered?" %}
-    <a href="{% url tms:login %}">{% trans "Log in" %}</a>
-</nav>
-{% endblock %}
-
 {% block messages %}
     {{ block.super }}
     {% if user_form.non_field_errors %}

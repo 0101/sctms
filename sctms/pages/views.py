@@ -6,5 +6,8 @@ from pages.models import Page
 
 
 def page(request, slug, template='pages/page.html'):
-    context = {'page': get_object_or_404(Page, slug=slug)}
+    context = {
+        'page': get_object_or_404(Page, slug=slug),
+        'main_menu_selected': 'pages_%s' % slug,
+    }
     return direct_to_template(request, template, context)

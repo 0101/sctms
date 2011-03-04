@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template, redirect_to
 
 from tms.views import TmsNyxAuth
 
@@ -13,8 +13,9 @@ urlpatterns += patterns('tms.views',
     url(r'^$', 'index', name='index'),
     url(r'^reg/$', 'registration', name='registration'),
     url(r'^logout/$', 'logout', name='logout'),
+    #url(r'^nyxauth/authenticate/', redirect_to,
+    #    {'url': 'http://thensl.cz/nyxauth/authenticate/', 'query_string': True}),
     url(r'^nyxauth/', include(TmsNyxAuth().urls(), namespace='nyxauth')),
-    url(r'^irc/$', direct_to_template, {'template': 'tms/irc.html'}, name='irc'),
     url(r'^delete-replay/', 'delete_replay', name='delete_replay'),
     url(r'^banner/$', 'banner', name='banner'),
     url(r'^status/$', 'status', name='status'),

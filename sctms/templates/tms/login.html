@@ -4,13 +4,6 @@
 
 {% block title %}{% trans "Log in" %}{% endblock %}
 
-{% block user-bar %}
-<nav>
-    {% trans "Don't have an account?" %}
-    <a href="{% url tms:registration %}">{% trans "Sign up" %}</a>
-</nav>
-{% endblock %}
-
 {% block messages %}
     {{ block.super }}
     {% if form.non_field_errors %}
