@@ -1,13 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
     
+    class Meta:
+        verbose_name = _(u'Category')
+        verbose_name_plural = _(u'Categories')
+        
     def __unicode__(self):
         return self.name
+                        
 
 class Topic(models.Model):
     author = models.ForeignKey(User, unique=True)
@@ -35,6 +41,10 @@ class Comment(models.Model):
 class BlogEntry(models.Model):
     topic = models.ForeignKey(Topic)
     text = models.TextField()
+    
+    class Meta:
+        verbose_name = _(u'Blog Entry')
+        verbose_name_plural = _(u'Blog Entries')
     
     def __unicode__(self):
         return self.topic
