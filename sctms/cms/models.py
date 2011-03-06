@@ -47,7 +47,7 @@ class BlogEntry(models.Model):
         verbose_name_plural = _(u'Blog Entries')
     
     def __unicode__(self):
-        return self.topic
+        return self.text
     
     
 class CommentEntry(models.Model):
@@ -55,6 +55,6 @@ class CommentEntry(models.Model):
     text = models.TextField()
     
     def __unicode__(self):
-        return self.topic
+        return self.text
 
   
