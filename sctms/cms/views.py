@@ -1,19 +1,14 @@
 # Create your views here.
 
-from blog.models import Topic, BlogEntry
+from django.template import Context, loader
+from cms.models import Comment, BlogEntry
 from django.http import HttpResponse
 
+
 def index(request):
-    latest_topic_list = Topic.objects.all().order_by('date')[:5]
-    output = ', '.join([t.title for t in latest_topic_list])
-    return HttpResponse(output)
-    
-def detail(request, poll_id):
-    return HttpResponse("You're looking at poll %s." % poll_id)
-
-def comments(request, poll_id):
-    return HttpResponse("You're looking at the results of poll %s." % poll_id)
-
-def comment(request, poll_id):
-    return HttpResponse("You're voting on poll %s." % poll_id)
-   
+    latest_entry_list = BlogEntry.objects.all().order_by('date')[:5]
+    t = loader.get_template('cms/index.html')
+    c = Context({
+        'latest_entry_list': latest_entry_list,
+    })
+    return HttpResponse(t.render(c))

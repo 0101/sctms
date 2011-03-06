@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-from blog.models import Topic, Category, BlogEntry
+from cms.models import BlogEntry, Category, Comment
 from django.contrib import admin
 
 
-admin.site.register(Topic)
-admin.site.register(Category)
 admin.site.register(BlogEntry)
+admin.site.register(Comment)
+admin.site.register(Category)
+
 

@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     'tms',
     'forms',
     'pages',
+    'cms',
 ]
 
 AUTH_PROFILE_MODULE = 'tms.Player'
