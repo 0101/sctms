@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="content-wrap index">
+    <div class="box" id="cms-news">
+        {% if BlogEntry %}
+            <hgroup><h3>{{BlogEntry.title}}</h3></hgroup>            
+            <ul>
+                <li>
+                    <div class="cms-entry">
+                        <div class="cms-entry-tags">{{BlogEntry.tags}}</div>
+                        <div class="cms-entry-details">{{BlogEntry.author}}, {{BlogEntry.date}}</div>
+                        {{BlogEntry.text}}
+                        <div class="cms-entry-tags cms-entry-details">{{BlogEntry.hits}} hits</div>
+                    </div>
+                </li>
+            </ul>
+        {% else %}
+            <p>No entries are available.</p>
+        {% endif %}
+    </div>
+</div>
+{%endblock%}

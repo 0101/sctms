@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="content-wrap index">
+    <div class="box" id="cms-news">
+        <hgroup><h3>Latest news</h3></hgroup>
+        {% if latest_entry_list %}
+            <ul>
+            {% for BlogEntry in latest_entry_list %}
+                <li>
+                    <a href="/cms/{{ BlogEntry.slug }}/detail/"><hgroup class="cms-news-hgroup"><h4>{{ BlogEntry.title }}</h4></hgroup></a>
+                    <div class="cms-entry">
+                        <div class="cms-entry-tags">{{BlogEntry.tags}}</div>
+                        <div class="cms-entry-details">{{BlogEntry.author}}, {{BlogEntry.date}}</div>
+                        {{BlogEntry.text|truncatewords_html:69}}
+                        <div class="cms-entry-tags cms-entry-details">{{BlogEntry.hits}} hits</div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No entries are available.</p>
+        {% endif %}
+    </div>
+</div>
+{%endblock%}
