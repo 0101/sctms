@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+from django_extensions.db.fields import AutoSlugField
+from jsonstore.models import JsonStore
+
 # Create your models here.
 
 class Category(models.Model):
@@ -20,6 +23,7 @@ class BlogEntry(models.Model):
     category = models.ForeignKey(Category)
     date = models.DateTimeField('date published')
     title = models.CharField(max_length=100)
+    slug = AutoSlugField(populate_from='title')
     tags = models.CharField(max_length=150)
     hits = models.IntegerField()
     up = models.IntegerField()
@@ -33,8 +37,8 @@ class BlogEntry(models.Model):
         verbose_name = _(u'Blog Entry')
         verbose_name_plural = _(u'Blog Entries')
     
-    def get_short_text(self):
-        return self.text[:200] + '...'
+    def slug_title(self):
+        return '';
   
 class Comment(models.Model):
     author = models.ForeignKey(User, unique=True)
