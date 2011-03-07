@@ -27,16 +27,12 @@ from cms.models import Comment, BlogEntry
 
 def index(request):
     latest_entry_list = BlogEntry.objects.all().order_by('date')[:5]
-    c = RequestContext(request, {
-        'latest_entry_list': latest_entry_list,
-    })
-    return render_to_response('cms/index.html', c,context_instance=RequestContext(request))
+    c = {'latest_entry_list': latest_entry_list}
+    return direct_to_template(request, 'cms/index.html', c)
     
 def detail(request, slug):
     entry = BlogEntry.objects.get(slug=slug)
-    c = RequestContext(request, {
-        'BlogEntry': entry,
-    })
+    c = {'BlogEntry': entry}
     entry.hits += 1
     entry.save()
-    return render_to_response('cms/detail.html', c,context_instance=RequestContext(request))    
+    return direct_to_template(request, 'cms/detail.html', c)    
