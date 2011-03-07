@@ -383,3 +383,12 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .replays-content .confirmed-post-yes,
 .replays-content .confirmed-post-no {font-weight:bold;}
 .replays-content .replay a.loading {opacity: 0.5;}
+
+
+/* cms styles */
+#cms-news {width:910px; text-align: justify}
+#cms-news h3 {text-transform: uppercase;}
+.cms-entry {padding: 10px 10px 20px 10px;}
+.cms-entry-details {font-weight: bold; line-height: 250%; text-align:right;}
+.cms-entry-tags {color:#555555; font-style: italic; line-height: 75%}
+

@@ -32,8 +32,9 @@ class BlogEntry(models.Model):
     class Meta:
         verbose_name = _(u'Blog Entry')
         verbose_name_plural = _(u'Blog Entries')
-            
     
+    def get_short_text(self):
+        return self.text[:200] + '...'
   
 class Comment(models.Model):
     author = models.ForeignKey(User, unique=True)
