@@ -8,14 +8,14 @@
         <hgroup><h3>Latest news</h3></hgroup>
         {% if latest_entry_list %}
             <ul>
-            {% for BlogEntry in latest_entry_list %}
+            {% for entry in latest_entry_list %}
                 <li>
-                    <a href="/cms/{{ BlogEntry.slug }}/detail/"><hgroup class="cms-news-hgroup"><h4>{{ BlogEntry.title }}</h4></hgroup></a>
+                    <a href="/cms/{{ entry.slug }}/detail/"><hgroup class="cms-news-hgroup"><h4>{{ entry.title }}</h4></hgroup></a>
                     <div class="cms-entry">
-                        <div class="cms-entry-tags">{{BlogEntry.tags}}</div>
-                        <div class="cms-entry-details">{{BlogEntry.author}}, {{BlogEntry.date}}</div>
-                        {{BlogEntry.text|truncatewords_html:69}}
-                        <div class="cms-entry-tags cms-entry-details">{{BlogEntry.hits}} hits</div>
+                        <div class="cms-entry-tags">{{entry.tags}}</div>
+                        <div class="cms-entry-details">{{entry.author}}, {{entry.date}}</div>
+                        {{entry.text|truncatewords_html:69}}
+                        <div class="cms-entry-tags cms-entry-details">{{entry.hits}} hits</div>
                     </div>
                 </li>
             {% endfor %}

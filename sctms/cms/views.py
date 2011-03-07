@@ -32,7 +32,7 @@ def index(request):
     
 def detail(request, slug):
     entry = BlogEntry.objects.get(slug=slug)
-    c = {'BlogEntry': entry}
+    c = {'entry': entry}
     entry.hits += 1
     entry.save()
     return direct_to_template(request, 'cms/detail.html', c)    

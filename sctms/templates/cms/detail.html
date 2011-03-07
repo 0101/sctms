@@ -5,15 +5,15 @@
 
 <div class="content-wrap index">
     <div class="box" id="cms-news">
-        {% if BlogEntry %}
-            <hgroup><h3>{{BlogEntry.title}}</h3></hgroup>            
+        {% if entry %}
+            <hgroup><h3>{{entry.title}}</h3></hgroup>            
             <ul>
                 <li>
                     <div class="cms-entry">
-                        <div class="cms-entry-tags">{{BlogEntry.tags}}</div>
-                        <div class="cms-entry-details">{{BlogEntry.author}}, {{BlogEntry.date}}</div>
-                        {{BlogEntry.text}}
-                        <div class="cms-entry-tags cms-entry-details">{{BlogEntry.hits}} hits</div>
+                        <div class="cms-entry-tags">{{entry.tags}}</div>
+                        <div class="cms-entry-details">{{entry.author}}, {{entry.date}}</div>
+                        {{entry.text}}
+                        <div class="cms-entry-tags cms-entry-details">{{entry.hits}} hits</div>
                     </div>
                 </li>
             </ul>
