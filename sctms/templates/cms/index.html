@@ -12,10 +12,10 @@
                 <li>
                     <a href="/cms/{{ entry.slug }}/detail/"><hgroup class="cms-news-hgroup"><h4>{{ entry.title }}</h4></hgroup></a>
                     <div class="cms-entry">
-                        <div class="cms-entry-tags">{{entry.tags}}</div>
-                        <div class="cms-entry-details">{{entry.author}}, {{entry.date}}</div>
-                        {{entry.text|truncatewords_html:69}}
-                        <div class="cms-entry-tags cms-entry-details">{{entry.hits}} hits</div>
+                        <div class="cms-entry-tags">{{ entry.tags }}</div>
+                        <div class="cms-entry-details">{{ entry.author }}, {{ entry.date }}</div>
+                        {{ entry.text|truncatewords_html:69 }}
+                        <div class="cms-entry-tags cms-entry-details">{{ entry.hits }} hits</div>
                     </div>
                 </li>
             {% endfor %}
