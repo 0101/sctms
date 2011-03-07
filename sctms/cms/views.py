@@ -31,7 +31,7 @@ def index(request):
     return direct_to_template(request, 'cms/index.html', c)
     
 def detail(request, slug):
-    entry = BlogEntry.objects.get(slug=slug)
+    entry = get_object_or_404(BlogEntry, slug=slug)
     c = {'entry': entry}
     entry.hits += 1
     entry.save()
