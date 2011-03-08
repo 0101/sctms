@@ -25,11 +25,11 @@ class BlogEntry(models.Model):
     title = models.CharField(max_length=100)
     slug = AutoSlugField(populate_from='title')
     tags = models.CharField(max_length=150)
-    hits = models.IntegerField()
-    up = models.IntegerField()
-    down = models.IntegerField()
+    hits = models.IntegerField(default=0)
+    up = models.IntegerField(default=0)
+    down = models.IntegerField(default=0)
     highlight = models.TextField(blank=True)
-    text = models.TextField()    
+    text = models.TextField()
     
     def __unicode__(self):
         return self.title
@@ -46,8 +46,8 @@ class Comment(models.Model):
     topic = models.ForeignKey(BlogEntry)
     title = models.CharField(max_length=100)
     date = models.DateTimeField('date published')    
-    up = models.IntegerField()
-    down = models.IntegerField()
+    up = models.IntegerField(default=0)
+    down = models.IntegerField(default=0)
     text = models.TextField()    
     
     def __unicode__(self):

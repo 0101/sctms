@@ -10,7 +10,7 @@ from cms.models import Comment, BlogEntry
 
 
 def index(request):
-    latest_entry_list = BlogEntry.objects.all().order_by('date')[:5]
+    latest_entry_list = BlogEntry.objects.all().order_by('date')[:10]
     c = {'latest_entry_list': latest_entry_list}
     return direct_to_template(request, 'cms/index.html', c)
     
