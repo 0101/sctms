@@ -8,7 +8,7 @@ from jsonstore.models import JsonStore
 # Create your models here.
 
 class Category(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     
     class Meta:
         verbose_name = _(u'Category')
@@ -22,8 +22,8 @@ class BlogEntry(models.Model):
     author = models.ForeignKey(User)
     category = models.ForeignKey(Category)
     date = models.DateTimeField('date published')
-    title = models.CharField(max_length=100)
-    slug = AutoSlugField(populate_from='title')
+    title = models.CharField(max_length=100, unique=True)
+    slug = AutoSlugField(populate_from='title', unique=True)
     tags = models.CharField(max_length=150)
     hits = models.IntegerField(default=0)
     up = models.IntegerField(default=0)
