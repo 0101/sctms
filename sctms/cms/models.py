@@ -19,7 +19,7 @@ class Category(models.Model):
                         
 
 class BlogEntry(models.Model):
-    author = models.ForeignKey(User, unique=True)
+    author = models.ForeignKey(User)
     category = models.ForeignKey(Category)
     date = models.DateTimeField('date published')
     title = models.CharField(max_length=100)
