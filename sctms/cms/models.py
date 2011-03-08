@@ -27,7 +27,8 @@ class BlogEntry(models.Model):
     tags = models.CharField(max_length=150)
     hits = models.IntegerField()
     up = models.IntegerField()
-    down = models.IntegerField()    
+    down = models.IntegerField()
+    highlight = models.TextField(blank=True)
     text = models.TextField()    
     
     def __unicode__(self):
