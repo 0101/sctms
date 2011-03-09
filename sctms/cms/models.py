@@ -30,6 +30,7 @@ class BlogEntry(models.Model):
     down = models.IntegerField(default=0)
     highlight = models.TextField(blank=True)
     text = models.TextField()
+    showfront = models.IntegerField(default=1)
     
     def __unicode__(self):
         return self.title
