@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_extensions.db.fields import AutoSlugField
 from jsonstore.models import JsonStore
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 
@@ -41,6 +42,9 @@ class BlogEntry(models.Model):
     
     def slug_title(self):
         return '';
+    
+    def get_absolute_url(self):
+        return reverse('cms:detail', kwargs={'slug':self.slug})
   
 class Comment(models.Model):
     author = models.ForeignKey(User, unique=True)
