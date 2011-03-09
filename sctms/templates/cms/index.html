@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block title %} Latest news {%endblock%}
 
 {% block content %}
 
@@ -26,4 +27,11 @@
         {% endif %}
     </div>
 </div>
+
 {%endblock%}
+
+{% block main_menu %}
+{% with 'home' as main_menu_selected %}
+	{{ block.super }}
+{% endwith %}
+{% endblock %}
