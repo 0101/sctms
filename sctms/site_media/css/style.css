@@ -394,6 +394,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .cms-entry-highlight {font-weight:bold; padding: 20px 0px 20px 0px; line-height: 115%;}
 .cms-entry center img {border-width: 1px; border-style: solid; border-color: #555555; width: 550px;}
 .cms-entry center {font-style: italic; color: #555555; padding: 20px;}
-.cms-entry center table {font-style: normal; border-width: 0px; width: 550px;}
+.cms-entry center table {font-style: normal; border-width: 1px; width: 550px; border-style: solid; border-color: #333333;}
 .cms-entry center table td {padding: 3px;}
 .w125 {width: 125px; font-weight: bold;}
+.cms-entry center h2 {font-style: normal; font-size: larger; font-weight: bold;}
