@@ -1,11 +1,14 @@
+import re
 from datetime import date, datetime, timedelta
 
 from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
 from django.db.models.aggregates import Sum
+from django.db.models.base import ModelBase
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import timeuntil, timesince, slugify
 
@@ -13,11 +16,141 @@ from django_extensions.db.fields import AutoSlugField
 from jsonstore.models import JsonStore
 
 from tms.cachecontrol import CacheNotifierModel, bind_clear_cache, ClearCacheMixin, SAVE
-from tms.managers import TournamentManager
-from tms.utils import cached, invalidate_template_cache, odd, split, merge, pop_random, is_valid_pairing
+from tms.managers import OldTournamentManager, LeafClassManager, ThisTypeOnlyManager
+from tms.utils import (cached, invalidate_template_cache, odd, split, merge,
+                       pop_random, is_valid_pairing)
 
 
-class Player(models.Model):
+node_types = {}
+
+
+class NodeBase(ModelBase):
+
+    def __new__(cls, name, bases, attrs):
+
+        # redefine the related name in the foreign key to TournamentNode,
+        # so classes with the same name (from different apps) won't clash
+        try:
+            from tms.models import TournamentNode
+        except ImportError:
+            pass
+        else:
+            if (TournamentNode in bases and not
+                ('Meta' in attrs and getattr(attrs['Meta'], 'proxy', False))):
+                attrs['tournamentnode_ptr'] = models.OneToOneField(
+                    TournamentNode,
+                    related_name="%(app_label)s_%(class)s_related",
+                    parent_link=True
+                )
+
+        # add leaf class manager to all subclasses (unless they define their own)
+        if 'objects' not in attrs:
+            attrs['objects'] = ThisTypeOnlyManager()
+
+        NewNodeType = ModelBase.__new__(cls, name, bases, attrs)
+
+        type_id = NewNodeType.get_id()
+
+        def node_init(self, *args, **kwargs):
+            # TODO: preserve custom init method?
+            models.Model.__init__(self, *args, **kwargs)
+            if not self.type_id:
+                self.type_id = type_id
+
+        NewNodeType.__init__ = node_init
+
+        node_types[type_id] = NewNodeType
+        return NewNodeType
+
+
+class TreeNodeMixin(object):
+    """
+    Methods for accessing parent node and root node in the tournament tree
+    common for TournamentNode and Round
+    """
+    def get_parent(self):
+        return self.parent_node.as_leaf_class() if self.parent_node else None
+
+    def set_parent(self, value):
+        self.parent_node = value
+
+    parent = property(get_parent, set_parent)
+
+    def get_root(self):
+        return self.parent.get_root() if self.parent else self
+
+
+class TournamentNode(models.Model, TreeNodeMixin):
+
+    __metaclass__ = NodeBase
+
+    type_id = models.CharField(max_length=64)
+    parent_node = models.ForeignKey('self', blank=True, null=True)
+    name = models.CharField(max_length=64)
+    user_set = models.ManyToManyField(User, blank=True, through='Player')
+
+    objects = LeafClassManager()
+
+    def __unicode__(self):
+        return self.name or self.__class__.__name__
+
+    @property
+    def players(self):
+        return self.user_set.all()
+
+    @property
+    @cached
+    def player_dict(self):
+        return dict([(p.id, player) for player in self.player_set.all()])
+
+    @classmethod
+    def get_id(cls):
+        return '%s.%s' % (cls.__module__, cls.__name__)
+
+    def as_leaf_class(self):
+        return (self if self.__class__.get_id() == self.type_id
+                else node_types[self.type_id].objects.get(pk=self.pk))
+
+
+class Tournament(TournamentNode, JsonStore):
+    slug = AutoSlugField(populate_from='name')
+    maps = models.ManyToManyField('Map', blank=True)
+    prizes = models.TextField(blank=True,
+                              help_text='You can use markdown formatting')
+
+    objects = LeafClassManager()
+
+    def __getattr__(self, name):
+        """
+        enable alternative calling of get_url in this format:
+
+        get_<view_name>_url (e.g. get_info_url)
+
+        so that it can be used in templates
+        """
+        match = re.match(r'get_(\w+)_url', name)
+        if match:
+            return self.get_url(match.group(1))
+        return super(Tournament, self).__getattr__(name)
+
+    def get_url(self, view_name, args=(), kwargs={}):
+        return reverse('tms:%s:%s' % (self.slug, view_name),
+                       args=args, kwargs=kwargs)
+
+    def get_urls(self):
+        raise NotImplementedError()
+
+
+def node_link(model):
+    def function(self):
+        try:
+            return model.objects.get(parent_node=self.id)
+        except ObjectDoesNotExist:
+            return None
+    return property(function)
+
+
+class PlayerProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
     character_name = models.CharField(max_length=50)
     character_code = models.PositiveSmallIntegerField()
@@ -26,8 +159,8 @@ class Player(models.Model):
     from_nyx = models.BooleanField()
 
     class Meta:
-        verbose_name = _('Player')
-        verbose_name_plural = _('Players')
+        verbose_name = _('PlayerProfile')
+        verbose_name_plural = _('PlayerProfiles')
         unique_together = 'character_name', 'character_code'
         ordering = 'character_name',
 
@@ -52,7 +185,7 @@ class Player(models.Model):
                        kwargs={'username': self.user.username})
 
     def get_stats(self):
-        return PlayerStats(self)
+        return PlayerProfileStats(self)
 
 
 class Map(models.Model):
@@ -119,7 +252,7 @@ class PlayerRanking(object):
             self.players[i]['rank'] = i + 1
 
 
-class PlayerStats(object):
+class PlayerProfileStats(object):
 
     def __init__(self, player):
         self.player = player
@@ -137,23 +270,23 @@ class PlayerStats(object):
         return r
 
 
-class Tournament(CacheNotifierModel, ClearCacheMixin):
+class OldTournament(CacheNotifierModel, ClearCacheMixin):
     name = models.CharField(max_length=50, unique=True)
     slogan = models.CharField(max_length=200, blank=True)
     slug = AutoSlugField(populate_from='name')
     registration_deadline = models.DateTimeField(blank=True, help_text='Defaults to a week from today')
     additional_information = models.TextField(blank=True, help_text='You can use markdown formatting')
-    players = models.ManyToManyField(Player, blank=True, through='Competitor')
+    players = models.ManyToManyField(PlayerProfile, blank=True, through='Competitor')
     map_pool = models.ManyToManyField(Map, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True)
     format_class = models.CharField(_('Format'), max_length=50)
     prizes = models.TextField(blank=True, help_text='You can use markdown formatting')
 
-    objects = TournamentManager()
+    objects = OldTournamentManager()
 
     class Meta:
-        verbose_name = _(u'Tournament')
-        verbose_name_plural = _(u'Tournaments')
+        verbose_name = _(u'OldTournament')
+        verbose_name_plural = _(u'OldTournaments')
 
     def __unicode__(self):
         return self.name
@@ -166,7 +299,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
         tries to find missing atributes on the 'format' object
         """
         if attr.startswith('_'):
-            return super(Tournament, self).__getattr__(attr)
+            return super(OldTournament, self).__getattr__(attr)
         return getattr(self.format, attr)
 
     def _create_ranking(self):
@@ -212,14 +345,14 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
 
         @ranking.field
         def won_against(player, tournament, data):
-            players = Player.objects.filter(id__in=(
+            players = PlayerProfile.objects.filter(id__in=(
                 player.matches_in(tournament).filter(winner=player).values('loser')
             ))
             return list(players)
 
         @ranking.field
         def lost_against(player, tournament, data):
-            players = Player.objects.filter(id__in=(
+            players = PlayerProfile.objects.filter(id__in=(
                 player.matches_in(tournament).filter(loser=player).values('winner')
             ))
             return list(players)
@@ -334,7 +467,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
     def save(self, *args, **kwargs):
         if not self.registration_deadline:
             self.registration_deadline = date.today() + timedelta(7)
-        super(Tournament, self).save(*args, **kwargs)
+        super(OldTournament, self).save(*args, **kwargs)
 
     @classmethod
     def clear_cache_tournament(cls, tournament, action):
@@ -351,7 +484,7 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
 
     @classmethod
     def clear_cache_rules(cls, rules, action):
-        ids = (Tournament.objects.filter(format_class=rules.format_class)
+        ids = (OldTournament.objects.filter(format_class=rules.format_class)
                .values_list('id'))
         if ids:
             for id in zip(*ids)[0]:
@@ -363,9 +496,9 @@ class Tournament(CacheNotifierModel, ClearCacheMixin):
         invalidate_template_cache('info', competitor.tournament.id)
 
 
-class FastTournament(Tournament):
+class FastOldTournament(OldTournament):
     """
-    Tournament model proxy which only creates limited version of ranking.
+    OldTournament model proxy which only creates limited version of ranking.
 
     Primarily used for faster homepage load times with empty cache.
     """
@@ -396,14 +529,14 @@ class FastTournament(Tournament):
         Returns ragular ranking if it's already created. Otherwise returns
         limited version which is faster to create.
         """
-        full_ranking_key = Tournament._get_ranking_cache_key(self)
+        full_ranking_key = OldTournament._get_ranking_cache_key(self)
         full_ranking = cache.get(full_ranking_key)
-        return full_ranking or super(FastTournament, self).ranking
+        return full_ranking or super(FastOldTournament, self).ranking
 
 
 class Competitor(JsonStore, CacheNotifierModel):
-    player = models.ForeignKey(Player)
-    tournament = models.ForeignKey(Tournament)
+    player = models.ForeignKey(PlayerProfile)
+    tournament = models.ForeignKey(OldTournament)
 
     class Meta:
         verbose_name = _(u'Competitor')
@@ -413,7 +546,30 @@ class Competitor(JsonStore, CacheNotifierModel):
         return '%s in %s' % (self.player.user.username, self.tournament.name)
 
 
-class Round(CacheNotifierModel, ClearCacheMixin):
+class Player(JsonStore):
+    user = models.ForeignKey(User)
+    node = models.ForeignKey(TournamentNode)
+    rank = models.PositiveSmallIntegerField(blank=True, null=True, db_index=True)
+
+    def __unicode__(self):
+        return '%s in %s' % (self.user.username, self.node.name)
+
+    def clean(self):
+        if self.node.parent and self.user not in self.node.parent.players:
+            raise ValidationError('Invalid Player')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super(Player, self).save(*args, **kwargs)
+
+
+class Round(CacheNotifierModel,  ClearCacheMixin, TreeNodeMixin):
+
+    STATUS_NOT_STARTED = 'not_yet_started'
+    STATUS_IN_PROGRESS = 'in_progress'
+    STATUS_OVER = 'over'
+
+    # TODO: remove:
     TYPE_RANDOM = 'random'
     TYPE_SWISS = 'swiss'
     TYPE_ROBIN = 'round_robin'
@@ -421,7 +577,7 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     TYPE_DOUBLE_ELIM_WB = 'double_elimination_wb'
     TYPE_DOUBLE_ELIM_LB = 'double_elimination_lb'
     TYPE_DOUBLE_ELIM_FIN = 'double_elimination_fin'
-    # TODO: remove:
+
     TYPES_PLAYOFF = (
         TYPE_SINGLE_ELIM,
     )
@@ -434,17 +590,19 @@ class Round(CacheNotifierModel, ClearCacheMixin):
         (TYPE_DOUBLE_ELIM_LB, _('Double elimination - Losers bracket')),
         (TYPE_DOUBLE_ELIM_FIN, _('Double elimination - Final')),
     )
-    STATUS_NOT_STARTED = 'not_yet_started'
-    STATUS_IN_PROGRESS = 'in_progress'
-    STATUS_OVER = 'over'
-    tournament = models.ForeignKey(Tournament)
+    tournament = models.ForeignKey(OldTournament)
+    type = models.SlugField(choices=TYPE_CHOICES)
+    #/
+
     start = models.DateTimeField(null=True, blank=True)
     end = models.DateTimeField(null=True, blank=True)
     bo = models.PositiveSmallIntegerField(default=3)
     first_map = models.ForeignKey(Map, null=True, blank=True)
     description = models.CharField(max_length=50, blank=True)
-    type = models.SlugField(choices=TYPE_CHOICES)
+
     order = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    parent_node = models.ForeignKey(TournamentNode)
 
     class Meta:
         verbose_name = _(u'Round')
@@ -472,13 +630,12 @@ class Round(CacheNotifierModel, ClearCacheMixin):
     @property
     @cached
     def matches(self):
-        """
-        Returns this round's matches.
-        If they are not definded, generates them if possible.
-        """
-        if self.match_set.count() == 0:
-            MatchMaker().create_matches_if_possible(self)
-
+        #"""
+        #Returns this round's matches.
+        #If they are not definded, generates them if possible.
+        #"""
+        #if self.match_set.count() == 0:
+        #    MatchMaker().create_matches_if_possible(self)
         return self.match_set.all()
 
     @property
@@ -512,8 +669,10 @@ class Round(CacheNotifierModel, ClearCacheMixin):
         invalidate_template_cache('rounds', self.tournament.id, self)
 
     def get_absolute_url(self):
-        return reverse('tms:tournament_round',
-            kwargs={'slug': self.tournament.slug, 'id': self.id})
+        return self.parent.get_round_url(self)
+
+        #return reverse('tms:tournament_round',
+        #    kwargs={'slug': self.tournament.slug, 'id': self.id})
 
     def is_in_progress(self):
         return self.status == Round.STATUS_IN_PROGRESS
@@ -716,15 +875,15 @@ class MatchMaker(object):
 
 class Match(CacheNotifierModel):
     round = models.ForeignKey(Round)
-    player1 = models.ForeignKey(Player, related_name='match_player1')
-    player2 = models.ForeignKey(Player, related_name='match_player2')
+    player1 = models.ForeignKey(User, related_name='match_player1')
+    player2 = models.ForeignKey(User, related_name='match_player2')
     player1_score = models.PositiveSmallIntegerField(default=0)
     player2_score = models.PositiveSmallIntegerField(default=0)
     finished = models.BooleanField()
     reported_by = models.ForeignKey(User, null=True, blank=True)
-    winner = models.ForeignKey(Player, null=True, blank=True, editable=False,
+    winner = models.ForeignKey(User, null=True, blank=True, editable=False,
                                related_name='won_matches')
-    loser = models.ForeignKey(Player, null=True, blank=True, editable=False,
+    loser = models.ForeignKey(User, null=True, blank=True, editable=False,
                               related_name='lost_matches')
 
     class Meta:
@@ -811,7 +970,7 @@ class Rules(CacheNotifierModel):
 
 
 bind_clear_cache(Round)
-bind_clear_cache(Tournament)
+bind_clear_cache(OldTournament)
 
 
 from tms.tournaments import tournament_formats

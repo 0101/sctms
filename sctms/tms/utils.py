@@ -73,7 +73,7 @@ def is_valid_pairing(pairing):
 
 def import_players():
     from django.contrib.auth.models import User
-    from tms.models import Player
+    from tms.models import PlayerProfile
     from tms.views import _configure_user
 
     data="""MARTYMARTY,http://eu.battle.net/sc2/en/profile/210242/1/marty/,marty,249
@@ -108,7 +108,7 @@ MONGHOL,http://eu.battle.net/sc2/en/profile/1348061/1/Monghol/,Monghol,204"""
         user = _configure_user(user)
         user.set_unusable_password()
         user.save()
-        Player.objects.create(
+        PlayerProfile.objects.create(
             user=user,
             bnet_url=bnet_url,
             character_name=name,
@@ -119,7 +119,7 @@ MONGHOL,http://eu.battle.net/sc2/en/profile/1348061/1/Monghol/,Monghol,204"""
 
 
 def import_round(data, round_id):
-    from tms.models import Match, Round, Player
+    from tms.models import Match, Round, PlayerProfile
 
     round = Round.objects.get(id=round_id)
 
@@ -128,8 +128,8 @@ def import_round(data, round_id):
         p1, s1, s2, p2 = match.split(',')
         Match.objects.create(
             round=round,
-            player1=Player.objects.get(user__username=p1),
-            player2=Player.objects.get(user__username=p2),
+            player1=PlayerProfile.objects.get(user__username=p1),
+            player2=PlayerProfile.objects.get(user__username=p2),
             player1_score=s1,
             player2_score=s2,
             finished=True,
@@ -150,3 +150,18 @@ BIOH,2,0,JUNGLER"""
 
     import_round(r1, 18)
 '''
+
+def match_profile_to_user():
+    from tms.models import Match
+
+    for m in Match.objects.exclude(converted=True):
+        m.player1_id = m.player1.user_id
+        m.player2_id = m.player2.user_id
+        if m.winner:
+            m.winner_id = m.winner.user_id
+        if m.loser:
+            m.loser_id = m.loser.user_id
+        m.converted = True
+        m.save()
+
+

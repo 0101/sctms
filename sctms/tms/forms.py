@@ -2,13 +2,13 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from tms.tournaments import tournament_formats
-from tms.models import Player, Replay, Tournament, Rules
+from tms.models import PlayerProfile, Replay, OldTournament, Rules
 
 
-class PlayerForm(forms.ModelForm):
+class PlayerProfileForm(forms.ModelForm):
 
     class Meta:
-        model = Player
+        model = PlayerProfile
         exclude = 'user', 'from_nyx',
 
 
@@ -45,10 +45,10 @@ class FormatClassChoiceForm(forms.ModelForm):
         self.fields['format_class'].choices = tournament_formats.get_choices()
 
 
-class TournamentForm(FormatClassChoiceForm):
+class OldTournamentForm(FormatClassChoiceForm):
 
     class Meta:
-        model = Tournament
+        model = OldTournament
 
 
 class RulesForm(FormatClassChoiceForm):

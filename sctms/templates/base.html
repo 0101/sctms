@@ -13,31 +13,36 @@
 	</head>
 
 	<body>
-		<header class="top">
-            <div class="content">
-                <a class="logo" href="/">NSL</a>
-                <section class="user">
-                    {% block user-bar %}{% user_bar %}{% endblock %}
-                </section>
-            </div>
-            <section class="main_menu">
-				{% block main_menu %}
-                    {% include 'includes/main_menu.html' %}
-				{% endblock %}
-            </section>
-		</header>
-		{% block messages %}
-			{% if messages %}
-			<ul class="messages">
-				{% for message in messages %}
-				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %}
-		{% endblock %}
+		<div class="page-decoration">
 
-		<div class="content">
-			{% block content %}{% endblock %}
+			<header class="top">
+				<div class="content">
+					<a class="logo" href="/">NSL</a>
+					<section class="user">
+						{% block user-bar %}{% user_bar %}{% endblock %}
+					</section>
+				</div>
+				<section class="main_menu">
+					{% block main_menu %}
+						{% include 'includes/main_menu.html' %}
+					{% endblock %}
+				</section>
+			</header>
+			{% block messages %}
+				{% if messages %}
+				<ul class="messages">
+					{% for message in messages %}
+					<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			{% endblock %}
+
+
+			<div class="content">
+				{% block content %}{% endblock %}
+			</div>
+
 		</div>
 
 		{# fancybox #}
@@ -65,7 +70,10 @@
 			overlayShow:false,
 			padding:0,
 		});
+
 		$('header.top .main_menu nav a').click(function() {$(this).addClass('loading')});
+		{# pre-load animation #}
+		$('<img/>').attr('src', '{{ MEDIA_URL }}img/static.gif');
 		</script>
 		{% endblock %}
 	</body>

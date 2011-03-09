@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-from tms.forms import TournamentForm, RulesForm
-from tms.models import Map, Match, Player, Replay, Round, Tournament, Rules, Competitor
+from tms.forms import OldTournamentForm, RulesForm
+from tms.models import Map, Match, PlayerProfile, Replay, Round, OldTournament, Rules, Competitor
 
 
 class RoundInline(admin.StackedInline):
@@ -23,14 +23,14 @@ class MatchAdmin(admin.ModelAdmin):
     search_fields = ('player1__user__username', 'player2__user__username',)
 
 
-class TournamentAdmin(admin.ModelAdmin):
+class OldTournamentAdmin(admin.ModelAdmin):
     search_fields = 'name', 'slug',
     date_hierarchy = 'registration_deadline'
     inlines = RoundInline,
     filter_horizontal = 'map_pool',
     list_display = 'name', 'slug',
     exclude = 'owner', 'players',
-    form = TournamentForm
+    form = OldTournamentForm
 
 
 class RoundAdmin(admin.ModelAdmin):
@@ -41,20 +41,20 @@ class RoundAdmin(admin.ModelAdmin):
     ordering = 'order',
 
 
-class PlayerAdmin(admin.ModelAdmin):
+class PlayerProfileAdmin(admin.ModelAdmin):
     exclude = 'user', 'from_nyx',
     list_display = 'user', 'character_name',
     ordering = 'user',
 
     def queryset(self, request):
-        qs = super(PlayerAdmin, self).queryset(request)
+        qs = super(PlayerProfileAdmin, self).queryset(request)
         user = request.user
         if not user.is_superuser:
             qs = qs.filter(user=user)
         return qs
 
     def response_change(self, request, obj):
-        default = super(PlayerAdmin, self).response_change(request, obj)
+        default = super(PlayerProfileAdmin, self).response_change(request, obj)
         if request.user.is_superuser:
             return default
         if request.POST.has_key("_continue"):
@@ -83,9 +83,9 @@ class CompetitorAdmin(admin.ModelAdmin):
 
 admin.site.register(Map)
 admin.site.register(Match, MatchAdmin)
-admin.site.register(Player, PlayerAdmin)
+admin.site.register(PlayerProfile, PlayerProfileAdmin)
 admin.site.register(Replay, ReplayAdmin)
 admin.site.register(Round, RoundAdmin)
-admin.site.register(Tournament, TournamentAdmin)
+admin.site.register(OldTournament, OldTournamentAdmin)
 admin.site.register(Rules, RulesAdmin)
 admin.site.register(Competitor, CompetitorAdmin)

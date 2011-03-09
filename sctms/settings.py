@@ -119,9 +119,11 @@ INSTALLED_APPS = [
     'tms',
     'forms',
     'pages',
+    'tms.tour.nsl_v1',
+    'tms.tour.nsl_v2',
 ]
 
-AUTH_PROFILE_MODULE = 'tms.Player'
+AUTH_PROFILE_MODULE = 'tms.PlayerProfile'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -132,6 +134,7 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 
 CACHE_BACKEND = 'locmem://?timeout=259200' # 3 days
+CACHE_BACKEND = 'dummy://' # 3 days
 
 #NYX_AUTH_PHRASE = '*****'
 NYX_AUTH_PLUGIN_URL = 'https://www.nyx.cz/index.php?l=plugexec;id=19'

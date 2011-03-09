@@ -17,12 +17,14 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 from django.views.generic.simple import direct_to_template
 
 from nyxauth import NyxAuth
 
-from tms.forms import PlayerForm, ResultForm, ReplayForm
-from tms.models import Tournament, Round, Match, PlayerRanking, Player, FastTournament, Competitor, Replay
+from tms.forms import PlayerProfileForm, ResultForm, ReplayForm
+from tms.models import (OldTournament, Round, Match, PlayerProfile,
+                        FastOldTournament, Competitor, Replay, Tournament)
 
 
 def _configure_user(user):
@@ -50,10 +52,11 @@ def index(request, template='tms/index.html'):
 
     context = {
         'tournaments': {
-            'ongoing': map(player_info, Tournament.objects.ongoing()),
-            'future': Tournament.objects.future(),
-            'past': FastTournament.objects.past()
-        }
+            'ongoing': map(player_info, OldTournament.objects.ongoing()),
+            'future': OldTournament.objects.future(),
+            'past': FastOldTournament.objects.past(),
+        },
+        'newstyle_tournaments': Tournament.objects.all(),
     }
     return direct_to_template(request, template, context)
 
@@ -61,11 +64,11 @@ def index(request, template='tms/index.html'):
 def registration(request, template='tms/registration.html'):
     """
     Displays registration form. After submitting :model:`auth.User` account is
-    created along with a new :model:`tms.Player` object.
+    created along with a new :model:`tms.PlayerProfile` object.
     """
     if request.method == 'POST':
         user_form = UserCreationForm(request.POST, prefix='user')
-        player_form = PlayerForm(request.POST, prefix='player')
+        player_form = PlayerProfileForm(request.POST, prefix='player')
 
         if user_form.is_valid() and player_form.is_valid():
             user = user_form.save(commit=False)
@@ -86,7 +89,7 @@ def registration(request, template='tms/registration.html'):
 
     else:
         user_form = UserCreationForm(prefix='user')
-        player_form = PlayerForm(prefix='player')
+        player_form = PlayerProfileForm(prefix='player')
 
     context = {
         'user_form': user_form,
@@ -107,8 +110,8 @@ class TmsNyxAuth(NyxAuth):
 
     def post_auth(self, request, user):
         try:
-            Player.objects.get(user=user)
-        except Player.DoesNotExist:
+            PlayerProfile.objects.get(user=user)
+        except PlayerProfile.DoesNotExist:
             request.session[TmsNyxAuth.USER_SESSION_KEY] = user
             return HttpResponseRedirect(reverse('tms:nyxauth:account_setup'))
         else:
@@ -117,7 +120,7 @@ class TmsNyxAuth(NyxAuth):
     @transaction.commit_on_success
     def account_setup(self, request, template='tms/registration.html'):
         if request.method == 'POST':
-            player_form = PlayerForm(request.POST)
+            player_form = PlayerProfileForm(request.POST)
 
             if player_form.is_valid():
                 user = request.session[TmsNyxAuth.USER_SESSION_KEY]
@@ -132,7 +135,7 @@ class TmsNyxAuth(NyxAuth):
                 messages.success(request, _('Registration successfull.'))
                 return super(TmsNyxAuth, self).post_auth(request, user)
         else:
-            player_form = PlayerForm()
+            player_form = PlayerProfileForm()
 
         context = {
             'player_form': player_form,
@@ -145,13 +148,43 @@ class TmsNyxAuth(NyxAuth):
         )
 
 
+class BaseTournamentView(TemplateView):
+
+    tournament = None
+
+    @property
+    def template_root(self):
+        return self.tournament.template_root
+
+    def dispatch(self, request, *args, **kwargs):
+        kwargs['tournament'] = self.tournament
+        return super(BaseTournamentView, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, tournament):
+        return self.render_to_response({})
+
+    def get_template_names(self):
+        if self.template:
+            return [self.template_root + self.template]
+        else:
+            return super(BaseTournamentView, self).get_template_names()
+
+    def render_to_response(self, context, **response_kwargs):
+        context.update({
+            'tournament': self.tournament,
+            'current_view': self.__class__.__name__.lower(),
+        })
+        return (super(BaseTournamentView, self)
+                .render_to_response(context, **response_kwargs))
+
+
 class tournament_view(object):
     def __init__(self, template):
         self.template = template
 
     def __call__(self, function):
         def wrapped(request, slug, **kwargs):
-            tournament = get_object_or_404(Tournament, slug=slug)
+            tournament = get_object_or_404(OldTournament, slug=slug)
             result = function(request, tournament, **kwargs)
             if isinstance(result, HttpResponse):
                 return result
@@ -291,7 +324,7 @@ def leave_tournament(request, tournament):
 
 
 def player_profile(request, username, template='tms/player_profile.html'):
-    player = get_object_or_404(Player, user__username=username)
+    player = get_object_or_404(PlayerProfile, user__username=username)
 
     def ongoing_info(tournament):
         return tournament, tournament.ranking.get_for_player(player)['rank']
@@ -381,5 +414,5 @@ def status(request, template='tms/status.html'):
     """
     Simple status of ongoing tournaments.
     """
-    context = {'ongoing_tournaments': Tournament.objects.ongoing()}
+    context = {'ongoing_tournaments': OldTournament.objects.ongoing()}
     return direct_to_template(request, template, context)

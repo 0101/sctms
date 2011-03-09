@@ -14,7 +14,7 @@
             {% endif %}
 
             {% if user.get_profile %}
-            <a href="{% url admin:tms_player_change user.get_profile.id %}">{% trans "Edit profile" %}</a>
+            <a href="{% url admin:tms_playerprofile_change user.get_profile.id %}">{% trans "Edit profile" %}</a>
             {% endif %}
             <a href="{% url tms:logout %}">{% trans "Log out" %}</a>
         </nav>

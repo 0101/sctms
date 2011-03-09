@@ -16,6 +16,15 @@
 <div class="content-wrap index">
     <section class="tournaments">
 
+        <div class="box newstyle-tournaments">
+            <hgroup><h3>{% trans "New-style tournaments" %}</h3></hgroup>
+            <div class="box-content">
+            {% for tournament in newstyle_tournaments %}
+                <a href="{{ tournament.get_absolute_url }}">{{ tournament.name }}</a>
+            {% endfor %}
+            </div>
+        </div>
+
         <div class="box ongoing-tournaments">
             <hgroup><h3>{% trans "Ongoing tournaments" %}</h3></hgroup>
             {% with tournaments.ongoing as tournaments %}

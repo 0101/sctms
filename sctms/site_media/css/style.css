@@ -88,6 +88,9 @@ section.user nav a {display:inline-block;padding:4px 7px;}
 section.user .logged_in nav a {background:#000;}
 section.user .logged_in nav a:hover {background:#1C1606;}
 
+/*
+.page-decoration {position:absolute;width:100%;background:url('../img/pagebottom.jpg') repeat-x center bottom;min-height:1300px;padding-bottom:110px;}*/
+
 .content hgroup.h1 {text-align:center;font-size:24px;margin-top:30px;color:#D6D6D6;}
 .content hgroup.h1 * {display:inline;}
 .content hgroup.h1 small {font-size:17px;color:#999;}
