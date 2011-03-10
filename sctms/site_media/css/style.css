@@ -399,9 +399,13 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail .cms-entry .back-to-index {text-align:center;clear:both;}
 #cms-entry-detail .cms-entry .back-to-index a {font-weight:bold;padding:10px;}
 
-#cms-entry-detail center img {border-width: 1px; border-style: solid; border-color: #555555; width: 550px;}
-#cms-entry-detail center {font-style: italic; color: #666; padding: 20px;}
-#cms-entry-detail center h2 {font-style: normal; font-size: larger; font-weight: bold;}
+#cms-entry-detail div img {border-width: 1px; border-style: solid; border-color: #555555; width: 550px;}
+#cms-entry-detail div .center {font-style: italic; color: #666; padding: 20px; text-align: center; width: 550px}
+#cms-entry-detail div .center h2 {font-style: normal; font-size: larger; font-weight: bold;}
 #cms-entry-detail table .w125 {width: 125px; font-weight: bold;}
 #cms-entry-detail center table {font-style: normal; border-width: 1px; width: 550px; border-style: solid; border-color: #333333;}
 #cms-entry-detail center table td {padding: 3px;}
+#cms-entry-detail p {padding: 10px 0px 10px 0px;}
+#cms-entry-detail p .italics {font-style: italic;}
+#cms-entry-detail p .question {font-weight: normal;}
+#cms-entry-detail p .answer {font-weight: bold;}
