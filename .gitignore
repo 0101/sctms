@@ -1,2 +1,4 @@
 *.pyc
 *settings_local.py
+
+/sctms/settings/local.py
