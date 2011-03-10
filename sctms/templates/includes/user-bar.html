@@ -10,20 +10,20 @@
         </div>
         <nav>
             {% if user.is_manager or user.is_superuser %}
-            <a href="{% url admin:index %}">{% trans "Administration" %}</a>
+            <a href="{{ domains.admin }}{% url admin:index %}">{% trans "Administration" %}</a>
             {% endif %}
 
             {% if user.get_profile %}
-            <a href="{% url admin:tms_player_change user.get_profile.id %}">{% trans "Edit profile" %}</a>
+            <a href="{{ domains.admin }}{% url admin:tms_player_change user.get_profile.id %}">{% trans "Edit profile" %}</a>
             {% endif %}
-            <a href="{% url tms:logout %}">{% trans "Log out" %}</a>
+            <a href="{{ domains.tms }}{% url tms:logout %}">{% trans "Log out" %}</a>
         </nav>
     </div>
 {% else %}
     <nav class="not_logged_in">
-        <a href="{% url tms:login %}?next={{ request.path }}">{% trans "Log in" %}</a>
+        <a href="{{ domains.tms }}{% url tms:login %}?next=http://{{ request.get_host }}{{ request.path }}">{% trans "Log in" %}</a>
         {% trans "or" %}
-        <a href="{% url tms:registration %}">{% trans "Sign up" %}</a>
+        <a href="{{ domains.tms }}{% url tms:registration %}">{% trans "Sign up" %}</a>
     </nav>
 {% endif %}
 {% endspaceless %}

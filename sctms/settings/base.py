@@ -2,7 +2,7 @@
 
 from os.path import join, dirname, abspath
 
-PROJECT_DIR = abspath(dirname(__file__))
+PROJECT_DIR = abspath(join(dirname(__file__), '..'))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -90,6 +90,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.contrib.messages.context_processors.messages',
+    'nsl.context_processors.domains',
 )
 
 ROOT_URLCONF = 'urls'
@@ -121,6 +122,11 @@ INSTALLED_APPS = [
     'pages',
     'cms',
 ]
+
+# development setup
+DOMAINS = {
+    'default': 'localhost',
+}
 
 AUTH_PROFILE_MODULE = 'tms.Player'
 
