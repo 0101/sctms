@@ -399,7 +399,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail .cms-entry .back-to-index {text-align:center;clear:both;}
 #cms-entry-detail .cms-entry .back-to-index a {font-weight:bold;padding:10px;}
 
-#cms-entry-detail div img {border-width: 1px; border-style: solid; border-color: #555555; width: 550px;}
+#cms-entry-detail div img {border-width: 1px; border-style: solid; border-color: #666; width: 550px;}
 #cms-entry-detail div .center {font-style: italic; color: #666; padding: 20px; text-align: center; width: 550px}
 #cms-entry-detail div .center h2 {font-style: normal; font-size: larger; font-weight: bold;}
 #cms-entry-detail table .w125 {width: 125px; font-weight: bold;}
