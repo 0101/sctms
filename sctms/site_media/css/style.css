@@ -388,6 +388,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 /* cms styles */
 .index #cms-news li {padding:20px 20px 40px;}
 .index #cms-news li header a {font-size:17px;display:block;border-bottom:1px solid #444;margin-bottom:5px;font-weight:bold;}
+.index #cms-news .empty {padding:70px; text-align:center;}
 .cms-entry .details {font-weight:bold;color:#666;}
 .cms-entry {line-height:1.5;}
 .cms-entry .highlight {padding:20px 0;}
