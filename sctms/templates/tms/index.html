@@ -5,14 +5,6 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-<hgroup class="h1 index">
-    <small>{% trans "Welcome to" %}</small>
-    <h1>
-        <strong>Nyx StarCraft 2 League</strong>
-        <small>{% trans "Tournament Management System" %}</small>
-    </h1>
-</hgroup>
-
 <div class="content-wrap index">
     <section class="tournaments">
 
@@ -46,7 +38,7 @@
                 The system is in pre-alpha stage. Some things don't work yet and you may encounter some bugs.
             </div>
         </div>
-        {% endcomment %}
+
         <div class="box">
             <hgroup><h3>{% trans "FAQ" %}</h3></hgroup>
             <div class="box-content">
@@ -65,6 +57,7 @@
 
             </div>
         </div>
+        {% endcomment %}
 
         {% comment %}
         <div class="box irc">
