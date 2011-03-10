@@ -402,10 +402,9 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail div img {border-width: 1px; border-style: solid; border-color: #666; width: 550px;}
 #cms-entry-detail div .center {font-style: italic; color: #666; padding: 20px; text-align: center}
 #cms-entry-detail div .center h2 {font-style: normal; font-size: larger; font-weight: bold;}
-#cms-entry-detail table .w125 {width: 125px; font-weight: bold;}
 #cms-entry-detail table {font-style: normal; border-width: 1px; width: 550px; border-style: solid; border-color: #333333;}
 #cms-entry-detail table td {padding: 3px;}
-#cms-entry-detail table th {font-weight:bold;}
+#cms-entry-detail table th {padding: 3px; font-weight:bold; width: 125px;}
 #cms-entry-detail p {padding: 10px 0px 10px 0px;}
 p .italics {font-style: italic;}
 p .question {font-weight: normal;}
