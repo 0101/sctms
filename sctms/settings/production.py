@@ -7,3 +7,5 @@ DOMAINS = {
     'tms': 'tour.thensl.cz',
     'irc': 'chat.thensl.cz',
 }
+
+SESSION_COOKIE_DOMAIN = '.thensl.cz'
