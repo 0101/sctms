@@ -405,7 +405,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail table .w125 {width: 125px; font-weight: bold;}
 #cms-entry-detail center table {font-style: normal; border-width: 1px; width: 550px; border-style: solid; border-color: #333333;}
 #cms-entry-detail center table td {padding: 3px;}
-#cms-entry-detail p {padding: 10px 0px 10px 0px;}
+#cms-entry-detail p {padding: 10px 0px 10px 0px; text-align: justify;}
 #cms-entry-detail p .italics {font-style: italic;}
 #cms-entry-detail p .question {font-weight: normal;}
 #cms-entry-detail p .answer {font-weight: bold;}
