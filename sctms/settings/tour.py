@@ -2,4 +2,4 @@
 
 from settings.production import *
 
-ROOT_URLCONF = 'urls.tms'
+ROOT_URLCONF = 'urls.tour'
