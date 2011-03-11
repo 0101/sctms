@@ -408,5 +408,5 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail table th {padding: 3px; font-weight:bold; width: 125px;}
 #cms-entry-detail p {padding: 10px 0px;}
 #cms-entry-detail p.italics {font-style: italic;}
-#cms-entry-detail p.question {padding: 10px 0px 4px 0px; font-weight: bold;}
-#cms-entry-detail p.answer {padding: 0px 0px 10px 0px; font-weight: normal;}
+#cms-entry-detail p.question {padding: 10px 0px 5px; font-weight: bold;}
+#cms-entry-detail p.answer {padding: 0px 0px 20px; font-weight: normal;}
