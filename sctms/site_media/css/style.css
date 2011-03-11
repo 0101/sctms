@@ -396,7 +396,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .cms-entry .hits {float:right; color:#666; padding:10px 0;}
 #cms-entry-detail .cms-entry .meta {padding:10px;border-bottom:1px solid #444;background:rgba(0,0,0,0.2)}
 #cms-entry-detail .cms-entry .box-content {padding:25px 70px;}
-#cms-entry-detail .cms-entry .content {padding:10px 0;}
+#cms-entry-detail .cms-entry .content {padding:0;}
 #cms-entry-detail .cms-entry .back-to-index {text-align:center;clear:both;}
 #cms-entry-detail .cms-entry .back-to-index a {font-weight:bold;padding:10px;}
 
@@ -406,7 +406,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail table {font-style: normal; border-width: 1px; width: 550px; border-style: solid; border-color: #333333; margin: 0 auto;}
 #cms-entry-detail table td {padding: 3px;}
 #cms-entry-detail table th {padding: 3px; font-weight:bold; width: 125px;}
-#cms-entry-detail p {padding: 0px;}
+#cms-entry-detail p {padding: 10px 0px;}
 #cms-entry-detail p.italics {font-style: italic;}
 #cms-entry-detail p.question {padding: 10px 0px 4px 0px; font-weight: bold;}
 #cms-entry-detail p.answer {padding: 0px 0px 10px 0px; font-weight: normal;}
