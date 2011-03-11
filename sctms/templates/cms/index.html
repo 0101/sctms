@@ -33,7 +33,7 @@
                         <div class="tags">{{ entry.tags }}</div>
                         <div class="details">{{ entry.author }}, {{ entry.date }}</div>
                         <div class="highlight">{{ entry.highlight }}</div>
-                        {{ entry.text|truncatewords_html:69|safe }} <a href="{{ entry.get_absolute_url }}">celý&nbsp;článek</a>
+                        {{ entry.text|truncatewords_html:69|striptags }} <a href="{{ entry.get_absolute_url }}">celý&nbsp;článek</a>
                         <div class="hits">{{ entry.hits }} hits</div>
                     </div>
                 </li>
