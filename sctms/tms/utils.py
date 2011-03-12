@@ -152,16 +152,17 @@ BIOH,2,0,JUNGLER"""
 '''
 
 def match_profile_to_user():
-    from tms.models import Match
+    from tms.models import Match, PlayerProfile
 
-    for m in Match.objects.exclude(converted=True):
-        m.player1_id = m.player1.user_id
-        m.player2_id = m.player2.user_id
-        if m.winner:
-            m.winner_id = m.winner.user_id
-        if m.loser:
-            m.loser_id = m.loser.user_id
-        m.converted = True
+    for m in Match.objects.all():
+        #m.player1_id = m.player1.user_id
+        #m.player2_id = m.player2.user_id
+        if m.winner_id is not None:
+            m.winner = PlayerProfile.objects.get(id=m.winner_id).user
+
+        if m.loser_id is not None:
+            m.loser = PlayerProfile.objects.get(id=m.loser_id).user
+
+        print m, m.winner, m.loser
+        #m.converted = True
         m.save()
-
-
