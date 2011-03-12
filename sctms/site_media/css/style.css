@@ -402,7 +402,10 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 
 #cms-entry-detail div img {border-width: 1px; border-style: solid; border-color: #666; width: 550px;}
 #cms-entry-detail div.center {font-style: italic; color: #666; padding: 20px; text-align: center}
-#cms-entry-detail div.center h2 {font-style: normal; font-size: larger; font-weight: bold;}
+#cms-entry-detail h1 {font-style: normal; font-size: larger; font-weight: bold;}
+#cms-entry-detail h2 {font-style: normal; font-size: medium; font-weight: bold;}
+#cms-entry-detail h3 {font-style: normal; font-size: medium;}
+#cms-entry-detail h4 {font-style: italic; font-size: medium;}
 #cms-entry-detail table {font-style: normal; border-width: 1px; width: 550px; border-style: solid; border-color: #333333; margin: 0 auto;}
 #cms-entry-detail table td {padding: 3px;}
 #cms-entry-detail table th {padding: 3px; font-weight:bold; width: 125px;}
