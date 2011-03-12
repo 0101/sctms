@@ -3,13 +3,31 @@
 {% load i18n nsl_tags %}
 	<head>
 		<meta charset="utf-8" />
-		<title>{% block title %}{% endblock %} | SCTMS</title>
-		<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css?19" type="text/css" media="screen,projection" />
+		<title>TheNSL.cz | {% block title %}{% endblock %}</title>
+		<link rel="icon" type="image/png" href="{{ MEDIA_URL }}img/favicon.png" />
+		<link rel="stylesheet" href="{{ MEDIA_URL }}css/style.css?26" type="text/css" media="screen,projection" />
 
+		{# HTML5 for IE #}
 		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
 		{# jQuery #}
 		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.3.min.js"></script>
+
+		{# analytics #}
+		<script type="text/javascript">
+		
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-22009367-1']);
+		  _gaq.push(['_setDomainName', '.thensl.cz']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+		</script>
 	</head>
 
 	<body>

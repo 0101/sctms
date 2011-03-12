@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %} Latest news {%endblock%}
+
+{% block main_menu %}
+{% with 'home' as main_menu_selected %}
+	{{ block.super }}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+
+<hgroup class="h1 index">
+    <small>{% trans "Welcome to" %}</small>
+    <h1>
+        <strong>Nyx StarCraft League</strong>
+    </h1>
+</hgroup>
+
+<div class="content-wrap index">
+    <div class="box" id="cms-news">
+        <hgroup><h3>Latest news</h3></hgroup>
+        {% if latest_entry_list %}
+            <ul>
+            {% for entry in latest_entry_list %}
+                <li>
+                    <header>
+                        <h4><a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a></h4>
+                    </header>
+                    <div class="cms-entry">
+                        <div class="tags">{{ entry.tags }}</div>
+                        <div class="details">{{ entry.author }}, {{ entry.date }}</div>
+                        <div class="highlight">{{ entry.highlight }}</div>
+                        {{ entry.text|striptags|truncatewords:69 }} <a href="{{ entry.get_absolute_url }}">celý&nbsp;článek</a>
+                        <div class="hits">{{ entry.hits }} hits</div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty">No news.</div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
