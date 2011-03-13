@@ -36,6 +36,9 @@ class LeafClassQuerySet(QuerySet):
         for item in super(LeafClassQuerySet, self).__iter__():
             yield item.as_leaf_class()
 
+    def get(self, *args, **kwargs):
+        return super(LeafClassQuerySet, self).get(*args, **kwargs).as_leaf_class()
+
 
 class LeafClassManager(models.Manager):
 

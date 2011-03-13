@@ -17,6 +17,7 @@
             </div>
         </div>
 
+        {% comment %}
         <div class="box ongoing-tournaments">
             <hgroup><h3>{% trans "Ongoing tournaments" %}</h3></hgroup>
             {% with tournaments.ongoing as tournaments %}
@@ -37,7 +38,9 @@
                 {% include 'tms/includes/tournaments_past.html' %}
             {% endwith %}
         </div>
+        {% endcomment %}
     </section>
+
 
     <section>
         {% comment %}

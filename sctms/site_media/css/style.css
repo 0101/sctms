@@ -261,57 +261,57 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 .tournament .leave_tournament form p {text-align:center; font-size:17px; padding:20px;}
 .tournament .message {font-size:17px; text-align:center; padding:10px; border:1px solid #333; background:#111;}
 
-.tournament .tournament_players table {width:100%;}
-.tournament .tournament_players table th {padding:3px; background:#333; font-weight:bold; text-shadow:-1px -1px 0 #000;}
-.tournament .tournament_players table td {padding:3px; border-bottom:1px solid #333; border-top:1px solid #333; vertical-align:middle;}
-.tournament .tournament_players table .rank {text-align:center;font-weight:bold;}
-.tournament .tournament_players table .points,
-.tournament .tournament_players table .buchholz {text-align:center;}
-.tournament .tournament_players table tbody tr:hover td {color:#eee; background:transparent;}
+.tournament table.ranking {width:100%;}
+.tournament table.ranking th {padding:3px; background:#333; font-weight:bold; text-shadow:-1px -1px 0 #000;}
+.tournament table.ranking td {padding:3px; border-bottom:1px solid #333; border-top:1px solid #333; vertical-align:middle;}
+.tournament table.ranking .rank {text-align:center;font-weight:bold;}
+.tournament table.ranking .points,
+.tournament table.ranking .buchholz {text-align:center;}
+.tournament table.ranking tbody tr:hover td {color:#eee; background:transparent;}
             .tournament_players             tr.hover td {background:#342F21;}
-.tournament .tournament_players table tbody tr.me td {background:#484848;color:#fff;}
-.tournament .tournament_players table .opponent-list {font-size:11px;padding:0px 2px;}
-.tournament .tournament_players table .opponent-list .avatar {
+.tournament table.ranking tbody tr.me td {background:#484848;color:#fff;}
+.tournament table.ranking .opponent-list {font-size:11px;padding:0px 2px;}
+.tournament table.ranking .opponent-list .avatar {
 	opacity:.65;position:relative;top:1px;margin-right:1px;max-width:20px;overflow:hidden;
 	display:inline-block;padding:1px;}
-.tournament .tournament_players table .me .bye {color:#999;padding:3px 0;}
-.tournament .tournament_players table .bye {color:#666;padding:3px 0;}
+.tournament table.ranking .me .bye {color:#999;padding:3px 0;}
+.tournament table.ranking .bye {color:#666;padding:3px 0;}
 
-.tournament .tournament_players table .opponent-list .avatar.hover {padding:0; border:1px solid #FFD13A; opacity:1; cursor:pointer;}
+.tournament table.ranking .opponent-list .avatar.hover {padding:0; border:1px solid #FFD13A; opacity:1; cursor:pointer;}
 
-.tournament .tournament_playoff .single-elim.top8 .bracket {
+.tournament .single-elim.top8 .bracket {
 	background:url('../img/se-playoff.png') no-repeat -6px 0; height:580px;
 	position:relative;margin-top:35px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round {position:absolute;width:178px;text-align:center;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round .description {
+.tournament .single-elim.top8 .bracket .round {position:absolute;width:178px;text-align:center;}
+.tournament .single-elim.top8 .bracket .round .description {
 	font-size:17px;font-weight:bold;color:#666;font-style:italic;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round .map {color:#ccc;padding:2px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round.round1 {left:15px;top:-25px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round.round2 {left:235px;top:45px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round.round3 {left:455px;top:185px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .round.champion-label {left:675px;top:226px;color:#eee;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match {position:absolute;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1 {left:15px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match1 {top:31px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match2 {top:171px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match3 {top:311px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round1.match4 {top:451px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round2 {left:235px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round2.match1 {top:101px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round2.match2 {top:381px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round3.match1 {left:455px;top:241px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .match.round3.match1 {left:455px;top:241px;}
+.tournament .single-elim.top8 .bracket .round .map {color:#ccc;padding:2px;}
+.tournament .single-elim.top8 .bracket .round.round1 {left:15px;top:-25px;}
+.tournament .single-elim.top8 .bracket .round.round2 {left:235px;top:45px;}
+.tournament .single-elim.top8 .bracket .round.round3 {left:455px;top:185px;}
+.tournament .single-elim.top8 .bracket .round.champion-label {left:675px;top:226px;color:#eee;}
+.tournament .single-elim.top8 .bracket .match {position:absolute;}
+.tournament .single-elim.top8 .bracket .match.round1 {left:15px;}
+.tournament .single-elim.top8 .bracket .match.round1.match1 {top:31px;}
+.tournament .single-elim.top8 .bracket .match.round1.match2 {top:171px;}
+.tournament .single-elim.top8 .bracket .match.round1.match3 {top:311px;}
+.tournament .single-elim.top8 .bracket .match.round1.match4 {top:451px;}
+.tournament .single-elim.top8 .bracket .match.round2 {left:235px;}
+.tournament .single-elim.top8 .bracket .match.round2.match1 {top:101px;}
+.tournament .single-elim.top8 .bracket .match.round2.match2 {top:381px;}
+.tournament .single-elim.top8 .bracket .match.round3.match1 {left:455px;top:241px;}
+.tournament .single-elim.top8 .bracket .match.round3.match1 {left:455px;top:241px;}
 
-.tournament .tournament_playoff .single-elim.top8 .bracket .player {width:178px;text-align:center;height:38px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .player.winner {
+.tournament .single-elim.top8 .bracket .player {width:178px;text-align:center;height:38px;}
+.tournament .single-elim.top8 .bracket .player.winner {
 	width:178px;text-align:center;height:38px;background:rgba(125,187,242,0.07);font-weight:bold;}
-	.tournament .tournament_playoff .single-elim.top8 .bracket .player.me {background:rgba(255,255,255,0.25);}
-.tournament .tournament_playoff .single-elim.top8 .bracket .player .user {padding:9px 0 9px 23px;display:inline-block;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .player .score {float:right;padding:9px 9px 0;font-weight:bold;color:#333;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .finished.match .player .score {color:#ccc;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .player.champion {position:absolute;left:675px;top:261px;height:58px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .player.champion .user {padding:16px 0;display:inline-block;font-size:17px;}
-.tournament .tournament_playoff .single-elim.top8 .bracket .replays {height:22px;text-align:center;}
+.tournament .single-elim.top8 .bracket .player.me {background:rgba(255,255,255,0.25);}
+.tournament .single-elim.top8 .bracket .player .user {padding:9px 0 9px 23px;display:inline-block;}
+.tournament .single-elim.top8 .bracket .player .score {float:right;padding:9px 9px 0;font-weight:bold;color:#333;}
+.tournament .single-elim.top8 .bracket .finished.match .player .score {color:#ccc;}
+.tournament .single-elim.top8 .bracket .player.champion {position:absolute;left:675px;top:261px;height:58px;}
+.tournament .single-elim.top8 .bracket .player.champion .user {padding:16px 0;display:inline-block;font-size:17px;}
+.tournament .single-elim.top8 .bracket .replays {height:22px;text-align:center;}
 
 #fancybox-outer {
 	background:#111 !important;

@@ -166,3 +166,54 @@ def match_profile_to_user():
         print m, m.winner, m.loser
         #m.converted = True
         m.save()
+
+
+def migrate_playoff(old_tournament_slug, new_tournament_slug):
+    from tms.models import Round, Tournament, OldTournament
+    from tms.tour.nsl_v1.models import Playoff
+
+    ot = OldTournament.objects.get(slug=old_tournament_slug)
+    nt = Tournament.objects.get(slug=new_tournament_slug)
+
+    if not nt.playoff:
+        nt.playoff = Playoff.objects.create(parent_node=nt, name='Playoff')
+
+
+    for round in Round.objects.filter(type=Round.TYPE_SINGLE_ELIM, tournament=ot):
+        round.parent_node = nt.playoff
+        round.save()
+
+
+def migrate_playoff_s1():
+    migrate_playoff('nyx-sc2-league-season-1', 'nsl-season-1')
+
+
+def migrate_players(os_id, ns_id):
+    from tms.models import OldTournament, Tournament, Player
+
+    os = OldTournament.objects.get(id=os_id)
+    ns = Tournament.objects.get(id=ns_id)
+    print Tournament.objects
+    print type(ns)
+    sw = ns.swiss
+
+    print ns, sw
+
+    for c in os.competitor_set.all():
+        Player.objects.create(
+            node=ns,
+            user=c.player.user,
+        )
+        Player.objects.create(
+            node=sw,
+            user=c.player.user,
+            json_data=c.json_data
+        )
+
+def migrate_players_s23():
+    migrate_players(4, 12)
+    migrate_players(5, 16)
+
+
+def migrate_competitor_data():
+    pass

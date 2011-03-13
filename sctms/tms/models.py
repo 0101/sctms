@@ -92,16 +92,18 @@ class TournamentNode(models.Model, TreeNodeMixin):
     objects = LeafClassManager()
 
     def __unicode__(self):
-        return self.name or self.__class__.__name__
+        name = self.name or self.__class__.__name__
+        if self.parent:
+            return u'%s - %s' % (self.parent, name)
+        return name
 
     @property
     def players(self):
-        return self.user_set.all()
+        return self.player_set.order_by('rank')
 
     @property
-    @cached
-    def player_dict(self):
-        return dict([(p.id, player) for player in self.player_set.all()])
+    def users(self):
+        return self.user_set.all()
 
     @classmethod
     def get_id(cls):
@@ -552,10 +554,10 @@ class Player(JsonStore):
     rank = models.PositiveSmallIntegerField(blank=True, null=True, db_index=True)
 
     def __unicode__(self):
-        return '%s in %s' % (self.user.username, self.node.name)
+        return '%s in %s' % (self.user.username, self.node)
 
     def clean(self):
-        if self.node.parent and self.user not in self.node.parent.players:
+        if self.node.parent and self.user not in self.node.parent.users:
             raise ValidationError('Invalid Player')
 
     def save(self, *args, **kwargs):
