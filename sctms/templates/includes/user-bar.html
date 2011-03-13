@@ -6,7 +6,7 @@
     {% endif %}
     <div class="controls logged_in">
         <div class="info">
-            <strong><a class="lightbox" href="{{ domains.tms }}{{ user.get_profile.get_absolute_url }}">{{ user.username }}</a></strong>
+            <strong><a {% if current_domain == 'tms' %}class="lightbox"{% endif %} href="{{ domains.tms }}{{ user.get_profile.get_absolute_url }}">{{ user.username }}</a></strong>
         </div>
         <nav>
             {% if user.is_manager or user.is_superuser %}

@@ -10,4 +10,7 @@ _domains = __DomainGetter()
 
 
 def domains(request):
-    return {'domains': _domains}
+    return {
+        'domains': _domains,
+        'current_domain': getattr(settings, 'CURRENT_DOMAIN', None),
+    }
