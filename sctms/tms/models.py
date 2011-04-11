@@ -149,14 +149,14 @@ class Tournament(TournamentNode, JsonStore):
     def get_urls(self):
         raise NotImplementedError()
 
-    def save(self, *args, **kwargs):
-        super(Tournament, self).save(*args, **kwargs)
-        reload_url_patterns()
-
-    def delete(self, *args, **kwargs):
-        # TODO: delete the TournamentNode
-        super(Tournament, self).delete(*args, **kwargs)
-        reload_url_patterns()
+    #def save(self, *args, **kwargs):
+    #    super(Tournament, self).save(*args, **kwargs)
+    #    reload_url_patterns()
+    #
+    #def delete(self, *args, **kwargs):
+    #    # TODO: delete the TournamentNode
+    #    super(Tournament, self).delete(*args, **kwargs)
+    #    reload_url_patterns()
 
 
 def node_link(model):

@@ -163,7 +163,7 @@ class TournamentView(TemplateView):
         return self.tournament.template_root
 
     def dispatch(self, request, *args, **kwargs):
-        kwargs['tournament'] = self.tournament
+        kwargs['tournament'] = Tournament.objects.get(pk=self.tournament.pk)
         return super(TournamentView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, tournament):
