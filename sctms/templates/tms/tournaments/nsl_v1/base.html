@@ -1,0 +1,56 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ tournament.name }}{% endblock %}
+
+{% block content %}
+<hgroup class="h1">
+    <h1>{{ tournament.name }}</h1>
+</hgroup>
+
+{% if tournament.slogan %}<div class="tournament-slogan">&ldquo;{{ tournament.slogan }}&rdquo;</div>{% endif %}
+
+<div class="content-wrap tournament t-{{ current_view }}">
+    <div class="box {{ current_view }}">
+        <nav class="clearfix">
+            <a {% if current_view == 'info' %}class="selected"{% endif %}
+               href="{{ tournament.get_info_url }}">{% trans "Info" %}</a>
+            <a {% if current_view == 'players' %}class="selected"{% endif %}
+               href="{{ tournament.get_players_url }}">{% trans "Players" %}</a>
+            <a {% if current_view == 'swissround' or current_view == 'swissrounds' %}class="selected"{% endif %}
+               href="{{ tournament.get_rounds_url }}">{% trans "Rounds" %}</a>
+            <a {% if current_view == 'playoff' %}class="selected"{% endif %}
+                href="{{ tournament.get_playoff_url }}">{% trans "Playoff" %}</a>
+            {% comment %}
+            {% if tournament.current_round %}
+                <a {% if current_view == 'result_report' %}class="selected"{% endif %}
+                   href="{% url tms:result_report slug=tournament.slug %}">{% trans "Report match results" %}</a>
+            {% endif %}
+            {% with user.get_profile as player %}
+            {% if tournament.registration_open and not user.get_profile in tournament %}
+                <a {% if current_view == 'join_tournament' %}class="selected"{% endif %}
+                    href="{% url tms:join_tournament slug=tournament.slug %}">{% trans "Join tournament" %}</a>
+            {% endif %}
+                {% if tournament.registration_open and user.get_profile in tournament %}
+                <a {% if current_view == 'leave_tournament' %}class="selected"{% endif %}
+                    href="{% url tms:leave_tournament slug=tournament.slug %}">{% trans "Leave tournament" %}</a>
+            {% endif %}
+            {% endwith %}
+            {% endcomment %}
+        </nav>
+        <div class="box-content">
+            {% block box-content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+// preload loading animation
+$('<img/>').attr('src', '{{ MEDIA_URL }}img/loading_bar.gif');
+$('.tournament .box nav a').click(function(){ $(this).addClass('loading'); });
+</script>
+{% endblock %}

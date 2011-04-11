@@ -1,0 +1,46 @@
+{% extends 'tms/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ tournament.name }} - {{ current_view|capfirst }}{% endblock %}
+
+{% block content %}
+<hgroup class="h1">
+    <h1>{{ tournament.name }}</h1>
+</hgroup>
+
+{% if tournament.slogan %}<div class="tournament-slogan">&ldquo;{{ tournament.slogan }}&rdquo;</div>{% endif %}
+
+<div class="content-wrap tournament t-{{ current_view }}">
+    <div class="box {{ current_view }}">
+        <nav class="clearfix">
+            <a {% if current_view == 'info' %}class="selected"{% endif %}
+               href="{{ tournament.get_info_url }}">{% trans "Info" %}</a>
+            <a {% if current_view == 'players' %}class="selected"{% endif %}
+               href="{{ tournament.get_players_url }}">{% trans "Players" %}</a>
+
+            {% if tournament.registration_open and not user in tournament %}
+                <a {% if current_view == 'join' %}class="selected"{% endif %}
+                    href="{{ tournament.get_join_url }}">{% trans "Join tournament" %}</a>
+            {% endif %}
+            {% if tournament.registration_open and user in tournament %}
+                <a {% if current_view == 'leave' %}class="selected"{% endif %}
+                    href="{{ tournament.get_leave_url }}">{% trans "Leave tournament" %}</a>
+            {% endif %}
+
+        </nav>
+        <div class="box-content">
+            {% block box-content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+// preload loading animation
+$('<img/>').attr('src', '{{ MEDIA_URL }}img/loading_bar.gif');
+$('.tournament .box nav a').click(function(){ $(this).addClass('loading'); });
+</script>
+{% endblock %}

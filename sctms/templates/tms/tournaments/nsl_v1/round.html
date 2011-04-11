@@ -1,0 +1,63 @@
+{% extends tournament.base_template %}
+
+{% load i18n %}
+
+{% block title %}{{ tournament.name }} > {% trans "Rounds" %} > {{ selected_round.description }}{% endblock %}
+
+{% block box-content %}
+<ul class="rounds">
+    {% for round in tournament.swiss.rounds %}
+    <li class="round {% if round == selected_round %}selected{% endif %} {{ round.status }}">
+        <h4><a href="{{ round.get_absolute_url }}">
+            <span class="desc">{{ round.description }}</span>
+            <span class="dates">{{ round.start|date:"d. m."|default:"?" }} &ndash; {{ round.end|date:"d. m." }}</span>
+            {% if round.first_map %}<span class="map"><span>@</span> {{ round.first_map }}</span>{% endif %}
+            <span class="timeinfo">{{ round.time_info }}</span>
+        </a></h4>
+        {% if round == selected_round %}
+        <div class="round-content">
+            {% if round.matches %}
+            <table>
+                <tbody>
+                {% for match in round.matches %}
+                    <tr data-id="{{ match.id }}" class="match user-{{ match.player1 }} user-{{ match.player2 }} {% if match.finished %}finished{% endif %}">
+                        <td class="player player1 {% if match.player1 == match.winner %}winner{% endif %}">
+                            <a class="lightbox" href="{% url nsl:user_profile match.player1.username %}">{{ match.player1 }}</a>
+                        </td>
+                        <td class="score">{{ match.player1_score }}</td>
+                        <td class="colon">:</td>
+                        <td class="score">{{ match.player2_score }}</td>
+                        <td class="player {% if match.player2 == match.winner %}winner{% endif %}">
+                            <a class="lightbox" href="{% url nsl:user_profile match.player2.username %}">{{ match.player2 }}</a>
+                        </td>
+                        <td class="replays {% if match.replays.count == 0 %}empty{% endif %}">
+                            <span><a class="lightbox" href="{% url tms:match_replays id=match.id %}">{% trans "Replays" %} ({{ match.replays.count }})</a></span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty">{% trans "To be announced" %}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </li>
+    {% empty %}
+    <li class="empty">{% trans "To be announced" %}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+var myMatch = $('.rounds table').find('tr.user-{{ user.username }}');
+myMatch.addClass('me');
+if (myMatch.is('.finished')) {
+    myMatch.find('.empty.replays a').text('{% trans "Upload replays!" %}');
+}
+</script>
+{% endif %}
+{% endblock %}

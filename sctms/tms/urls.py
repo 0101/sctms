@@ -20,7 +20,7 @@ urlpatterns += patterns('tms.views',
     url(r'^delete-replay/', 'delete_replay', name='delete_replay'),
     url(r'^banner/$', 'banner', name='banner'),
     url(r'^status/$', 'status', name='status'),
-    url(r'^player/(?P<username>[\w_@-]+)/$', 'player_profile', name='player_profile'),
+    #url(r'^player/(?P<username>[\w_@-]+)/$', 'player_profile', name='player_profile'),
     url(r'^match/(?P<id>\d+)/replays/$', 'match_replays', name='match_replays'),
     url(r'^match/(?P<id>\d+)/replays/upload/$', 'upload_replay', name='upload_replay'),
 

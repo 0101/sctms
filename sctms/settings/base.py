@@ -146,7 +146,3 @@ CACHE_BACKEND = 'dummy://' # 3 days
 #NYX_AUTH_PHRASE = '*****'
 NYX_AUTH_PLUGIN_URL = 'https://www.nyx.cz/index.php?l=plugexec;id=19'
 
-try:
-    from settings_local import *
-except ImportError:
-    pass

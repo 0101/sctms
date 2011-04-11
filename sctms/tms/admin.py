@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 from tms.forms import OldTournamentForm, RulesForm
-from tms.models import Map, Match, PlayerProfile, Replay, Round, OldTournament, Rules, Competitor
+from tms.models import Map, Match, PlayerProfile, Replay, Round, OldTournament, Rules, Competitor, Player, TournamentNode
 
 
 class RoundInline(admin.StackedInline):
@@ -84,8 +84,10 @@ class CompetitorAdmin(admin.ModelAdmin):
 admin.site.register(Map)
 admin.site.register(Match, MatchAdmin)
 admin.site.register(PlayerProfile, PlayerProfileAdmin)
+admin.site.register(Player)
 admin.site.register(Replay, ReplayAdmin)
 admin.site.register(Round, RoundAdmin)
 admin.site.register(OldTournament, OldTournamentAdmin)
 admin.site.register(Rules, RulesAdmin)
 admin.site.register(Competitor, CompetitorAdmin)
+admin.site.register(TournamentNode)

@@ -18,7 +18,7 @@ from jsonstore.models import JsonStore
 from tms.cachecontrol import CacheNotifierModel, bind_clear_cache, ClearCacheMixin, SAVE
 from tms.managers import OldTournamentManager, LeafClassManager, ThisTypeOnlyManager
 from tms.utils import (cached, invalidate_template_cache, odd, split, merge,
-                       pop_random, is_valid_pairing)
+                       pop_random, is_valid_pairing, reload_url_patterns)
 
 
 node_types = {}
@@ -84,7 +84,7 @@ class TournamentNode(models.Model, TreeNodeMixin):
 
     __metaclass__ = NodeBase
 
-    type_id = models.CharField(max_length=64)
+    type_id = models.CharField(max_length=64, editable=False)
     parent_node = models.ForeignKey('self', blank=True, null=True)
     name = models.CharField(max_length=64)
     user_set = models.ManyToManyField(User, blank=True, through='Player')
@@ -96,6 +96,9 @@ class TournamentNode(models.Model, TreeNodeMixin):
         if self.parent:
             return u'%s - %s' % (self.parent, name)
         return name
+
+    def __contains__(self, user):
+        return self.user_set.filter(pk=user.pk).exists()
 
     @property
     def players(self):
@@ -115,7 +118,7 @@ class TournamentNode(models.Model, TreeNodeMixin):
 
 
 class Tournament(TournamentNode, JsonStore):
-    slug = AutoSlugField(populate_from='name')
+    slug = models.SlugField(max_length=50)
     maps = models.ManyToManyField('Map', blank=True)
     prizes = models.TextField(blank=True,
                               help_text='You can use markdown formatting')
@@ -135,12 +138,25 @@ class Tournament(TournamentNode, JsonStore):
             return self.get_url(match.group(1))
         return super(Tournament, self).__getattr__(name)
 
+    def get_absolute_url(self):
+        return self.get_url('index')
+
     def get_url(self, view_name, args=(), kwargs={}):
+        print 'get_url', self.slug, view_name
         return reverse('tms:%s:%s' % (self.slug, view_name),
                        args=args, kwargs=kwargs)
 
     def get_urls(self):
         raise NotImplementedError()
+
+    def save(self, *args, **kwargs):
+        super(Tournament, self).save(*args, **kwargs)
+        reload_url_patterns()
+
+    def delete(self, *args, **kwargs):
+        # TODO: delete the TournamentNode
+        super(Tournament, self).delete(*args, **kwargs)
+        reload_url_patterns()
 
 
 def node_link(model):
@@ -152,6 +168,7 @@ def node_link(model):
     return property(function)
 
 
+#TODO: move to nsl app
 class PlayerProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
     character_name = models.CharField(max_length=50)
@@ -183,7 +200,7 @@ class PlayerProfile(models.Model):
         return self.matches.filter(round__tournament=tournament)
 
     def get_absolute_url(self):
-        return reverse('tms:player_profile',
+        return reverse('nsl:user_profile',
                        kwargs={'username': self.user.username})
 
     def get_stats(self):

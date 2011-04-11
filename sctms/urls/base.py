@@ -4,8 +4,8 @@ from django.contrib import admin as admin
 from django.views.generic.simple import direct_to_template
 from django.http import HttpResponseNotFound
 
-admin.autodiscover()
 
+admin.autodiscover()
 
 sections = {
     'admin': patterns('',
@@ -25,6 +25,9 @@ sections = {
     ),
     'tms': patterns('',
         (r'^', include('tms.urls', namespace='tms'))
+    ),
+    'nsl': patterns('',
+        (r'^', include('nsl.urls', namespace='nsl'))
     ),
 }
 
@@ -49,6 +52,7 @@ urlpatterns = patterns('',
     url(r'^irc/$', direct_to_template,
         {'template': 'irc.html', 'extra_context': {'main_menu_selected': 'irc'}},
         name='irc'),
+    (r'^nsl/', include('nsl.urls', namespace='nsl')),
     (r'', include('tms.urls', namespace='tms')),
 )
 

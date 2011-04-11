@@ -7,5 +7,6 @@ urlpatterns = pattern_list(
     sections['cms'],
     _404_below_this_,
     sections['tms'],
+    sections['nsl'],
     sections['irc'],
 )

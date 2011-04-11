@@ -166,6 +166,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 	display:block;padding:10px 10px;margin: 5px;text-align:center;
 	font-size:17px;border: 1px solid #008000;background: #0C1B09;}
 .messages li.error {background:#541212;border:1px solid #D30000;}
+.messages li.success {background:rgba(0,200,0,0.1);}
 
 .index .tournaments .tournament {margin-bottom:10px;border-bottom:1px solid #383838;padding-bottom:5px;}
 .index .tournaments .tournament a {padding:5px;}
@@ -255,10 +256,10 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 	font-size:36px;border: 1px solid #666;background:#111111;color:#fff;
 	line-height:1.5; text-align:center;}
 .tournament .result_report form select:focus {border-color: #BF9A2B;background:#1C1606;color:#FFD13A;}
-.tournament .join_tournament .box-content,
-.tournament .leave_tournament .box-content {padding:60px 20px;}
-.tournament .join_tournament form p,
-.tournament .leave_tournament form p {text-align:center; font-size:17px; padding:20px;}
+.tournament .join .box-content,
+.tournament .leave .box-content {padding:60px 20px;}
+.tournament .join .box-content p,
+.tournament .leave .box-content p {text-align:center; font-size:17px; padding:20px;}
 .tournament .message {font-size:17px; text-align:center; padding:10px; border:1px solid #333; background:#111;}
 
 .tournament table.ranking {width:100%;}

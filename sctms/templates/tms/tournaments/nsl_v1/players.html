@@ -1,0 +1,81 @@
+{% extends tournament.base_template %}
+
+{% load i18n %}
+
+{% block title %}{{ tournament.name }} > {% trans "Players" %} {% endblock %}
+
+{% block box-content %}
+<table class="ranking">
+    <thead>
+        <tr>
+            <th class="rank">{% trans "Rank" %}</th>
+            <th>{% trans "Player" %}</th>
+            <th class="bye"></th>
+            <th class="points">{% trans "Points" %}</th>
+            <th class="buchholz">{% trans "Buch." %}</th>
+            <th>{% trans "Wins" %}</th>
+            {% comment %}<th>{% trans "Won against" %}</th>{% endcomment %}
+            <th>{% trans "Losses" %}</th>
+            {% comment %}<th>{% trans "Lost against" %}</th>{% endcomment %}
+            <th>{% trans "Score" %}</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for player in tournament.swiss.players %}
+        <tr data-username="{{ player.user }}">
+            <td class="rank">{{ player.rank }}</td>
+            <td><a class="lightbox player" href="{% url nsl:user_profile player.user.username %}">{{ player.user }}</a></td>
+            <td class="bye">{% if player.received_bye %}<span class="bye" title="{% trans 'player received a bye' %}">(b)</span>{% endif %}</td>
+            <td class="points">{{ player.points }} </td>
+            <td class="buchholz">{{ player.buchholz }}</td>
+            <td>{{ player.wins }}&nbsp;({{ player.win_percent }}&nbsp;%)</td>
+            {% comment %}<td class="opponent-list">{% with i.won_against as players %}{% include 'tms/includes/opponent-list.html' %}{% endwith %}</td>{% endcomment %}
+            <td>{{ player.losses }}&nbsp;({{ player.loss_percent }}&nbsp%)</td>
+            {% comment %}<td class="opponent-list">{% with i.lost_against as players %}{% include 'tms/includes/opponent-list.html' %}{% endwith %}</td>{% endcomment %}
+            <td>{{ player.games_won }}-{{ player.games_lost }}&nbsp;({% if player.score > 0 %}+{% endif %}{{ player.score }})</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+
+{% if user.is_authenticated %}
+<script type="text/javascript">
+$('table').find('tr[data-username="{{ user.username }}"]').addClass('me');
+</script>
+{% endif %}
+
+{% comment %}
+<script type="text/javascript">
+$('table.ranking tr .player').each(function() {
+    var player = $(this);
+    var row = player.closest('tr');
+    var username = row.attr('data-username');
+    var imgs = $('.opponent-list img[data-username="' + username + '"]');
+
+    player.multiHover({
+        onClick: function() {
+            if (this == player.get(0)) {
+                return true;
+            } else {
+                player.click();
+                return false;
+            }
+        },
+        onEnter: function(items) {
+            items.add(row).addClass('hover');
+        },
+        onLeave: function(items) {
+            items.add(row).removeClass('hover');
+        }
+    });
+    player.trigger('attach', [imgs]);
+});
+</script>
+{% endcomment %}
+{% endblock %}

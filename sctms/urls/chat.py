@@ -8,4 +8,5 @@ urlpatterns = pattern_list(
     sections['pages'],
     sections['cms'],
     sections['tms'],
+    sections['nsl'],
 )

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Profile" %}: {{ profile.user }}{% endblock %}
+
+{% block content %}
+<div class="content-wrap profile">
+    {% include 'nsl/user_profile_content.html' %}
+</div>
+{% endblock %}

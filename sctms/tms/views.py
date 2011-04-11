@@ -15,6 +15,7 @@ from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
@@ -24,7 +25,8 @@ from nyxauth import NyxAuth
 
 from tms.forms import PlayerProfileForm, ResultForm, ReplayForm
 from tms.models import (OldTournament, Round, Match, PlayerProfile,
-                        FastOldTournament, Competitor, Replay, Tournament)
+                        FastOldTournament, Competitor, Replay, Tournament,
+                        Player)
 
 
 def _configure_user(user):
@@ -36,6 +38,10 @@ def _configure_user(user):
 
 
 def index(request, template='tms/index.html'):
+
+    #TODO: ...
+
+    return HttpResponseRedirect(reverse('tms:nsl-season-4:index'))
 
     def player_info(t):
         if request.user.is_authenticated():
@@ -148,7 +154,7 @@ class TmsNyxAuth(NyxAuth):
         )
 
 
-class BaseTournamentView(TemplateView):
+class TournamentView(TemplateView):
 
     tournament = None
 
@@ -158,24 +164,32 @@ class BaseTournamentView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         kwargs['tournament'] = self.tournament
-        return super(BaseTournamentView, self).dispatch(request, *args, **kwargs)
+        return super(TournamentView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, tournament):
         return self.render_to_response({})
 
     def get_template_names(self):
         if self.template:
-            return [self.template_root + self.template]
+            return [self.template_root + self.template,
+                    'tms/tournaments/' + self.template]
         else:
-            return super(BaseTournamentView, self).get_template_names()
+            return super(TournamentView, self).get_template_names()
 
     def render_to_response(self, context, **response_kwargs):
         context.update({
             'tournament': self.tournament,
             'current_view': self.__class__.__name__.lower(),
         })
-        return (super(BaseTournamentView, self)
+        return (super(TournamentView, self)
                 .render_to_response(context, **response_kwargs))
+
+
+class LoginRequiredTournamentView(TournamentView):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredTournamentView, self).dispatch(*args, **kwargs)
 
 
 class tournament_view(object):
@@ -305,6 +319,30 @@ def join_tournament(request, tournament):
         return HttpResponseRedirect(tournament.get_absolute_url())
 
 
+class Join(LoginRequiredTournamentView):
+    template = 'join.html'
+
+    def get(self, request, tournament):
+        self._validate_attempt(request, tournament)
+        return self.render_to_response({})
+
+    def post(self, request, tournament):
+        if self._validate_attempt(request, tournament):
+            Player.objects.create(user=request.user, node=tournament)
+            messages.success(request, _('You have joined %s!') % tournament.name)
+        return HttpResponseRedirect(tournament.get_absolute_url())
+
+    def _validate_attempt(self, request, tournament):
+        if not tournament.registration_open:
+            messages.error(request, _('Registration closed.'))
+            return False
+        if request.user in tournament:
+            messages.error(request, _('You are already registered '
+                                      'for this tournament.'))
+            return False
+        return True
+
+
 @login_required
 @tournament_view(template='leave.html')
 def leave_tournament(request, tournament):
@@ -321,6 +359,31 @@ def leave_tournament(request, tournament):
         Competitor.objects.get(player=player, tournament=tournament).delete()
         messages.success(request, _('You have left %s.') % tournament.name)
         return HttpResponseRedirect(reverse('tms:index'))
+
+
+class Leave(LoginRequiredTournamentView):
+    template = 'leave.html'
+
+    def get(self, request, tournament):
+        self._validate_attempt(request, tournament)
+        return self.render_to_response({})
+
+    def post(self, request, tournament):
+        if self._validate_attempt(request, tournament):
+            Player.objects.get(user=request.user, node=tournament.pk).delete()
+            messages.success(request, _('You have left %s.') % tournament.name)
+        return HttpResponseRedirect(reverse('tms:index'))
+
+    def _validate_attempt(self, request, tournament):
+        if not tournament.registration_open:
+            messages.error(request, _('You cannot leave a tournament '
+                                      'after registration deadline.'))
+            return False
+        if request.user not in tournament:
+            messages.error(request, _('You are not registered '
+                                      'for this tournament.'))
+            return False
+        return True
 
 
 def player_profile(request, username, template='tms/player_profile.html'):

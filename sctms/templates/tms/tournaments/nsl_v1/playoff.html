@@ -1,0 +1,64 @@
+{% extends tournament.base_template %}
+
+{% load i18n %}
+
+{% block box-content %}
+<div class="single-elim top{{ player_count }}">
+    <div class="bracket">
+    {% for round in rounds %}
+        {% with forloop.counter as round_number %}
+        <div class="round round{{ round_number }}">
+            <div class="description">{{ round.description }}</div>
+            <div class="map">{{ round.first_map }}</div>
+        </div>
+        {% for match in round.matches %}
+            <div data-id="{{ match.id }}" class="match round{{ round_number }} match{{ forloop.counter }} {% if match.finished %}finished{% endif %}">
+                <div class="player player1 user-{{ match.player1 }} {% if match.player1 == match.winner %}winner{% endif %}">
+                    <div class="inner">
+                        <a class="user lightbox" href="{{ match.player1.get_profile.get_absolute_url }}">{{ match.player1 }}</a>
+                        <span class="score">{{ match.player1_score }}</span>
+                    </div>
+                </div>
+                <div class="replays {% if match.replays.count == 0 %}empty{% endif %}">
+                    <span><a class="lightbox" href="{% url tms:match_replays id=match.id %}">{% trans "Replays" %} ({{ match.replays.count }})</a></span>
+                </div>
+                <div class="player player2 user-{{ match.player2 }} {% if match.player2 == match.winner %}winner{% endif %}">
+                    <div class="inner">
+                        <a class="user lightbox" href="{{ match.player2.get_profile.get_absolute_url }}">{{ match.player2 }}</a>
+                        <span class="score">{{ match.player2_score }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% if forloop.last %}
+            {% with round.matches.0.winner as champion %}
+            {% if champion %}
+                <div class="round champion-label"><div class="description">{% trans "Champion" %}</div></div>
+                <div class="player champion winner">
+                    <div class="inner">
+                        <a class="user lightbox" href="{{ champion.get_profile.get_absolute_url }}">{{ champion }}</a>
+                    </div>
+                </div>
+            {% endif %}
+            {% endwith %}
+        {% endif %}
+        {% endwith %}
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+{% if user.is_authenticated %}
+<script type="text/javascript">
+var me = $('.bracket').find('.player.user-{{ user.username }}').addClass('me');
+me.each(function() {
+    var myMatch = $(this).closest('.match').addClass('me');
+    if (myMatch.is('.finished')) {
+        myMatch.find('.empty.replays a').text('{% trans "Upload replays!" %}');
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

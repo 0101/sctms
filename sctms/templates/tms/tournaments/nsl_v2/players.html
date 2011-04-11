@@ -1,0 +1,22 @@
+{% extends tournament.base_template %}
+
+{% load i18n markup %}
+
+{% block box-content %}
+
+    <ul>
+        {% for user in tournament.users %}
+            <li><a class="lightbox player" href="{% url nsl:user_profile user.username %}">{{ user }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript">
+{% if user in tournament %}
+$('#click-to-join').remove();
+{% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends tournament.base_template %}
+
+{% load i18n form_tags %}
+
+{% block title %}{{ tournament.name }} > {% trans "Join" %} {% endblock %}
+
+{% block box-content %}
+
+{% if not messages %}
+    {% block text %}
+    <p>{% trans "Click this button to join the tournament." %}</p>
+    {% endblock %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="submit-row">
+            <input type="submit" value="{% block button-text %}{% trans 'Join' %} {{ tournament.name }}{% endblock %}" />
+        </div>
+    </form>
+{% else %}
+    <p>ಠ_ಠ</p>
+{% endif %}
+
+{% endblock %}

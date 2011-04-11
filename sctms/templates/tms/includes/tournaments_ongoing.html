@@ -32,7 +32,7 @@
                         {% else %}
                             <div class="player-match">
                                 {% trans "You are playing with" %}
-                                <a class="lightbox" href="{% url tms:player_profile match.opponent.user.username %}">{{ match.opponent.user.username }}</a>.
+                                <a class="lightbox" href="{% url nsl:user_profile match.opponent.user.username %}">{{ match.opponent.user.username }}</a>.
                             </div>
                         {% endif %}
                     {% endif %}

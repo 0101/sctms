@@ -1,0 +1,56 @@
+{% load i18n %}
+<div class="box profile-content light-box">
+
+    <h1>
+        <span class="username">{{ profile.user }}</span>
+    </h1>
+
+    <div class="box-content">
+        {% if profile.avatar_url %}<img class="avatar" src="{{ profile.avatar_url }}" alt=""/>{% endif %}
+    <table class="info">
+        <tr><th>Character name</th><td class="ch_name">{{ profile.character_name }}</td></tr>
+        <tr><th>Character code</th><td class="ch_code">{{ profile.character_code }}</td></tr>
+        {% if profile.bnet_url %}
+        <tr><th>BattleNet profile</th><td><a href="{{ profile.bnet_url }}" target="_blank">{{ profile.bnet_url }}</a></td></tr>
+        {% endif %}
+        {% if profile.from_nyx %}
+        <tr>
+            <th>{% trans "Contact" %}</th><td><a href="http://www.nyx.cz/index.php?l=mail;recipient={{ profile.user.username }}" target="_blank">Poslat zprávu NYX poštou</a></td></tr>
+            {% if profile.contact %}
+                <tr><th></th><td>{{ profile.contact|urlize }}</td></tr>
+            {% endif %}
+        </tr>
+        {% else %}
+            {% if profile.contact %}
+            <tr><th>{% trans "Contact" %}</th><td>{{ profile.contact|urlize }}</td></tr>
+            {% endif %}
+        {% endif %}
+    </table>
+    {% comment %}
+    {% if tournaments.ongoing %}
+    <h2>{% trans "Currently playing in" %}:</h2>
+    <table class="tournaments ongoing">
+        {% for tournament, rank in tournaments.ongoing %}
+        <tr><th><a href="{{ tournament.get_absolute_url }}">{{ tournament }}</a></th><td class="rank">Rank <span>{{ rank }}</span></td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if tournaments.future %}
+    <h2>{% trans "Will be playing in" %}:</h2>
+    <table class="tournaments future">
+        {% for tournament in tournaments.future %}
+        <tr><th><a href="{{ tournament.get_absolute_url }}">{{ tournament }}</a></th></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if tournaments.past %}
+    <h2>{% trans "Played in" %}:</h2>
+    <table class="tournaments past">
+        {% for tournament, rank in tournaments.past %}
+        <tr><th><a href="{{ tournament.get_absolute_url }}">{{ tournament }}</a></th>{% if rank %}<td class="rank">Placed <span class="placed{{ rank }}">{{ rank }}.</span></td>{% endif %}</tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    </div>
+    {% endcomment %}
+</div>
