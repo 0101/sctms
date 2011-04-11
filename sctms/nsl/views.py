@@ -1,5 +1,9 @@
+from datetime import datetime
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
@@ -44,3 +48,10 @@ class UserProfile(AjaxTemplateView):
         user = get_object_or_404(User, username=username)
         profile = user.get_profile()
         return self.render_to_response(request, {'profile': profile})
+
+
+def banner(request):
+    max = 26
+    url = settings.MEDIA_URL + 'img/banner/i%02d.jpg'
+    number = (datetime.now().hour + datetime.now().day) % max
+    return HttpResponseRedirect(url % number)

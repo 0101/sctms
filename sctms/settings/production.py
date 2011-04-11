@@ -9,3 +9,7 @@ DOMAINS = {
 }
 
 SESSION_COOKIE_DOMAIN = '.thensl.cz'
+
+MEDIA_URL = 'http://nslstatic.mazec.org/'
+
+ADMIN_MEDIA_PREFIX = 'http://adminstatic.mazec.org/'

@@ -1,6 +1,3 @@
-from datetime import datetime
-from random import randint
-
 from django.conf.urls.defaults import patterns, url
 from django.contrib import auth
 from django.contrib import messages
@@ -12,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.db import transaction
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.decorators import method_decorator
@@ -465,13 +462,6 @@ def delete_replay(request):
 
     replay.delete()
     return HttpResponse('ok')
-
-
-def banner(request):
-    max = 26
-    url = '/site_media/img/banner/i%02d.jpg'
-    number = (datetime.now().hour + datetime.now().day) % max
-    return HttpResponseRedirect(url % number)
 
 
 def status(request, template='tms/status.html'):
