@@ -321,8 +321,8 @@ class Join(LoginRequiredTournamentView):
     template = 'join.html'
 
     def get(self, request, tournament):
-        self._validate_attempt(request, tournament)
-        return self.render_to_response({})
+        ok = self._validate_attempt(request, tournament)
+        return self.render_to_response({'ok': ok})
 
     def post(self, request, tournament):
         if self._validate_attempt(request, tournament):
@@ -363,8 +363,8 @@ class Leave(LoginRequiredTournamentView):
     template = 'leave.html'
 
     def get(self, request, tournament):
-        self._validate_attempt(request, tournament)
-        return self.render_to_response({})
+        ok = self._validate_attempt(request, tournament)
+        return self.render_to_response({'ok': ok})
 
     def post(self, request, tournament):
         if self._validate_attempt(request, tournament):
