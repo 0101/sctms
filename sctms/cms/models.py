@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
@@ -45,6 +46,9 @@ class BlogEntry(models.Model):
     
     def get_absolute_url(self):
         return reverse('cms:detail', kwargs={'slug':self.slug})
+        
+    def get_absolute_url_for_comment(self):
+        return reverse('cms:add_comment', kwargs={'slug':self.slug})
   
 class Comment(models.Model):
     author = models.ForeignKey(User, unique=True)
@@ -58,5 +62,18 @@ class Comment(models.Model):
     def __unicode__(self):
         return self.title
     
+    class Meta:
+        verbose_name = _(u'Comment')
+        verbose_name_plural = _(u'Comments')
+        
+    def slug_title(self):
+        return '';
+    
+    def get_absolute_url(self):
+        return reverse('cms:comment', kwargs={'slug':self.slug})
+    
 
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
   

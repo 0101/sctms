@@ -416,3 +416,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail p.italics {font-style: italic;}
 #cms-entry-detail p.question {padding: 10px 0px 5px; font-weight: bold;}
 #cms-entry-detail p.answer {padding: 0px 0px 20px; font-weight: normal;}
+
+#cms-comments {padding: 20px 70px 20px 70px;}
+#cms-comments .title {text-transform: uppercase; font-size: larger;}
+#cms-comments .title .details {font-size: smaller;color:#666;text-transform:none;}
