@@ -49,7 +49,7 @@ class BlogEntry(models.Model):
         
   
 class Comment(models.Model):
-    author = models.ForeignKey(User, unique=True)
+    author = models.ForeignKey(User)
     topic = models.ForeignKey(BlogEntry)
     title = models.CharField(max_length=100)
     date = models.DateTimeField('date published')    
@@ -74,4 +74,5 @@ class Comment(models.Model):
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
+        fields = ("text", "title")
   
