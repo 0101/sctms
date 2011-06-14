@@ -21,7 +21,7 @@
             </div>
             <div class="hits">{{ entry.hits }} hits</div>
             <div class="back-to-index">
-                <a href="{% url cms:index %}">Zpět na seznam článků</a> | <a href="{{ entry.get_absolute_url_for_comment}}">Přidat komentář</a>
+                <a href="{% url cms:index %}">Zpět na seznam článků</a> | <a href="{{ entry.get_absolute_url}}add_comment/">Přidat komentář</a>
             </div>
         </div>
         

@@ -5,7 +5,12 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 
-from cms.models import Comment, BlogEntry
+import datetime
+
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
+from cms.models import Comment, BlogEntry, CommentForm
 
 
 
@@ -26,10 +31,18 @@ def add_comment(request, slug):
     entry = get_object_or_404(BlogEntry, slug=slug)
     if request.method == 'POST':
         form = CommentForm(request.POST) # A form bound to the POST data
-        if form.is_valid():
+        if form.is_valid:
+            comment = form.save(commit=False)
+            comment.author = user
+            comment.date = datetime.datetime.now()
             comment_entry_list = Comment.objects.all().filter(topic=entry).order_by('-date')
             c = {'entry': entry, 'comment_entry_list': comment_entry_list}
-            return direct_to_template(request, 'cms/detail.html', c)            
+            return HttpResponseRedirect(reverse('cms:detail', kwargs={'slug':entry.slug}))
+        else:
+            form = CommentForm()
+            c = {'entry' : entry, 'form' : form}
+            return direct_to_template(request, 'cms/comment.html', c)
+                 
     else:
         form = CommentForm()
         c = {'entry' : entry, 'form' : form}

@@ -47,8 +47,6 @@ class BlogEntry(models.Model):
     def get_absolute_url(self):
         return reverse('cms:detail', kwargs={'slug':self.slug})
         
-    def get_absolute_url_for_comment(self):
-        return reverse('cms:add_comment', kwargs={'slug':self.slug})
   
 class Comment(models.Model):
     author = models.ForeignKey(User, unique=True)

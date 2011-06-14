@@ -1,47 +1,43 @@
 {% extends 'cms/index.html' %}
 
+{% load i18n form_tags %}
+
 {% block title %}{{ entry.title }}{%endblock%}
 
 {% block content %}
 
 <hgroup class="h1">
-    <h1>{{ entry.title }}</h1>
+    <h1>Komentář k článku "{{ entry.title }}"</h1>
 </hgroup>
 
+
+
 <div class="content-wrap" id="cms-entry-detail">
-    <div class="box cms-entry">
-        <div class="meta">
-            <div class="tags">{{ entry.tags }}</div>
-            <div class="details">{{ entry.author }}, {{ entry.date }}</div>
-        </div>
-        <div class="box-content clearfix">
 
-            <div class="content">
-            {{ entry.text|safe }}
-            </div>
-            <div class="hits">{{ entry.hits }} hits</div>
-            <div class="back-to-index">
-                <a href="{% url cms:index %}">Zpět na seznam článků</a> | <a href="{{entry.get_absolute_url_for_comment}}">Přidat komentář</a>
+
+            {% if user.username %}
+    <div class="box">
+        <div class="login-option password-login">
+            <div class="box-content">
+                
+                <form id="login-form" method="post" action="">
+                    {% csrf_token %}
+                    <fieldset>
+                        {% field form.title %}
+                        {% field form.text %}
+                    </fieldset>
+                    <div class="submit-row">
+                        <input class="button" type="submit" value="{% trans 'Poslat komentář' %}" />
+                    </div>
+                </form>
+
             </div>
         </div>
-        
-        {% if comment_entry_list %}
-            <ul id="cms-comments">
-            {% for commentzor in comment_entry_list %}
-                <li>
-                    <div class="title">
-                        {{ commentzor.title }} <span class="details"> by {{ commentzor.author }}, {{ commentzor.date }}</span>
-                    </div>
-                    <div class="comment">
-                        {{ commentzor.text|striptags }}
-                    </div>
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <div class="empty">Článek zatím nemá žádné komentáře.</div>
-        {% endif %}
-
     </div>
+            
+            {% else %}
+                <div class="empty">Pro přidání komentáře je třeba se přihlásit.</div>
+            {% endif %}
+
 </div>
 {%endblock%}
