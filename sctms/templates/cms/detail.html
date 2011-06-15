@@ -19,7 +19,7 @@
             <div class="content">
             {{ entry.text|safe }}
             </div>
-            <div class="hits">{{ entry.hits }} hits</div>
+            <div class="hits">{{ entry.hits }} hits, {{ entry.comments }} comments</div>
             <div class="back-to-index">
                 <a href="{% url cms:index %}">Zpět na seznam článků</a> | <a href="{{ entry.get_absolute_url}}add_comment/">Přidat komentář</a>
             </div>
@@ -30,7 +30,7 @@
             {% for commentzor in comment_entry_list %}
                 <li>
                     <div class="title">
-                        {{ commentzor.title }} <span class="details"> by {{ commentzor.author }}, {{ commentzor.date }}</span>
+                        {{ commentzor.title|striptags|truncatewords:50 }} <span class="details"> by {{ commentzor.author }}, {{ commentzor.date }}</span>
                     </div>
                     <div class="comment">
                         {{ commentzor.text|striptags }}

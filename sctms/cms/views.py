@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.decorators import login_required
 
-import datetime
+import datetime, array
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -17,12 +17,16 @@ from cms.models import Comment, BlogEntry, CommentForm
 
 def index(request):
     latest_entry_list = BlogEntry.objects.all().order_by('-date').filter(showfront=1)[:10]
+    for entry in latest_entry_list:
+        comment_entry_list = Comment.objects.all().filter(topic=entry)
+        entry.comments = comment_entry_list.count()
     c = {'latest_entry_list': latest_entry_list}
     return direct_to_template(request, 'cms/index.html', c)
     
 def detail(request, slug):
     entry = get_object_or_404(BlogEntry, slug=slug)
     comment_entry_list = Comment.objects.all().filter(topic=entry).order_by('date')
+    entry.comments = comment_entry_list.count()    
     c = {'entry': entry, 'comment_entry_list': comment_entry_list}
     entry.hits += 1
     entry.save()

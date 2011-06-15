@@ -34,7 +34,7 @@
                         <div class="details">{{ entry.author }}, {{ entry.date }}</div>
                         <div class="highlight">{{ entry.highlight }}</div>
                         {{ entry.text|striptags|truncatewords:69 }} <a href="{{ entry.get_absolute_url }}">celý&nbsp;článek</a>
-                        <div class="hits">{{ entry.hits }} hits</div>
+                        <div class="hits">{{ entry.hits }} hits, {{ entry.comments }} comments</div>
                     </div>
                 </li>
             {% endfor %}
