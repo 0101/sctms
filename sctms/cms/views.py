@@ -26,6 +26,10 @@ def index(request):
 def detail(request, slug):
     entry = get_object_or_404(BlogEntry, slug=slug)
     comment_entry_list = Comment.objects.all().filter(topic=entry).order_by('date')
+    i = 1
+    for comment in comment_entry_list:
+        comment.number = i
+        i += 1
     entry.comments = comment_entry_list.count()    
     c = {'entry': entry, 'comment_entry_list': comment_entry_list}
     entry.hits += 1
@@ -45,7 +49,7 @@ def add_comment(request, slug):
             comment.save()
             comment_entry_list = Comment.objects.all().filter(topic=entry).order_by('date')
             c = {'entry': entry, 'comment_entry_list': comment_entry_list}
-            return HttpResponseRedirect(reverse('cms:detail', kwargs={'slug':entry.slug}))
+            return HttpResponseRedirect(reverse('cms:detail', kwargs={'slug':entry.slug})+'#end')
                  
     else:
         form = CommentForm()

@@ -417,8 +417,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail p.question {padding: 10px 0px 5px; font-weight: bold;}
 #cms-entry-detail p.answer {padding: 0px 0px 20px; font-weight: normal;}
 
-#cms-comments {padding: 20px 70px 20px 70px;}
-#cms-comments .title {text-transform: uppercase; font-size: larger;}
-#cms-comments .title .details {font-size: smaller;color:#666;text-transform:none;}
+#cms-comments {padding: 20px 70px 20px 70px; background:rgba(0,0,0,0.1);}
+#cms-comments .title {text-transform: uppercase;color:#666; font-size: medium;}
+#cms-comments .title .details {font-size: smaller;text-transform:none;}
 #cms-comments .comment {padding: 3px 0px 15px 0px; overflow: hidden;}
-

@@ -30,16 +30,15 @@
             {% for commentzor in comment_entry_list %}
                 <li>
                     <div class="title">
-                        {{ commentzor.title|striptags|truncatewords:50 }} <span class="details"> by {{ commentzor.author }}, {{ commentzor.date }}</span>
+                        <span class="details"> # {{ commentzor.number }}</span> {{ commentzor.title|striptags|truncatewords:50 }} <span class="details"> by {{ commentzor.author }}, {{ commentzor.date }}</span>
                     </div>
                     <div class="comment">
-                        {{ commentzor.text|striptags }}
+                        {{ commentzor.text|striptags|linebreaks }}
                     </div>
                 </li>
             {% endfor %}
             </ul>
-        {% else %}
-            <div class="empty">Článek zatím nemá žádné komentáře.</div>
+            <span><a name="end"></a></span>
         {% endif %}
 
     </div>
