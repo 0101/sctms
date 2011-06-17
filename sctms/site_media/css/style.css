@@ -418,7 +418,7 @@ form .errormsg {color: #D30000;display:block;clear:left;}
 #cms-entry-detail p.answer {padding: 0px 0px 20px; font-weight: normal;}
 
 #cms-comments {background: #181818; border-top: 1px solid #303030; padding: 50px 70px;}
-#cms-comments .title {color:#666;}
+#cms-comments .title {color:#4D4D4D;}
 #cms-comments .title .author {color:#aaa; font-weight:bold;}
 #cms-comments .comment {padding: 0px 0px 25px; overflow: hidden; color:#888;}
 #cms-comments .comment p {padding-top:0px;}
