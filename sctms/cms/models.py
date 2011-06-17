@@ -11,14 +11,14 @@ from django.core.urlresolvers import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    
+
     class Meta:
         verbose_name = _(u'Category')
         verbose_name_plural = _(u'Categories')
-        
+
     def __unicode__(self):
         return self.name
-                        
+
 
 class BlogEntry(models.Model):
     author = models.ForeignKey(User)
@@ -33,46 +33,45 @@ class BlogEntry(models.Model):
     highlight = models.TextField(blank=True)
     text = models.TextField()
     showfront = models.IntegerField(default=1)
-    
+
     def __unicode__(self):
         return self.title
-    
+
     class Meta:
         verbose_name = _(u'Blog Entry')
         verbose_name_plural = _(u'Blog Entries')
-    
+
     def slug_title(self):
         return '';
-    
+
     def get_absolute_url(self):
         return reverse('cms:detail', kwargs={'slug':self.slug})
-        
-  
+
+
 class Comment(models.Model):
     author = models.ForeignKey(User)
     topic = models.ForeignKey(BlogEntry)
-    title = models.CharField(max_length=100)
-    date = models.DateTimeField('date published')    
+    title = models.CharField(max_length=100, blank=True)
+    date = models.DateTimeField('date published')
     up = models.IntegerField(default=0)
     down = models.IntegerField(default=0)
-    text = models.TextField()    
-    
+    text = models.TextField()
+
     def __unicode__(self):
         return self.title
-    
+
     class Meta:
         verbose_name = _(u'Comment')
         verbose_name_plural = _(u'Comments')
-        
+
     def slug_title(self):
         return '';
-    
+
     def get_absolute_url(self):
         return reverse('cms:comment', kwargs={'slug':self.slug})
-    
+
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ("text", "title")
-  
+        fields = ("text",)

@@ -21,25 +21,35 @@
             </div>
             <div class="hits">{{ entry.hits }} hits, {{ entry.comments }} comments</div>
             <div class="back-to-index">
-                <a href="{% url cms:index %}">Zpět na seznam článků</a> | <a href="{{ entry.get_absolute_url}}add_comment/">Přidat komentář</a>
+                <a href="{% url cms:index %}">Zpět na seznam článků</a>
             </div>
         </div>
-        
-        {% if comment_entry_list %}
-            <ul id="cms-comments">
-            {% for commentzor in comment_entry_list %}
-                <li>
-                    <div class="title">
-                        <span class="details"> # {{ commentzor.number }}</span> {{ commentzor.title|striptags|truncatewords:50 }} <span class="details"> by {{ commentzor.author }}, {{ commentzor.date }}</span>
-                    </div>
-                    <div class="comment">
-                        {{ commentzor.text|striptags|linebreaks }}
-                    </div>
-                </li>
-            {% endfor %}
-            </ul>
+
+        <div id="cms-comments">
+            {% if comment_entry_list %}
+                <ul>
+                {% for commentzor in comment_entry_list %}
+                    <li>
+                        <div class="title">
+                            <span class="author">{{ commentzor.author }}</span> wrote {{ commentzor.date|timesince }} ago:
+                        </div>
+                        <div class="comment">
+                            {{ commentzor.text|striptags|linebreaks }}
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+
+            {% endif %}
+            <div class="actions">
+                {% if user.is_authenticated %}
+                    <a class="add-comment" href="{% url cms:add_comment slug=entry.slug %}">Přidat komentář</a>
+                {% else %}
+                    Pro přidání komentáře se musíte přihlásit.
+                {% endif %}
+            </div>
             <span><a name="end"></a></span>
-        {% endif %}
+        </div>
 
     </div>
 </div>

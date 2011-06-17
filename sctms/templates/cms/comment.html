@@ -15,12 +15,12 @@
 <div class="content-wrap" id="cms-entry-detail">
 
 
-            {% if user.username %}
+            {% if user.is_authenticated %}
     <div class="center-form clearfix">
                  <p>
                     <div class="empty">Při tvorbě komentářů respektujte, prosím, pravidla slušného chování. Při publikaci příspěvků, které shledají administrátoři theNSL jako závadné, může dojít k jejich smazání. Při opakovaném porušování dobrých mravů pak k postihu vyššímu, od zákazu komentování až po úplnou diskvalifikaci z theNSL. Výše penalizace je čistě v rukou administrátorů.</div>
                     <div class="cms-entry"><span class="details">Děkujeme, admin tým theNSL</span></div>
-                </p>       
+                </p>
         <div class="box center-form">
         <div class="login-option password-login">
             <div class="box-content">
@@ -28,7 +28,6 @@
                 <form id="login-form" method="post" action="">
                     {% csrf_token %}
                     <fieldset>
-                        {% field form.title %}
                         {% field form.text %}
                     </fieldset>
                     <div class="submit-row">
@@ -41,7 +40,7 @@
         </div>
         </div>
     </div>
-            
+
             {% else %}
                 <div class="empty">Pro přidání komentáře je třeba se přihlásit.</div>
             {% endif %}
